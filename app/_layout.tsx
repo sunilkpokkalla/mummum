@@ -1,4 +1,3 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -6,7 +5,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+import { useBabyStore } from '@/store/useBabyStore';
+import { useRouter, useSegments, useRootNavigationState } from 'expo-router';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -24,7 +26,6 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -38,21 +39,49 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  // We still render even if fonts aren't loaded to avoid blank screen if fonts fail
+  // but we can check error if needed.
 
   return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() ?? 'light';
+  const { isOnboarded } = useBabyStore();
+  const segments = useSegments();
+  const router = useRouter();
+  const rootNavigationState = useRootNavigationState();
+
+  useEffect(() => {
+    if (!rootNavigationState?.key) return;
+
+    const inOnboardingGroup = segments[0] === 'onboarding';
+
+    if (!isOnboarded && !inOnboardingGroup) {
+      // Redirect to onboarding if not onboarded and not already there
+      setTimeout(() => {
+        router.replace('/onboarding');
+      }, 1);
+    } else if (isOnboarded && inOnboardingGroup) {
+      // Redirect to home if onboarded but trying to access onboarding
+      setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 1);
+    }
+  }, [isOnboarded, segments, rootNavigationState?.key]);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="onboarding/index" />
+        <Stack.Screen name="onboarding/name" />
+        <Stack.Screen name="onboarding/birthdate" />
+        <Stack.Screen name="onboarding/wishes" />
+        <Stack.Screen name="onboarding/welcome" />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="log/feed" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="log/sleep" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="log/diaper" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

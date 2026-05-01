@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c3c8bf",
+                    "surface-variant": "#e0e3e5",
+                    "primary-fixed": "#ccebc7",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d7dadd",
+                    "inverse-primary": "#b0cfad",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e5e9eb",
+                    "background": "#f7fafc",
+                    "on-primary-fixed-variant": "#334d33",
+                    "secondary-fixed": "#c8e6ff",
+                    "surface-container-low": "#f1f4f6",
+                    "tertiary": "#7e553d",
+                    "tertiary-container": "#c8957a",
+                    "on-tertiary-container": "#512e19",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#8ba888",
+                    "on-secondary-fixed": "#001e2e",
+                    "primary-fixed-dim": "#b0cfad",
+                    "on-tertiary-fixed-variant": "#643e28",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f7fafc",
+                    "on-primary-fixed": "#07200b",
+                    "tertiary-fixed": "#ffdbc9",
+                    "tertiary-fixed-dim": "#f2bb9d",
+                    "surface-bright": "#f7fafc",
+                    "inverse-surface": "#2d3133",
+                    "on-secondary-fixed-variant": "#2b4a5e",
+                    "primary": "#4a6549",
+                    "outline": "#737970",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#ebeef0",
+                    "on-surface-variant": "#434841",
+                    "surface-tint": "#4a6549",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#181c1e",
+                    "on-tertiary-fixed": "#301403",
+                    "secondary-container": "#c4e4fd",
+                    "secondary": "#446277",
+                    "on-primary-container": "#243d24",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#abcae3",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eef1f3",
+                    "on-background": "#181c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "unit": "8px",
+                    "container-padding": "24px",
+                    "gutter": "16px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "thumb-zone-bottom": "80px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7fafc;
+        }
+        .sleep-gradient {
+            background: linear-gradient(135deg, #446277 0%, #2b4a5e 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-xl border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img alt="Baby profile picture" class="w-full h-full object-cover" data-alt="close up profile of a sleeping newborn baby with soft lighting and neutral colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH1XL0X_TfBTf2Nccszg7Ds0aYgqh57ic1ECJSQ6sSMl1cvNgfLPnvtiv0LGExVdFT9qYtmGCOK2-oV9Z5YdKcJIp5ZV8jEwdSoFZ6d2g1kOxPcsyTo1AD0fF89d0FMx9Vmw7FpA-sZ4ONcNujGwT52OIg4WIN1IWLbVNzCd8uZu6eehSkUFide_a1cWRJFu854mG0wwkFxKhA3CB3maoEG0W91XoJtqlLUUJYeRUhE8Hl6P725YQlAYUGp2BgEVGqjFNLKRoYnJI"/>
+</div>
+<h1 class="font-headline-md text-headline-md text-emerald-800 dark:text-emerald-300">Sleep Log</h1>
+</div>
+<button class="text-stone-500 dark:text-stone-400 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-24 pb-32 px-container-padding space-y-stack-lg">
+<!-- Sleep Timer Section -->
+<section class="relative sleep-gradient rounded-[32px] p-8 text-white overflow-hidden shadow-xl">
+<div class="absolute top-0 right-0 p-8 opacity-20">
+<span class="material-symbols-outlined text-8xl" data-icon="dark_mode">dark_mode</span>
+</div>
+<div class="relative z-10 space-y-6">
+<div class="space-y-1">
+<p class="font-label-sm text-label-sm opacity-80">CURRENT SESSION</p>
+<h2 class="font-display-lg text-display-lg">Sleeping for 0h 45m</h2>
+</div>
+<div class="flex justify-center py-4">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90">
+<circle cx="64" cy="64" fill="none" r="58" stroke="rgba(255,255,255,0.1)" stroke-width="8"></circle>
+<circle cx="64" cy="64" fill="none" r="58" stroke="white" stroke-dasharray="364" stroke-dashoffset="120" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<span class="absolute material-symbols-outlined text-4xl" data-icon="bedtime">bedtime</span>
+</div>
+</div>
+<button class="w-full h-14 bg-white text-secondary font-headline-md text-headline-md rounded-full shadow-lg active:scale-95 transition-transform">
+                    Wake Up
+                </button>
+</div>
+</section>
+<!-- Insights Bento Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Main Insight -->
+<div class="bg-secondary-container/30 border border-secondary-container/50 rounded-[24px] p-6 flex flex-col justify-between space-y-4">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-secondary-container rounded-2xl">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="insights">insights</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary px-3 py-1 bg-white rounded-full">Today</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-md text-headline-md text-on-secondary-container">14 hours</h3>
+<p class="font-body-md text-body-md text-on-secondary-fixed-variant">1 hour more than yesterday.</p>
+</div>
+</div>
+<!-- Mini Tip -->
+<div class="bg-tertiary-fixed/30 border border-tertiary-fixed/50 rounded-[24px] p-6 flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary text-4xl" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-label-sm text-label-sm text-tertiary">PRO TIP</p>
+<p class="font-body-md text-body-md text-on-tertiary-container">Keep the room dim during naps for better night rest.</p>
+</div>
+</div>
+</section>
+<!-- Log History -->
+<section class="space-y-stack-md">
+<div class="flex justify-between items-center px-2">
+<h3 class="font-headline-md text-headline-md">Log History</h3>
+<button class="font-label-sm text-label-sm text-primary">View Trends</button>
+</div>
+<div class="space-y-stack-md">
+<!-- Afternoon Nap -->
+<div class="glass-card rounded-[24px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-l-4 border-secondary flex justify-between items-center">
+<div class="space-y-1">
+<h4 class="font-headline-md text-headline-md">Afternoon Nap</h4>
+<div class="flex items-center gap-3 text-stone-500">
+<span class="font-body-md text-body-md">13:20 - 15:45</span>
+<span class="w-1 h-1 bg-stone-300 rounded-full"></span>
+<span class="font-label-sm text-label-sm">2h 25m</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-2xl">😊</span>
+<span class="font-label-sm text-label-sm text-stone-400 uppercase tracking-widest">Happy</span>
+</div>
+</div>
+<!-- Morning Nap -->
+<div class="glass-card rounded-[24px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-l-4 border-secondary/40 flex justify-between items-center">
+<div class="space-y-1">
+<h4 class="font-headline-md text-headline-md">Morning Nap</h4>
+<div class="flex items-center gap-3 text-stone-500">
+<span class="font-body-md text-body-md">09:15 - 10:30</span>
+<span class="w-1 h-1 bg-stone-300 rounded-full"></span>
+<span class="font-label-sm text-label-sm">1h 15m</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-2xl">😫</span>
+<span class="font-label-sm text-label-sm text-stone-400 uppercase tracking-widest">Cranky</span>
+</div>
+</div>
+<!-- Night Sleep -->
+<div class="glass-card rounded-[24px] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border-l-4 border-indigo-200 flex justify-between items-center">
+<div class="space-y-1">
+<h4 class="font-headline-md text-headline-md">Night Sleep</h4>
+<div class="flex items-center gap-3 text-stone-500">
+<span class="font-body-md text-body-md">20:30 - 06:45</span>
+<span class="w-1 h-1 bg-stone-300 rounded-full"></span>
+<span class="font-label-sm text-label-sm">10h 15m</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-2xl">😴</span>
+<span class="font-label-sm text-label-sm text-stone-400 uppercase tracking-widest">Deep</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Decorative Illustration Spacer -->
+<div class="py-stack-lg flex justify-center opacity-40">
+<img class="w-32 h-32 object-contain rounded-full" data-alt="abstract artistic render of a crescent moon and stars in soft pastel watercolor texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQiMrIAanCnaxZEw7r8JvkWwd9RqZBTQ1sSX55y0BuuPJtoVdBVzJNhfzpqrEW4_Lr2oxWKetBbtMDgGpP4YFd12LUnp9nP90sbp2SfkUFg0jFJeaEG3LYz6lxE4R2riUSmRUtGgq94GSRWUyL_o-5HAvdyff5UvW6ePd-73EboaUU_0I48U3CYSMgngo7qbDn90nncINQS1GIz9Hmj5GKm3F5pQB1eWQpFDgBvG_sYfpSHCJrVNBVSI5mSZsV2Moy4xjcEHsAL5c"/>
+</div>
+</main>
+<!-- Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/70 dark:bg-stone-900/70 backdrop-blur-xl rounded-t-[32px] shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+<button class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-emerald-700 dark:text-emerald-300 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Logs</span>
+</button>
+<button class="relative -top-8 w-16 h-16 bg-emerald-600 dark:bg-emerald-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 duration-300">
+<span class="material-symbols-outlined text-4xl" data-icon="add">add</span>
+</button>
+<button class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Charts</span>
+</button>
+<button class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="emoji_events">emoji_events</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Milestones</span>
+</button>
+</nav>
+</body></html>

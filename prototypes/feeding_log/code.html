@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c3c8bf",
+                    "surface-variant": "#e0e3e5",
+                    "primary-fixed": "#ccebc7",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d7dadd",
+                    "inverse-primary": "#b0cfad",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e5e9eb",
+                    "background": "#f7fafc",
+                    "on-primary-fixed-variant": "#334d33",
+                    "secondary-fixed": "#c8e6ff",
+                    "surface-container-low": "#f1f4f6",
+                    "tertiary": "#7e553d",
+                    "tertiary-container": "#c8957a",
+                    "on-tertiary-container": "#512e19",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#8ba888",
+                    "on-secondary-fixed": "#001e2e",
+                    "primary-fixed-dim": "#b0cfad",
+                    "on-tertiary-fixed-variant": "#643e28",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f7fafc",
+                    "on-primary-fixed": "#07200b",
+                    "tertiary-fixed": "#ffdbc9",
+                    "tertiary-fixed-dim": "#f2bb9d",
+                    "surface-bright": "#f7fafc",
+                    "inverse-surface": "#2d3133",
+                    "on-secondary-fixed-variant": "#2b4a5e",
+                    "primary": "#4a6549",
+                    "outline": "#737970",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#ebeef0",
+                    "on-surface-variant": "#434841",
+                    "surface-tint": "#4a6549",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#181c1e",
+                    "on-tertiary-fixed": "#301403",
+                    "secondary-container": "#c4e4fd",
+                    "secondary": "#446277",
+                    "on-primary-container": "#243d24",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#abcae3",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eef1f3",
+                    "on-background": "#181c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "unit": "8px",
+                    "container-padding": "24px",
+                    "gutter": "16px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "thumb-zone-bottom": "80px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tap-highlight-transparent {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background min-h-screen">
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-xl border-b border-stone-200/50 shadow-sm flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center w-10 h-10 rounded-full text-primary hover:bg-primary-fixed/30 transition-colors tap-highlight-transparent active:scale-95 duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold text-emerald-800 font-headline-md">Log Feed</h1>
+</div>
+<button class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close up of a sleeping baby face with soft warm lighting and a cozy cream-colored knit blanket background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGtF-mavsM7dgZYchG195hlS82_EF56Qi3eZi8aWfmLUetQGsIC64k7By5Rqq9kdzX1-qr7scDDLmMAsnfdvq7n-rfK4-H86wGmZoRVVZ7osF2XOf-YjIDjFbWG9tFRUtDD0qs-cUa2VAlAYZdFD8LSnIwrPlytbJwe9dVDznOboEHwN8Lwrk4Tz843os-_LxTZLFPOkPlbVMMlF01jQ2cFlPsll5U104YcIeGPMWiw_FP-XmguyL2neR6XyEb1QZKPEIR4sEzbio"/>
+</button>
+</header>
+<main class="pt-20 pb-32 px-container-padding max-w-md mx-auto">
+<section class="flex flex-col gap-stack-lg">
+<div class="flex overflow-x-auto gap-3 pb-2 custom-scrollbar">
+<button class="flex-shrink-0 px-6 py-3 rounded-full bg-primary text-on-primary font-label-sm shadow-md tap-highlight-transparent transition-all active:scale-95">Breast</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm border border-outline-variant/30 tap-highlight-transparent active:scale-95">Bottle</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm border border-outline-variant/30 tap-highlight-transparent active:scale-95">Pump</button>
+<button class="flex-shrink-0 px-6 py-3 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm border border-outline-variant/30 tap-highlight-transparent active:scale-95">Solids</button>
+</div>
+<div class="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-primary-fixed/20">
+<div class="flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-primary">Breastfeeding</span>
+<button class="text-secondary text-sm font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">edit</span> Manual Entry
+                        </button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col items-center gap-4 p-5 bg-surface-container rounded-[24px] border border-primary-fixed/10">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Left</span>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary-fixed/30" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-dasharray="276" stroke-dashoffset="180" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<span class="text-xl font-bold text-on-surface">05:22</span>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary rounded-full font-label-sm shadow-sm active:scale-95 transition-transform">Pause</button>
+</div>
+<div class="flex flex-col items-center gap-4 p-5 bg-surface-container rounded-[24px] border border-primary-fixed/10">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Right</span>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary-fixed/30" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="48" cy="48" fill="transparent" r="44" stroke="currentColor" stroke-dasharray="276" stroke-dashoffset="276" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<span class="text-xl font-bold text-on-surface">00:00</span>
+</div>
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container rounded-full font-label-sm shadow-sm active:scale-95 transition-transform">Start</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-secondary-container/20">
+<div class="flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-secondary">Bottle Details</span>
+<div class="flex bg-surface-container p-1 rounded-full">
+<button class="px-4 py-1.5 rounded-full bg-white text-on-surface text-xs font-label-sm shadow-sm">oz</button>
+<button class="px-4 py-1.5 rounded-full text-on-surface-variant text-xs font-label-sm">ml</button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="font-label-sm text-on-surface-variant">Amount</label>
+<div class="px-2">
+<input class="w-full h-2 bg-secondary-container rounded-lg appearance-none cursor-pointer accent-secondary" max="12" min="0" step="0.5" type="range"/>
+<div class="flex justify-between mt-4">
+<span class="text-display-lg font-bold text-secondary">4.5 <span class="text-lg font-medium opacity-60">oz</span></span>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full border border-secondary/30 flex items-center justify-center text-secondary active:bg-secondary/10">-</button>
+<button class="w-10 h-10 rounded-full border border-secondary/30 flex items-center justify-center text-secondary active:bg-secondary/10">+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<label class="font-label-sm text-on-surface-variant">Content</label>
+<div class="flex gap-3">
+<button class="flex-1 py-3 rounded-2xl bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-center border-2 border-secondary">Breast Milk</button>
+<button class="flex-1 py-3 rounded-2xl bg-surface-container text-on-surface-variant font-label-sm text-center border-2 border-transparent">Formula</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-[32px] p-6 shadow-sm border border-tertiary-container/20">
+<div class="flex flex-col gap-4">
+<span class="font-headline-md text-tertiary">Notes</span>
+<textarea class="w-full min-h-[100px] p-4 bg-surface-container rounded-2xl border-none focus:ring-2 focus:ring-primary/20 font-body-md text-on-surface placeholder:text-outline" placeholder="Any symptoms or mood changes?"></textarea>
+</div>
+</div>
+</section>
+</main>
+<div class="fixed bottom-0 left-0 w-full z-50 flex flex-col items-center bg-white/70 backdrop-blur-xl px-container-padding pb-8 pt-4">
+<button class="w-full max-w-md bg-tertiary-container text-on-tertiary-container py-5 rounded-full font-headline-md shadow-lg active:scale-95 transition-transform tap-highlight-transparent">
+            Save Feeding
+        </button>
+</div>
+<nav class="fixed bottom-0 left-0 w-full z-[60] bg-white/70 backdrop-blur-xl flex justify-around items-center px-4 pb-6 pt-3 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] hidden">
+<div class="flex flex-col items-center justify-center text-stone-400">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">list_alt</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Logs</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-400 -mt-8">
+<div class="w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-400">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Charts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-400">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Milestones</span>
+</div>
+</nav>
+</body></html>

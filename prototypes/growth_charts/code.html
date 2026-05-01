@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c3c8bf",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#ccebc7",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d7dadd",
+                        "inverse-primary": "#b0cfad",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e5e9eb",
+                        "background": "#f7fafc",
+                        "on-primary-fixed-variant": "#334d33",
+                        "secondary-fixed": "#c8e6ff",
+                        "surface-container-low": "#f1f4f6",
+                        "tertiary": "#7e553d",
+                        "tertiary-container": "#c8957a",
+                        "on-tertiary-container": "#512e19",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#8ba888",
+                        "on-secondary-fixed": "#001e2e",
+                        "primary-fixed-dim": "#b0cfad",
+                        "on-tertiary-fixed-variant": "#643e28",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f7fafc",
+                        "on-primary-fixed": "#07200b",
+                        "tertiary-fixed": "#ffdbc9",
+                        "tertiary-fixed-dim": "#f2bb9d",
+                        "surface-bright": "#f7fafc",
+                        "inverse-surface": "#2d3133",
+                        "on-secondary-fixed-variant": "#2b4a5e",
+                        "primary": "#4a6549",
+                        "outline": "#737970",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#ebeef0",
+                        "on-surface-variant": "#434841",
+                        "surface-tint": "#4a6549",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#181c1e",
+                        "on-tertiary-fixed": "#301403",
+                        "secondary-container": "#c4e4fd",
+                        "secondary": "#446277",
+                        "on-primary-container": "#243d24",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#abcae3",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eef1f3",
+                        "on-background": "#181c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "8px",
+                        "container-padding": "24px",
+                        "gutter": "16px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "thumb-zone-bottom": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        body {
+            background-color: #f7fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .thumb-safe-area {
+            padding-bottom: 120px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-xl border-b border-stone-200/50 shadow-sm flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="close-up of a happy baby smiling softly with warm lighting and a soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH7NP47j-oRI-672bW1s5i5uXrmT1jR8i8ArabCS2E_dqYfb_7Z0c4JIc9-uw94NP-bUPKSA2q3v7JV43fIDo0QaW5dtSL7Khu19EuxEKvOsWscUEFpsvQ5umJI99rRKyG_F51ABwL2h7__SK0PswTD7N1GslZcDsmZKW7HAkhF5A5iuzcVV1VA5OBceOJB4LB-nAQT5mn07S7ao6T6lDfmv7AUiX8oms7Q6GFix1maiGRe0TiNEvx565u_1H09foQpKzEM0ZF7fo"/>
+</div>
+<span class="text-xl font-bold text-emerald-800 font-['Plus_Jakarta_Sans']">LittleBloom</span>
+</div>
+<button class="text-emerald-700 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="pt-20 px-container-padding thumb-safe-area max-w-2xl mx-auto">
+<!-- Header Section -->
+<section class="mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Growth Tracking</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Monitoring Noah's healthy development</p>
+</section>
+<!-- Insights Card -->
+<section class="mb-stack-lg">
+<div class="bg-primary-container/10 border border-primary-container/20 p-stack-md rounded-xl flex items-center gap-4">
+<div class="bg-primary-container text-on-primary-container p-3 rounded-full">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+</div>
+<div>
+<h3 class="font-label-sm text-label-sm text-primary">Current Insight</h3>
+<p class="font-body-md text-body-md text-on-primary-container">Noah is in the <span class="font-bold">75th percentile</span> for weight.</p>
+</div>
+</div>
+</section>
+<!-- Tabs -->
+<nav class="flex gap-2 mb-stack-lg overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-sm text-label-sm whitespace-nowrap shadow-sm">Weight</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">Height</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">Head Circ</button>
+</nav>
+<!-- Chart Section -->
+<section class="mb-stack-lg bg-white rounded-[32px] p-6 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] border border-white">
+<div class="flex justify-between items-end mb-8">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Weight Log</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">18.4 lbs</h2>
+</div>
+<div class="text-right">
+<span class="text-emerald-600 font-bold font-body-md">+1.2 lbs</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">since last month</p>
+</div>
+</div>
+<!-- Asymmetric Chart Visualization -->
+<div class="relative h-64 w-full flex items-end gap-1 px-2 mb-4">
+<!-- WHO Percentile Shaded Area (Simulated with Background) -->
+<div class="absolute inset-0 bg-emerald-50/30 rounded-lg -z-10 overflow-hidden">
+<div class="absolute bottom-0 w-full h-[60%] bg-emerald-100/20" style="clip-path: polygon(0 80%, 20% 70%, 40% 60%, 60% 50%, 80% 30%, 100% 20%, 100% 100%, 0 100%);"></div>
+</div>
+<!-- Chart Bars / Points (Simplified Representation for UI Design) -->
+<div class="flex-1 h-[40%] bg-surface-variant/30 rounded-t-full relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-on-surface text-surface text-[10px] px-1.5 py-0.5 rounded">14.2</div>
+</div>
+<div class="flex-1 h-[45%] bg-surface-variant/30 rounded-t-full relative group"></div>
+<div class="flex-1 h-[52%] bg-surface-variant/30 rounded-t-full relative group"></div>
+<div class="flex-1 h-[60%] bg-primary/40 rounded-t-full relative group ring-2 ring-primary/20">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-on-primary text-[10px] px-2 py-1 rounded-full font-bold">18.4</div>
+</div>
+<div class="flex-1 h-[65%] border-t-2 border-dashed border-emerald-300/50 rounded-t-full"></div>
+<div class="flex-1 h-[72%] border-t-2 border-dashed border-emerald-300/50 rounded-t-full"></div>
+</div>
+<div class="flex justify-between px-2 font-label-sm text-[10px] text-on-surface-variant uppercase tracking-tighter">
+<span>4m</span>
+<span>5m</span>
+<span>6m</span>
+<span>7m</span>
+<span>8m</span>
+<span>9m</span>
+</div>
+</section>
+<!-- Measurement List -->
+<section class="mb-stack-lg">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent History</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Measurement Card -->
+<div class="flex items-center justify-between p-5 bg-white rounded-2xl shadow-sm border-l-4 border-emerald-500">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Today, Oct 24</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">18.4 lbs</h4>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-stone-300" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Measurement Card -->
+<div class="flex items-center justify-between p-5 bg-white rounded-2xl shadow-sm border-l-4 border-emerald-200">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Sep 20, 2023</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">17.2 lbs</h4>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-stone-300" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Measurement Card -->
+<div class="flex items-center justify-between p-5 bg-white rounded-2xl shadow-sm border-l-4 border-emerald-100">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Aug 22, 2023</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-semibold">15.8 lbs</h4>
+</div>
+<div class="text-right">
+<span class="material-symbols-outlined text-stone-300" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-full shadow-lg flex items-center justify-center active:scale-90 duration-300 z-40">
+<span class="material-symbols-outlined scale-125" data-icon="add" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.04)] flex justify-around items-center px-4 pb-6 pt-3 rounded-t-[32px]">
+<a class="flex flex-col items-center justify-center text-stone-400 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans'] mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans'] mt-1">Logs</span>
+</a>
+<div class="flex flex-col items-center justify-center -mt-8">
+<div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+</div>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans'] mt-1 text-stone-400">Add</span>
+</div>
+<a class="flex flex-col items-center justify-center text-emerald-700 font-bold active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="insights" data-weight="fill" style="font-variation-settings: 'FILL' 1;">insights</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans'] mt-1">Charts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="emoji_events">emoji_events</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans'] mt-1">Milestones</span>
+</a>
+</nav>
+</body></html>

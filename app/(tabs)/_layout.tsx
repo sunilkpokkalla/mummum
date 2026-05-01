@@ -1,59 +1,122 @@
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs, useRouter } from 'expo-router';
+import { Home, BarChart2, Award, List, Plus } from 'lucide-react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() ?? 'light';
+  const themeColors = Colors[colorScheme];
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        tabBarActiveTintColor: themeColors.primary,
+        tabBarInactiveTintColor: themeColors.tabIconDefault,
+        tabBarStyle: {
+          backgroundColor: themeColors.surface,
+          borderTopColor: themeColors.surfaceVariant,
+          elevation: 0,
+          height: 84,
+          paddingBottom: 24,
+          paddingTop: 12,
+          borderTopWidth: 1,
+        },
+        tabBarLabelStyle: {
+          fontWeight: '600',
+          fontSize: 11,
+        },
+        headerStyle: {
+          backgroundColor: themeColors.background,
+        },
+        headerTitleStyle: {
+          color: themeColors.text,
+          fontWeight: '700',
+        },
+        headerShadowVisible: false,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'Home',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Home size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="logs"
+        options={{
+          title: 'History',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <List size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="add"
+        options={{
+          title: 'Add',
+          tabBarButton: (props) => (
+            <CustomTabBarButton {...props} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="charts"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Charts',
+          tabBarIcon: ({ color }) => <BarChart2 size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="milestones"
+        options={{
+          title: 'Milestones',
+          tabBarIcon: ({ color }) => <Award size={24} color={color} />,
         }}
       />
     </Tabs>
   );
 }
+
+function CustomTabBarButton({ children }: any) {
+  const router = useRouter();
+  const colorScheme = useColorScheme() ?? 'light';
+  const themeColors = Colors[colorScheme];
+
+  return (
+    <View style={styles.fabContainer}>
+      <TouchableOpacity
+        onPress={() => router.push('/log/feed')}
+        activeOpacity={0.7}
+        style={[styles.fab, { backgroundColor: themeColors.primary }]}
+      >
+        <Plus size={32} color="#fff" />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  fabContainer: {
+    width: 70,
+    height: 70,
+    top: -20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fab: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+    backgroundColor: '#C69C82', // Match the Save button color
+  }
+});

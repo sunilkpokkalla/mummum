@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c3c8bf",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#ccebc7",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d7dadd",
+                        "inverse-primary": "#b0cfad",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e5e9eb",
+                        "background": "#f7fafc",
+                        "on-primary-fixed-variant": "#334d33",
+                        "secondary-fixed": "#c8e6ff",
+                        "surface-container-low": "#f1f4f6",
+                        "tertiary": "#7e553d",
+                        "tertiary-container": "#c8957a",
+                        "on-tertiary-container": "#512e19",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#8ba888",
+                        "on-secondary-fixed": "#001e2e",
+                        "primary-fixed-dim": "#b0cfad",
+                        "on-tertiary-fixed-variant": "#643e28",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f7fafc",
+                        "on-primary-fixed": "#07200b",
+                        "tertiary-fixed": "#ffdbc9",
+                        "tertiary-fixed-dim": "#f2bb9d",
+                        "surface-bright": "#f7fafc",
+                        "inverse-surface": "#2d3133",
+                        "on-secondary-fixed-variant": "#2b4a5e",
+                        "primary": "#4a6549",
+                        "outline": "#737970",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#ebeef0",
+                        "on-surface-variant": "#434841",
+                        "surface-tint": "#4a6549",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#181c1e",
+                        "on-tertiary-fixed": "#301403",
+                        "secondary-container": "#c4e4fd",
+                        "secondary": "#446277",
+                        "on-primary-container": "#243d24",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#abcae3",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eef1f3",
+                        "on-background": "#181c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "unit": "8px",
+                        "container-padding": "24px",
+                        "gutter": "16px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "thumb-zone-bottom": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-thumb-zone-bottom">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 dark:bg-stone-950/80 backdrop-blur-xl border-b border-stone-200/50 dark:border-stone-800/50 shadow-sm flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden ring-2 ring-primary-fixed">
+<img alt="Baby profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a cheerful infant with soft lighting and a warm, empathetic atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0gJufLRVT2O11PJDmAwGYZaeNvd7KLZ7GJhgS2kA_ozKg_t9qxoiwCP_f8UhtI3OshwteXAkK4j_agr2RVFAthb3Op1FLLKyV9sUQpk8nkgc_fASZZjgFByE4o2nKGx2BmcxZ_E9Ia8UjKphKsQNA5q8irTNINXDd8b6f5fFTcNCNeB3I-q5fr6aNWKMf4EmYJ0tmAZeWKL_TfJLvuXXzJDrIZIkdi3JTVJzO6cbD8obw6qRO_OR7ZN6n96emp6_8-QBy4APg6og"/>
+</div>
+<span class="text-xl font-bold text-emerald-800 dark:text-emerald-300 font-['Plus_Jakarta_Sans']">LittleBloom</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-stone-500 dark:text-stone-400 hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-container-padding max-w-2xl mx-auto space-y-stack-lg">
+<!-- Header Section -->
+<section class="space-y-stack-sm">
+<h1 class="font-display-lg text-display-lg text-on-background">Milestones</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Celebrating every little leap of growth.</p>
+</section>
+<!-- Stats Overview (Asymmetric Layout) -->
+<section class="grid grid-cols-2 gap-gutter">
+<div class="bg-primary-fixed p-6 rounded-[24px] flex flex-col justify-between h-32 shadow-sm">
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant">ACHIEVED</span>
+<span class="font-display-lg text-display-lg text-on-primary-fixed">12</span>
+</div>
+<div class="space-y-gutter">
+<div class="bg-secondary-fixed p-4 rounded-[20px] flex justify-between items-center shadow-sm">
+<span class="font-label-sm text-label-sm text-on-secondary-fixed-variant">IN PROGRESS</span>
+<span class="font-headline-md text-headline-md text-on-secondary-fixed">3</span>
+</div>
+<div class="bg-surface-container p-4 rounded-[20px] flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">NOT YET</span>
+<span class="font-headline-md text-headline-md text-on-surface">5</span>
+</div>
+</div>
+</section>
+<!-- Milestones Checklist Section -->
+<section class="space-y-stack-md">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">Development Tracker</h2>
+<button class="text-primary font-label-sm text-label-sm flex items-center gap-1">
+                    View all <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest rounded-[32px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] space-y-stack-md">
+<div class="flex items-center gap-3 border-b border-surface-variant pb-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full font-label-sm text-label-sm">3-4 Months</span>
+<div class="h-1 flex-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Milestone Item 1 -->
+<div class="flex items-start gap-4">
+<div class="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-on-primary" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Pushes up on arms</h4>
+<p class="text-sm text-on-surface-variant">Achieved at 3 months, 12 days</p>
+</div>
+</div>
+<!-- Milestone Item 2 -->
+<div class="flex items-start gap-4">
+<div class="mt-1 w-6 h-6 rounded-full border-2 border-primary-container flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container animate-pulse"></div>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Smiles to get attention</h4>
+<p class="text-sm text-on-surface-variant">In Progress • 2 moments logged</p>
+</div>
+</div>
+<!-- Milestone Item 3 -->
+<div class="flex items-start gap-4 opacity-50">
+<div class="mt-1 w-6 h-6 rounded-full border-2 border-outline-variant"></div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-semibold text-on-surface">Rolls over</h4>
+<p class="text-sm text-on-surface-variant">Not yet started</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Photo Journal Section (Bento Grid) -->
+<section class="space-y-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Photo Journal</h2>
+<div class="grid grid-cols-2 grid-rows-2 gap-3 h-[400px]">
+<div class="relative rounded-[24px] overflow-hidden row-span-2 shadow-sm group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Candid moment of a baby grabbing their feet in a sunny living room, soft natural morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVnINjbva6vPWbp5gh8V8PuSoCOXlksnKfTwMeHN2UNMS8VEsekYMnjxH-zIzuBSnxxNfCMjB0uJxl30JRPxOr51LclrZ3_ImA6A1con8tnXkn_DDCNonbq1zhK4w3grtEIf9Cr2FlUjzbuK3np8u9-IESN9A6R-aToivhlS9FKavorJeZ6wUjSVWXQ_SmGMPhu-i0KFUOX_pftwYUlw9qG0Huo_osAB7fz41o9az-JoutNjVqNsC_zWwNppiSPIcPF3ZhWDbEwVM"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+<p class="text-white font-label-sm text-label-sm">Found my toes!</p>
+<p class="text-white/70 text-[10px]">Aug 12</p>
+</div>
+</div>
+<div class="relative rounded-[24px] overflow-hidden shadow-sm group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Tiny baby hands holding an adult's finger, warm golden hour lighting, emotional close-up" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnsU0NqYKwOM6UkFf8AD4zT00-FBYwgQDCkYWOBY2xal-mxPCtOgWrBYGmg7uYLpQvkl8iVUW0TLvgeG4XtkXG-MfGt1-TX3TFHS2CW0PzNk1a2WMROOBSrdBYtgjEINNo79VFRdHexed3FGnBOpAnLq4DmI666HYp41FjU9y4kVf7fP87WxEhtvWHRZ_TDPilawWFHDvgrfDMoteocaVMg-Wkrx4YaVZYdfR3xGo-sD8c5n0J7QO2L39XPySIKi8eD1Xkgb1ZsM0"/>
+<div class="absolute inset-0 bg-black/10"></div>
+</div>
+<div class="relative rounded-[24px] overflow-hidden shadow-sm group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Happy infant lying on a soft cream-colored blanket looking up at the camera with a big gummy smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgfePd7gtdzRA46osm-t6A9O8jJYuAec10c27PBfQzvKhS1XAKbhpQvQqRBJDnWWTaiBzHgXdwnAcqkQNR0M75_lZCpOFl_I2Cea1TgZ84Y01rHdAXt12SU0hwiMvCw5DiV_A68rL0bkCVjktouUf7zzJkzeVKPWoCp8fv3H9iAB3-u4PCbumIkSdUAf-dCiTLW9mvEgqyX2qfkq8W4FrfUbcOK6rQHdZyzcTSdbU2i-yqaXdc2PG3_YrWbYvxLYXm8f9gHiIR-bg"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur-md w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB for Adding Moment -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-[20px] shadow-lg flex items-center justify-center active:scale-90 duration-300 z-40">
+<span class="material-symbols-outlined" data-icon="add_a_photo" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/70 dark:bg-stone-900/70 backdrop-blur-xl rounded-t-[32px] shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Logs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-emerald-500 transition-colors active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Charts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-emerald-700 dark:text-emerald-300 active:scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="emoji_events" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">Milestones</span>
+</a>
+</nav>
+</body></html>

@@ -1,33 +1,40 @@
 {
   "expo": {
-    "name": "stitch_littlebloom_baby_tracker",
-    "slug": "stitch_littlebloom_baby_tracker",
+    "name": "Mummum: Baby Tracker",
+    "slug": "mummum",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "stitchlittlebloombabytracker",
+    "icon": "./assets/images/MUMMUM_FINAL.png",
+    "scheme": "mummum",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/MUMMUM_FINAL.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ambright.mummum",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
+        "NSCameraUsageDescription": "Mummum needs camera access to capture new milestone photos of your baby.",
+        "NSMicrophoneUsageDescription": "Mummum needs microphone access for video milestones."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/MUMMUM_FINAL.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.ambright.mummum"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/MUMMUM_FINAL.png"
     },
     "plugins": [
       "expo-router"
