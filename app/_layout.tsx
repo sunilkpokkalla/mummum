@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import { useBabyStore } from '@/store/useBabyStore';
 import { useRouter, useSegments, useRootNavigationState } from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -71,18 +72,21 @@ function RootLayoutNav() {
   }, [isOnboarded, segments, rootNavigationState?.key]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="onboarding/index" />
-        <Stack.Screen name="onboarding/name" />
-        <Stack.Screen name="onboarding/birthdate" />
-        <Stack.Screen name="onboarding/wishes" />
-        <Stack.Screen name="onboarding/welcome" />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="log/feed" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="log/sleep" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="log/diaper" options={{ presentation: 'modal', headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="onboarding/index" />
+          <Stack.Screen name="onboarding/name" />
+          <Stack.Screen name="onboarding/birthdate" />
+          <Stack.Screen name="onboarding/wishes" />
+          <Stack.Screen name="onboarding/auth" />
+          <Stack.Screen name="onboarding/welcome" />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="log/feed" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="log/sleep" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="log/diaper" options={{ presentation: 'modal', headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

@@ -26,6 +26,14 @@ export interface Baby {
   photoUri?: string;
 }
 
+export interface Reminder {
+  id: string;
+  title: string;
+  time: string; // "08:00 AM"
+  enabled: boolean;
+  notificationId?: string;
+}
+
 interface ActiveSession {
   type: ActivityType;
   startTime: Date;
@@ -39,6 +47,7 @@ interface BabyState {
   activeSessions: ActiveSession[];
   memories: Memory[];
   completedChecklistItems: string[];
+  customReminders: Reminder[];
   isOnboarded: boolean;
   tempBaby: Partial<Baby>;
   
@@ -52,6 +61,9 @@ interface BabyState {
   stopSession: (type: ActivityType) => void;
   addMemory: (memory: Memory) => void;
   toggleChecklistItem: (id: string) => void;
+  addReminder: (reminder: Reminder) => void;
+  updateReminder: (id: string, data: Partial<Reminder>) => void;
+  deleteReminder: (id: string) => void;
   completeOnboarding: () => void;
   updateTempBaby: (data: Partial<Baby>) => void;
   resetStore: () => void;
@@ -66,6 +78,7 @@ export const useBabyStore = create<BabyState>()(
       activeSessions: [],
       memories: [],
       completedChecklistItems: [],
+      customReminders: [],
       isOnboarded: false,
       tempBaby: {},
 
@@ -107,6 +120,22 @@ export const useBabyStore = create<BabyState>()(
         completedChecklistItems: state.completedChecklistItems.includes(id)
           ? state.completedChecklistItems.filter(i => i !== id)
           : [...state.completedChecklistItems, id]
+      })),
+
+      addReminder: (reminder) => set((state) => ({
+        customReminders: [...state.customReminders, reminder]
+      })),
+
+      updateReminder: (id, data) => set((state) => ({
+        customReminders: state.customReminders.map(r => r.id === id ? { ...r, ...data } : r)
+      })),
+
+      deleteReminder: (id) => set((state) => ({
+        customReminders: state.customReminders.filter(r => r.id !== id)
+      })),
+
+      toggleReminder: (id) => set((state) => ({
+        customReminders: state.customReminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r)
       })),
 
       completeOnboarding: () => set({ isOnboarded: true }),

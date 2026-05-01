@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
@@ -254,7 +254,10 @@ export default function ChartsScreen() {
       </TouchableOpacity>
 
       <Modal visible={isModalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <View>
@@ -301,7 +304,7 @@ export default function ChartsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

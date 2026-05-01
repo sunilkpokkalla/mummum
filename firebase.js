@@ -1,17 +1,12 @@
-import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
+
+/**
+ * Mummum Firebase Native Integration
+ * 
+ * We use the Native SDK (@react-native-firebase) instead of the Web SDK
+ * for better performance, native social auth support, and App Store compliance.
+ */
 
 export { auth, firebase };
-
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBjhMnfwpmU5eUGxkbqB0xIRwgLHrVrgDo",
-    authDomain: "amummum-babytracker.firebaseapp.com",
-    projectId: "mummum-babytracker",
-    storageBucket: "mummum-babytracker.appspot.com",
-    messagingSenderId: "339373048707",
-    appId: "1:339373048707:ios:635323e78e83b2e6ed6cb6"
-};
-
-const app = initializeApp(firebaseConfig);
+export default firebase;
