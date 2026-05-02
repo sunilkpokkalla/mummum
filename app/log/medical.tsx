@@ -625,14 +625,14 @@ function VaccineRow({ title, period, record, onPress, onDelete }: any) {
 
   return (
     <Swipeable renderRightActions={renderRightActions} enabled={!isLocked && !!record}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
         <TouchableOpacity 
           onPress={() => record && setIsLocked(!isLocked)} 
           style={{ paddingRight: 8, paddingLeft: 4 }}
           disabled={!record}
         >
           {!record ? (
-            <Lock size={14} color="#EF5350" />
+            <Lock size={14} color="#CFD8DC" />
           ) : isLocked ? (
             <Lock size={14} color="#90A4AE" />
           ) : (
@@ -648,24 +648,32 @@ function VaccineRow({ title, period, record, onPress, onDelete }: any) {
         >
           <Card style={[
             styles.vaccineCardCompact, 
-            { flex: 1 },
-            record && { borderLeftColor: '#4CAF50', borderLeftWidth: 3, backgroundColor: isLocked ? '#F8FAFB' : '#F1F8E9' }
+            { flex: 1, padding: 16, borderRadius: 20 },
+            record && { 
+              borderLeftColor: '#4CAF50', 
+              borderLeftWidth: 4, 
+              backgroundColor: isLocked ? '#F8FAFB' : '#F1F8E9',
+              shadowColor: '#4CAF50',
+              shadowOpacity: 0.05
+            }
           ]}>
             <View style={{ flex: 1, gap: 2 }}>
-              <Typography variant="label" weight="800" color={record ? '#4CAF50' : '#C69C82'} style={{ fontSize: 7, textTransform: 'uppercase' }}>{period}</Typography>
+              <Typography variant="label" weight="800" color={record ? '#4CAF50' : '#B0BEC5'} style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: 1 }}>{period}</Typography>
               <Typography variant="body" weight="700" style={{ fontSize: 16, color: isLocked && record ? '#90A4AE' : '#1B3C35' }} numberOfLines={1}>{title}</Typography>
             </View>
             
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               {record ? (
-                <>
-                  <Syringe size={14} color={isLocked ? '#90A4AE' : '#4CAF50'} />
-                  <Typography variant="label" weight="700" style={{ fontSize: 13, color: isLocked ? '#90A4AE' : '#2E7D32' }}>
-                    {format(new Date(record.timestamp), 'MMM d, yy')}
+                <View style={{ backgroundColor: isLocked ? '#ECEFF1' : '#E8F5E9', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Syringe size={12} color={isLocked ? '#90A4AE' : '#4CAF50'} />
+                  <Typography variant="label" weight="800" style={{ fontSize: 11, color: isLocked ? '#607D8B' : '#2E7D32' }}>
+                    {format(new Date(record.timestamp), 'MMM d')}
                   </Typography>
-                </>
+                </View>
               ) : (
-                <Plus size={16} color="#CFD8DC" />
+                <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#F8FAFB', alignItems: 'center', justifyCenter: 'center', borderWidth: 1, borderColor: '#ECEFF1', borderStyle: 'dashed' }}>
+                  <Plus size={16} color="#CFD8DC" />
+                </View>
               )}
             </View>
           </Card>
