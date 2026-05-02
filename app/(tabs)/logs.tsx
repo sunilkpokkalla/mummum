@@ -255,7 +255,7 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const lastHeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Height');
   const lastHeadCirc = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Head Circ');
 
-  const medsCount = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination').length;
+  const careEvents = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination' || a.type === 'diaper').length;
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -279,37 +279,31 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
               {format(data.date, 'MMMM d, yyyy')} • Daily Report
             </Typography>
 
-            {/* High Level Category Grid */}
+            {/* High Level 4-Item Grid */}
             <View style={styles.categoryGrid}>
               <CategoryItem 
                 icon={<Scale size={20} color="#795548" />} 
                 title="VITALS" 
-                detail={lastWeight || lastHeight || lastHeadCirc ? `${lastWeight?.details?.value || '--'}${lastWeight?.details?.unit || 'lbs'} • ${lastHeight?.details?.value || '--'}${lastHeight?.details?.unit || 'cm'}` : 'No records'} 
+                detail={lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} 
                 bgColor="#EFEBE9"
               />
               <CategoryItem 
                 icon={<Milk size={20} color="#2E7D32" />} 
                 title="NUTRITION" 
-                detail={`${data.stats.feeds} Feeds • ${data.stats.amount}oz Total`} 
+                detail={`${data.stats.feeds} Feeds`} 
                 bgColor="#E8F5E9"
               />
               <CategoryItem 
                 icon={<Moon size={20} color="#1565C0" />} 
                 title="REST" 
-                detail={`${Math.floor(data.stats.sleep/3600)}h ${Math.floor((data.stats.sleep%3600)/60)}m Sleep`} 
+                detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
                 bgColor="#E3F2FD"
               />
               <CategoryItem 
                 icon={<Droplet size={20} color="#E65100" />} 
-                title="HYGIENE" 
-                detail={`${data.stats.diapers} Diaper Changes`} 
+                title="CARE" 
+                detail={`${careEvents} Events`} 
                 bgColor="#FFF3E0"
-              />
-              <CategoryItem 
-                icon={<Pill size={20} color="#9C27B0" />} 
-                title="MEDICAL" 
-                detail={medsCount > 0 ? `${medsCount} Health Events` : 'No health events'} 
-                bgColor="#F3E5F5"
               />
             </View>
 
@@ -333,9 +327,9 @@ function CategoryItem({ icon, title, detail, bgColor }: any) {
       <View style={[styles.categoryIcon, { backgroundColor: bgColor }]}>
         {icon}
       </View>
-      <View style={{ flex: 1 }}>
-        <Typography variant="label" weight="900" color="#90A4AE" style={{ fontSize: 10 }}>{title}</Typography>
-        <Typography variant="body" weight="700" color="#1B3C35">{detail}</Typography>
+      <View style={{ alignItems: 'center' }}>
+        <Typography variant="label" weight="900" color="#90A4AE" style={{ fontSize: 9 }}>{title}</Typography>
+        <Typography variant="bodyMd" weight="900" color="#1B3C35">{detail}</Typography>
       </View>
     </View>
   );
@@ -674,20 +668,25 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     gap: 12,
   },
   categoryItem: {
-    flexDirection: 'row',
+    width: (width - 40 - 64 - 12) / 2, // Adjusted for padding and gap
     alignItems: 'center',
-    gap: 16,
+    gap: 12,
     backgroundColor: '#F8FAFB',
     padding: 16,
-    borderRadius: 20,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
   },
   categoryIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
+    width: 48,
+    height: 48,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
