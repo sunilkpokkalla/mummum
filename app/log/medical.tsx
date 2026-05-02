@@ -318,7 +318,12 @@ export default function MedicalLogScreen() {
             <View style={{ width: 40 }} />
           </View>
 
-          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+          <ScrollView 
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.content} 
+            showsVerticalScrollIndicator={false} 
+            keyboardShouldPersistTaps="handled"
+          >
             {/* Tab Selector */}
             <View style={styles.tabContainer}>
               <TouchableOpacity 
