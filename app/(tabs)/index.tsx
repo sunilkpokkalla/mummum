@@ -294,6 +294,14 @@ export default function DashboardScreen() {
                 accent="#009688"
               />
             )}
+            {lastHeadCirc && (
+              <SummaryCard 
+                icon={<TrendingUp size={20} color="#2196F3" />}
+                label="Head Circ"
+                value={`${lastHeadCirc.details.value}${lastHeadCirc.details.unit || 'cm'}`}
+                accent="#2196F3"
+              />
+            )}
           </ScrollView>
         </View>
 
@@ -324,6 +332,12 @@ export default function DashboardScreen() {
               label="Medical"
               backgroundColor={colorScheme === 'light' ? '#F3E5F5' : '#4A148C20'}
               onPress={() => router.push('/log/medical')}
+            />
+            <QuickAction 
+              icon={<Scale size={32} color="#795548" />}
+              label="Log Growth"
+              backgroundColor={colorScheme === 'light' ? '#EFEBE9' : '#3E272320'}
+              onPress={() => router.push('/charts')}
             />
           </View>
         </View>
