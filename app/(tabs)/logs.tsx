@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
@@ -8,14 +8,18 @@ import { useBabyStore } from '@/store/useBabyStore';
 import { 
   format, 
   isSameDay, 
-  subDays
+  subDays,
+  addDays,
+  startOfToday
 } from 'date-fns';
-import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill } from 'lucide-react-native';
+import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
 export default function LogsScreen() {
+  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
   const { activities, babies, currentBabyId } = useBabyStore();
@@ -23,8 +27,10 @@ export default function LogsScreen() {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const weekDays = useMemo(() => {
-    return Array.from({ length: 7 }).map((_, i) => subDays(new Date(), i)).reverse();
+  // Create a 14-day strip centered around today
+  const calendarDays = useMemo(() => {
+    const today = startOfToday();
+    return Array.from({ length: 14 }).map((_, i) => addDays(subDays(today, 7), i));
   }, []);
 
   const babyActivities = useMemo(() => {
@@ -77,196 +83,156 @@ export default function LogsScreen() {
   }, [sortedActivities]);
 
   const selectedDateKey = format(selectedDate, 'yyyy-MM-dd');
-  const selectedDayData = dailySummaries[selectedDateKey];
+  const selectedDayData = dailySummaries[selectedDateKey] || {
+    date: selectedDate,
+    stats: { feeds: 0, amount: 0, sleep: 0, diapers: 0 }
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
+    <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Typography variant="display" weight="700" style={{ color: '#1B3C35' }}>History</Typography>
-          <Typography variant="bodyMd" color="#607D8B">Daily Nurture for {currentBaby?.name || 'Baby'}</Typography>
+          <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>History</Typography>
+          <Typography variant="bodyMd" weight="600" color="#607D8B">Daily Nurture for {currentBaby?.name || 'Baby'}</Typography>
         </View>
-        <TouchableOpacity 
-          style={styles.shareButton}
-          onPress={() => generateBabyReport(currentBaby, activities, 7)}
-        >
-          <Share2 size={24} color="#C69C82" />
-        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Report Cards */}
+        {/* Elegant Report Buttons */}
         <View style={styles.reportRow}>
           <TouchableOpacity 
-            style={[styles.reportCard, { backgroundColor: '#FBE9E7' }]}
+            style={[styles.pillButton, { backgroundColor: '#FCE4EC' }]}
             onPress={() => generateBabyReport(currentBaby, activities, 7)}
           >
-            <View style={styles.reportIcon}>
-              <FileText size={24} color="#C69C82" />
-            </View>
-            <Typography variant="body" weight="700" color="#C69C82">Weekly Summary</Typography>
-            <Typography variant="label" color="#C69C82" opacity={0.7}>Last 7 Days</Typography>
+            <FileText size={18} color="#E91E63" />
+            <Typography variant="body" weight="700" color="#E91E63">Weekly Summary</Typography>
           </TouchableOpacity>
 
           <TouchableOpacity 
-            style={[styles.reportCard, { backgroundColor: '#E3F2FD' }]}
+            style={[styles.pillButton, { backgroundColor: '#E3F2FD' }]}
             onPress={() => generateBabyReport(currentBaby, activities, 30)}
           >
-            <View style={[styles.reportIcon, { backgroundColor: '#BBDEFB' }]}>
-              <Share2 size={24} color="#1565C0" />
-            </View>
+            <Share2 size={18} color="#1565C0" />
             <Typography variant="body" weight="700" color="#1565C0">Monthly Report</Typography>
-            <Typography variant="label" color="#1565C0" opacity={0.7}>Full History</Typography>
           </TouchableOpacity>
         </View>
 
-        {/* Weekly Strip Consolidated */}
+        {/* Calendar Strip */}
         <View style={styles.calendarStripWrapper}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarStrip}>
-            {weekDays.map((date) => {
+            {calendarDays.map((date) => {
               const isSelected = isSameDay(date, selectedDate);
+              const isToday = isSameDay(date, new Date());
               return (
                 <TouchableOpacity 
                   key={date.toISOString()}
-                  style={[styles.dateCard, isSelected && { backgroundColor: '#4A5D4C' }]}
+                  style={[
+                    styles.dateCard, 
+                    isSelected && { backgroundColor: '#4A5D4C', shadowColor: '#4A5D4C', shadowOpacity: 0.2 }
+                  ]}
                   onPress={() => setSelectedDate(date)}
                 >
-                  <Typography variant="label" weight="700" color={isSelected ? '#fff' : '#90A4AE'} style={{ fontSize: 9 }}>
+                  <Typography variant="label" weight="700" color={isSelected ? '#fff' : '#90A4AE'} style={{ fontSize: 10 }}>
                     {format(date, 'EEE').toUpperCase()}
                   </Typography>
-                  <Typography variant="body" weight="800" color={isSelected ? '#fff' : '#1B3C35'} style={{ fontSize: 16 }}>
+                  <Typography variant="body" weight="800" color={isSelected ? '#fff' : '#1B3C35'} style={{ fontSize: 18 }}>
                     {format(date, 'd')}
                   </Typography>
+                  {isToday && !isSelected && <View style={styles.todayIndicator} />}
                 </TouchableOpacity>
               );
             })}
           </ScrollView>
         </View>
 
-        <View style={styles.listContainer}>
-          {selectedDayData ? (
-            <DailySummaryCard dayData={selectedDayData} />
-          ) : (
-            <View style={styles.emptyState}>
-              <Typography color="#B0BEC5">No activities logged for this day.</Typography>
+        {/* Main Prominent Summary Card */}
+        <View style={styles.mainCardContainer}>
+          <Card style={styles.summaryCard}>
+            <View style={styles.summaryCardHeader}>
+              <Typography variant="bodyLg" weight="800" color="#1B3C35">
+                {format(selectedDate, 'MMMM d, yyyy')} • {format(selectedDate, 'EEEE')}
+              </Typography>
             </View>
-          )}
-          
-          {/* Recent entries separator */}
-          <View style={{ marginTop: 24 }}>
-             <Typography variant="label" weight="800" color="#CFD8DC">ALL HISTORY</Typography>
-          </View>
-          {Object.entries(dailySummaries)
-            .sort((a,b) => b[0].localeCompare(a[0]))
-            .filter(([key]) => key !== selectedDateKey)
-            .map(([key, data]) => (
-              <DailySummaryCard key={key} dayData={data} />
-            ))
-          }
+            <View style={styles.statsGrid}>
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#E8F5E9' }]}>
+                  <Milk size={24} color="#2E7D32" />
+                </View>
+                <Typography variant="display" weight="800" color="#1B3C35">{selectedDayData.stats.feeds}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Feeds</Typography>
+              </View>
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#E3F2FD' }]}>
+                  <Moon size={24} color="#1565C0" />
+                </View>
+                <Typography variant="display" weight="800" color="#1B3C35">
+                  {Math.floor(selectedDayData.stats.sleep/3600)}h {Math.floor((selectedDayData.stats.sleep%3600)/60)}m
+                </Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Sleep</Typography>
+              </View>
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#FFF3E0' }]}>
+                  <Droplet size={24} color="#E65100" />
+                </View>
+                <Typography variant="display" weight="800" color="#1B3C35">{selectedDayData.stats.diapers}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Diaper</Typography>
+              </View>
+            </View>
+          </Card>
         </View>
+        
+        {/* All History Section */}
+        <View style={styles.historySection}>
+          <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>ALL HISTORY</Typography>
+          <View style={styles.historyList}>
+            {Object.entries(dailySummaries)
+              .sort((a,b) => b[0].localeCompare(a[0]))
+              .map(([key, data]) => (
+                <HistoryRow key={key} data={data} isSelected={key === selectedDateKey} />
+              ))
+            }
+            {Object.keys(dailySummaries).length === 0 && (
+              <View style={styles.emptyState}>
+                <Baby size={48} color="#CFD8DC" />
+                <Typography color="#B0BEC5" style={{ marginTop: 12 }}>No clinical history found</Typography>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
 }
 
-function DailySummaryCard({ dayData }: { dayData: any }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const dayNum = format(dayData.date, 'dd');
-  const monthYear = format(dayData.date, 'MMM yyyy').toUpperCase();
-
+function HistoryRow({ data, isSelected }: { data: any, isSelected: boolean }) {
   return (
-    <Card style={styles.dayCard}>
-      <TouchableOpacity 
-        style={styles.dayHeader} 
-        onPress={() => setIsExpanded(!isExpanded)}
-        activeOpacity={0.8}
-      >
-        <View style={styles.dateBlock}>
-          <Typography variant="display" weight="800" color="#1B3C35" style={styles.dayNumber}>{dayNum}</Typography>
-          <Typography variant="label" weight="700" color="#90A4AE" style={styles.monthYear}>{monthYear}</Typography>
+    <Card style={[styles.historyRowCard, isSelected && { borderColor: '#E8F5E9', borderWidth: 2 }]}>
+      <View style={styles.historyRowContent}>
+        <View style={styles.historyRowInfo}>
+          <Typography variant="bodyLg" weight="800" color="#1B3C35">
+            {format(data.date, 'MMMM d')}
+          </Typography>
+          <Typography variant="label" color="#90A4AE">{format(data.date, 'EEEE')}</Typography>
         </View>
-
-        <View style={{ flex: 1 }}>
-          <View style={styles.dayStatsRow}>
-            <View style={styles.miniStat}>
-              <Milk size={14} color="#2E7D32" />
-              <Typography variant="label" weight="700" color="#2E7D32">{dayData.stats.feeds} feeds • {dayData.stats.amount}oz</Typography>
-            </View>
-            <View style={styles.miniStat}>
-              <Moon size={14} color="#1565C0" />
-              <Typography variant="label" weight="700" color="#1565C0">{Math.floor(dayData.stats.sleep/3600)}h {Math.floor((dayData.stats.sleep%3600)/60)}m sleep</Typography>
-            </View>
-            <View style={styles.miniStat}>
-              <Droplet size={14} color="#E65100" />
-              <Typography variant="label" weight="700" color="#E65100">{dayData.stats.diapers} diapers</Typography>
-            </View>
+        <View style={styles.historyRowStats}>
+          <View style={styles.smallStat}>
+            <Milk size={14} color="#2E7D32" />
+            <Typography variant="label" weight="800" color="#455A64">{data.stats.feeds}</Typography>
+          </View>
+          <View style={styles.smallStat}>
+            <Moon size={14} color="#1565C0" />
+            <Typography variant="label" weight="800" color="#455A64">{Math.floor(data.stats.sleep/3600)}h</Typography>
+          </View>
+          <View style={styles.smallStat}>
+            <Droplet size={14} color="#E65100" />
+            <Typography variant="label" weight="800" color="#455A64">{data.stats.diapers}</Typography>
           </View>
         </View>
-        <ChevronRight size={20} color="#CFD8DC" style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }} />
-      </TouchableOpacity>
-
-      {isExpanded && (
-        <View style={styles.expandedContent}>
-          <View style={styles.divider} />
-          {dayData.activities.map((activity: any) => (
-            <ActivityItem key={activity.id} activity={activity} />
-          ))}
-        </View>
-      )}
-    </Card>
-  );
-}
-
-function ActivityItem({ activity }: { activity: any }) {
-  const getIcon = () => {
-    switch (activity.type) {
-      case 'feed': return <Milk size={18} color="#2E7D32" />;
-      case 'sleep': return <Moon size={18} color="#1565C0" />;
-      case 'diaper': return <Droplet size={18} color="#E65100" />;
-      case 'vaccination': return <Syringe size={18} color="#009688" />;
-      case 'medicine': return <Pill size={18} color="#9C27B0" />;
-      default: return <FileText size={18} color="#607D8B" />;
-    }
-  };
-
-  const getDetails = () => {
-    const d = activity.details;
-    if (activity.type === 'feed') {
-      return d.feedMode === 'Breast' 
-        ? `Breastfeed • ${[d.leftDuration ? `L:${Math.round(d.leftDuration/60)}m` : '', d.rightDuration ? `R:${Math.round(d.rightDuration/60)}m` : ''].filter(Boolean).join(' ')}`
-        : `${d.feedMode} • ${d.amount}${d.unit}`;
-    }
-    if (activity.type === 'sleep') {
-      const quality = d.quality || 'Peaceful';
-      const formattedQuality = quality.charAt(0).toUpperCase() + quality.slice(1).toLowerCase();
-      return `Slept for ${Math.round((d.duration || 0)/60)} mins\nQuality: ${formattedQuality}`;
-    }
-    if (activity.type === 'diaper') {
-      return `${d.diaperType} • ${d.hasRash ? 'Rash noted' : 'Clean'}`;
-    }
-    if (activity.type === 'vaccination') {
-      return `${d.name} • Recorded as permanent record`;
-    }
-    if (activity.type === 'medicine') {
-      return `${d.name} (${d.dosage || 'No dose'})\nReason: ${d.reason}`;
-    }
-    return '';
-  };
-
-  return (
-    <View style={styles.activityRow}>
-      <View style={styles.activityIconMini}>{getIcon()}</View>
-      <View style={{ flex: 1 }}>
-        <View style={styles.activityHeader}>
-          <Typography variant="label" weight="700" color="#455A64">
-            {activity.type.toUpperCase()}
-          </Typography>
-          <Typography variant="label" color="#90A4AE">{format(new Date(activity.timestamp), 'h:mm a')}</Typography>
-        </View>
-        <Typography variant="label" color="#607D8B">{getDetails()}</Typography>
       </View>
-    </View>
+    </Card>
   );
 }
 
@@ -276,153 +242,137 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 24,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  shareButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#FBE9E7',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  calendarStripWrapper: {
-    marginVertical: 8,
-  },
-  calendarStrip: {
-    paddingHorizontal: 4,
-    gap: 8,
-  },
-  dateCard: {
-    width: 45,
-    height: 60,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.03,
-    shadowRadius: 5,
-    elevation: 1,
+    paddingTop: 20,
+    paddingBottom: 16,
   },
   content: {
-    padding: 20,
-    gap: 20,
+    paddingHorizontal: 24,
   },
   reportRow: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 8,
+    marginBottom: 24,
   },
-  reportCard: {
+  pillButton: {
     flex: 1,
-    padding: 20,
-    borderRadius: 24,
+    flexDirection: 'row',
+    height: 54,
+    borderRadius: 27,
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
-  reportIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+  calendarStripWrapper: {
+    marginBottom: 32,
+  },
+  calendarStrip: {
+    gap: 12,
+  },
+  dateCard: {
+    width: 60,
+    height: 80,
+    borderRadius: 24,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    gap: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    elevation: 3,
   },
-  listContainer: {
+  todayIndicator: {
+    position: 'absolute',
+    bottom: 8,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#C69C82',
+  },
+  mainCardContainer: {
+    marginBottom: 40,
+  },
+  summaryCard: {
+    padding: 24,
+    borderRadius: 40,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.08,
+    shadowRadius: 30,
+    elevation: 10,
+  },
+  summaryCardHeader: {
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statBox: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  statIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  historySection: {
     gap: 16,
   },
-  dayCard: {
-    padding: 0,
-    borderRadius: 24,
-    overflow: 'hidden',
+  sectionLabel: {
+    letterSpacing: 1.5,
+    marginLeft: 4,
+  },
+  historyList: {
+    gap: 12,
+  },
+  historyRowCard: {
+    padding: 20,
+    borderRadius: 28,
     backgroundColor: '#fff',
-    borderWidth: 0,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.03,
     shadowRadius: 10,
     elevation: 2,
   },
-  dayHeader: {
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  dateBlock: {
-    backgroundColor: '#F8FAFB',
-    padding: 12,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 70,
-  },
-  dayNumber: {
-    fontSize: 28,
-    lineHeight: 32,
-  },
-  monthYear: {
-    fontSize: 10,
-    marginTop: 2,
-  },
-  dayStatsRow: {
-    flexDirection: 'column',
-    gap: 6,
-  },
-  miniStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#F8FAFB',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 10,
-  },
-  expandedContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#F0F0F0',
-    marginBottom: 16,
-  },
-  activityRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-    marginBottom: 16,
-  },
-  activityIconMini: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    backgroundColor: '#F8FAFB',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 2,
-  },
-  activityHeader: {
+  historyRowContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 2,
+  },
+  historyRowInfo: {
+    gap: 2,
+  },
+  historyRowStats: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  smallStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F8FAFB',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
   emptyState: {
     padding: 60,
     alignItems: 'center',
+    gap: 12,
   }
 });
