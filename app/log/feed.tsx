@@ -61,20 +61,32 @@ export default function FeedLogScreen() {
 
   // Timers for Left and Right
   const activeFeed = activeSessions.find(s => s.type === 'feed' && s.babyId === currentBabyId);
-  const [leftTimer, setLeftTimer] = useState(0);
-  const [rightTimer, setRightTimer] = useState(0);
+  const [leftTimer, setLeftTimer] = useState(activeFeed?.details?.accumulatedLeft || 0);
+  const [rightTimer, setRightTimer] = useState(activeFeed?.details?.accumulatedRight || 0);
   const [activeSide, setActiveSide] = useState<'L' | 'R' | null>(activeFeed?.side || null);
 
   useEffect(() => {
     let interval: any = null;
-    if (activeSide) {
+    if (activeSide && activeFeed) {
+      // Production Hardening: Calculate elapsed time from the persistent startTime
       interval = setInterval(() => {
-        if (activeSide === 'L') setLeftTimer(t => t + 1);
-        else setRightTimer(t => t + 1);
+        const start = new Date(activeFeed.startTime).getTime();
+        const now = Date.now();
+        const currentElapsed = Math.floor((now - start) / 1000);
+        
+        if (activeSide === 'L') {
+          setLeftTimer((activeFeed.details?.accumulatedLeft || 0) + currentElapsed);
+        } else {
+          setRightTimer((activeFeed.details?.accumulatedRight || 0) + currentElapsed);
+        }
       }, 1000);
+    } else {
+      // Sync local state when paused
+      setLeftTimer(activeFeed?.details?.accumulatedLeft || 0);
+      setRightTimer(activeFeed?.details?.accumulatedRight || 0);
     }
     return () => clearInterval(interval);
-  }, [activeSide]);
+  }, [activeSide, activeFeed]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -159,17 +171,23 @@ export default function FeedLogScreen() {
                       }]} />
                       <View style={styles.nipple} />
                       <Typography weight="800" style={styles.timerText}>{formatTime(leftTimer)}</Typography>
-                    </View>
-                    <TouchableOpacity 
+                    </View                    <TouchableOpacity 
                       style={[styles.timerButton, activeSide === 'L' ? { backgroundColor: '#C69C82' } : { backgroundColor: '#FBE9E7' }]}
                       onPress={() => {
                         const newSide = activeSide === 'L' ? null : 'L';
                         setActiveSide(newSide);
-                        if (newSide) {
-                          startSession({ babyId: currentBabyId || '', type: 'feed', startTime: new Date(), side: 'L' });
-                        } else {
-                          stopSession('feed');
-                        }
+                        
+                        // Production Hardening: Persist accumulated time to store
+                        startSession({ 
+                          babyId: currentBabyId || '', 
+                          type: 'feed', 
+                          startTime: new Date(), 
+                          side: newSide as any,
+                          details: {
+                            accumulatedLeft: leftTimer,
+                            accumulatedRight: rightTimer
+                          }
+                        });
                       }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'L' ? '#fff' : '#8D6E63' }}>
@@ -177,7 +195,7 @@ export default function FeedLogScreen() {
                       </Typography>
                     </TouchableOpacity>
                   </View>
-
+ 
                   {/* Right Side */}
                   <View style={styles.sideCard}>
                     <Typography variant="label" weight="700" color="#8D6E63" style={{ marginBottom: 12 }}>RIGHT</Typography>
@@ -196,17 +214,24 @@ export default function FeedLogScreen() {
                       onPress={() => {
                         const newSide = activeSide === 'R' ? null : 'R';
                         setActiveSide(newSide);
-                        if (newSide) {
-                          startSession({ babyId: currentBabyId || '', type: 'feed', startTime: new Date(), side: 'R' });
-                        } else {
-                          stopSession('feed');
-                        }
+                        
+                        // Production Hardening: Persist accumulated time to store
+                        startSession({ 
+                          babyId: currentBabyId || '', 
+                          type: 'feed', 
+                          startTime: new Date(), 
+                          side: newSide as any,
+                          details: {
+                            accumulatedLeft: leftTimer,
+                            accumulatedRight: rightTimer
+                          }
+                        });
                       }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'R' ? '#fff' : '#8D6E63' }}>
                         {activeSide === 'R' ? 'Pause' : 'Start'}
                       </Typography>
-                    </TouchableOpacity>
+                    </TouchableOpacity>y>
                   </View>
                 </View>
               </Card>
