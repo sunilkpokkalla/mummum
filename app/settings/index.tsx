@@ -26,7 +26,8 @@ import {
   Info,
   LifeBuoy,
   Bell,
-  Camera
+  Camera,
+  Heart
 } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import { saveImagePermanently } from '@/utils/imagePersistor';
@@ -189,10 +190,12 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Typography variant="label" color="#B0BEC5" style={{ textAlign: 'center' }}>
-            Made with ❤️ for babies and parents everywhere
-          </Typography>
-          <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+            <Typography variant="label" color="#B0BEC5">Made with</Typography>
+            <Heart size={12} color="#E57373" fill="#E57373" />
+            <Typography variant="label" color="#B0BEC5">for babies and parents everywhere</Typography>
+          </View>
+          <Typography variant="label" color="#CFD8DC">
             Version 1.0.0 (Production Build)
           </Typography>
         </View>
@@ -302,8 +305,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  footerText: {
-    textAlign: 'center',
-    marginTop: 20,
+  footer: {
+    alignItems: 'center',
+    marginTop: 32,
+    paddingBottom: 20,
   }
 });
