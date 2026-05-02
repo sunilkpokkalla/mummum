@@ -205,6 +205,7 @@ export default function MedicalLogScreen() {
 
   const [activeTab, setActiveTab] = useState<'VACCINE' | 'MEDICINE'>('VACCINE');
   const [isVaccineModalVisible, setIsVaccineModalVisible] = useState(false);
+  const [isMedicineModalVisible, setIsMedicineModalVisible] = useState(false);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [dateTarget, setDateTarget] = useState<'VACCINE' | 'MEDICINE'>('VACCINE');
   const [isSuccess, setIsSuccess] = useState(false);
@@ -298,6 +299,7 @@ export default function MedicalLogScreen() {
       setMedicineName('');
       setDosage('');
       setReason('');
+      setIsMedicineModalVisible(false);
     }, 1000);
   };
 
@@ -402,66 +404,19 @@ export default function MedicalLogScreen() {
               </View>
             ) : (
               <View style={styles.formContainer}>
-                {/* Medicine Entry Form */}
-                <Card style={styles.formCard}>
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>MEDICINE NAME</Typography>
-                    <TextInput 
-                      style={styles.textInput}
-                      placeholder="e.g., Paracetamol"
-                      value={medicineName}
-                      onChangeText={setMedicineName}
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>DOSAGE</Typography>
-                    <TextInput 
-                      style={styles.textInput}
-                      placeholder="e.g., 2.5ml"
-                      value={dosage}
-                      onChangeText={setDosage}
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>REASON FOR MEDICINE</Typography>
-                    <TextInput 
-                      style={[styles.textInput, { height: 80, textAlignVertical: 'top', paddingTop: 12 }]}
-                      placeholder="e.g., Fever, Teething pain"
-                      value={reason}
-                      onChangeText={setReason}
-                      multiline
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>DATE & TIME</Typography>
-                    <TouchableOpacity style={styles.dateDisplay} onPress={() => showDatePicker('MEDICINE')}>
-                      <Calendar size={18} color="#607D8B" />
-                      <Typography variant="body" color="#1B3C35">{format(medicineDate, 'PPP p')}</Typography>
+                {/* Recent Dosages at Top */}
+                <View style={{ gap: 12, marginBottom: 24 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1.5, marginLeft: 4 }}>RECENT DOSAGES</Typography>
+                    <TouchableOpacity 
+                      style={styles.addBtnSmall}
+                      onPress={() => setIsMedicineModalVisible(true)}
+                    >
+                      <Plus size={18} color="#fff" />
+                      <Typography variant="label" weight="700" color="#fff">Log New Dose</Typography>
                     </TouchableOpacity>
                   </View>
-
-                  <TouchableOpacity 
-                    style={[styles.saveBtn, (!medicineName.trim() || !reason.trim()) && { opacity: 0.5 }, isSuccess && { backgroundColor: '#4CAF50' }]} 
-                    onPress={handleSaveMedicine}
-                    disabled={!medicineName.trim() || !reason.trim() || isSuccess}
-                  >
-                    {isSuccess ? (
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                        <CheckCircle size={24} color="#fff" />
-                        <Typography variant="bodyLg" weight="700" color="#fff">Recorded</Typography>
-                      </View>
-                    ) : (
-                      <Typography variant="bodyLg" weight="700" color="#fff">Lock Medical Entry</Typography>
-                    )}
-                  </TouchableOpacity>
-                </Card>
-
-                {/* Medicine History (Moved back to bottom) */}
-                <View style={{ gap: 12, marginTop: 24 }}>
-                  <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1.5, marginLeft: 4 }}>RECENT DOSAGES</Typography>
+                  
                   {babyActivities
                     .filter(a => a.type === 'medicine')
                     .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -472,7 +427,99 @@ export default function MedicalLogScreen() {
                         onDelete={(id: string) => deleteActivity(id)}
                       />
                     ))}
+                  
+                  {babyActivities.filter(a => a.type === 'medicine').length === 0 && (
+                    <View style={styles.emptyState}>
+                      <Typography color="#90A4AE" align="center">No medication records found.</Typography>
+                    </View>
+                  )}
                 </View>
+
+                {/* Medicine Entry Modal */}
+                <Modal visible={isMedicineModalVisible} transparent animationType="fade">
+                  <View style={styles.modalOverlay}>
+                    <KeyboardAvoidingView 
+                      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                      style={{ width: '100%', alignItems: 'center' }}
+                    >
+                      <Card style={styles.calendarModal}>
+                        <View style={styles.modalHeader}>
+                          <View style={{ flex: 1 }}>
+                            <Typography variant="headline" weight="800" color="#1B3C35">Log Medicine</Typography>
+                            <Typography variant="label" weight="600" color="#607D8B">Record a new dosage for {currentBaby?.name || 'baby'}</Typography>
+                          </View>
+                          <TouchableOpacity onPress={() => setIsMedicineModalVisible(false)} style={styles.navBtnSmall}>
+                            <X size={20} color="#1B3C35" />
+                          </TouchableOpacity>
+                        </View>
+
+                        <View style={[styles.modalBody, { gap: 16 }]}>
+                          <View style={styles.inputGroup}>
+                            <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>MEDICINE NAME</Typography>
+                            <TextInput 
+                              style={styles.textInput}
+                              placeholder="e.g., Paracetamol"
+                              value={medicineName}
+                              onChangeText={setMedicineName}
+                            />
+                          </View>
+
+                          <View style={styles.inputGroup}>
+                            <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>DOSAGE</Typography>
+                            <TextInput 
+                              style={styles.textInput}
+                              placeholder="e.g., 2.5ml"
+                              value={dosage}
+                              onChangeText={setDosage}
+                            />
+                          </View>
+
+                          <View style={styles.inputGroup}>
+                            <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>REASON FOR MEDICINE</Typography>
+                            <TextInput 
+                              style={[styles.textInput, { height: 80, textAlignVertical: 'top', paddingTop: 12 }]}
+                              placeholder="e.g., Fever, Teething pain"
+                              value={reason}
+                              onChangeText={setReason}
+                              multiline
+                            />
+                          </View>
+
+                          <View style={styles.inputGroup}>
+                            <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>DATE & TIME</Typography>
+                            <TouchableOpacity style={styles.dateDisplay} onPress={() => showDatePicker('MEDICINE')}>
+                              <Calendar size={18} color="#607D8B" />
+                              <Typography variant="body" color="#1B3C35">{format(medicineDate, 'PPP p')}</Typography>
+                            </TouchableOpacity>
+                          </View>
+
+                          <View style={styles.modalFooter}>
+                            <TouchableOpacity 
+                              style={styles.cancelModalBtn}
+                              onPress={() => setIsMedicineModalVisible(false)}
+                            >
+                              <Typography weight="700" color="#90A4AE">Cancel</Typography>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                              style={[styles.confirmModalBtn, (!medicineName.trim() || !reason.trim()) && { opacity: 0.5 }, isSuccess && { backgroundColor: '#4CAF50' }]} 
+                              onPress={handleSaveMedicine}
+                              disabled={!medicineName.trim() || !reason.trim() || isSuccess}
+                            >
+                              {isSuccess ? (
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                  <CheckCircle size={20} color="#fff" />
+                                  <Typography variant="bodyMd" weight="700" color="#fff">Saved</Typography>
+                                </View>
+                              ) : (
+                                <Typography variant="bodyMd" weight="700" color="#fff">Record Dose</Typography>
+                              )}
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Card>
+                    </KeyboardAvoidingView>
+                  </View>
+                </Modal>
               </View>
             )}
           </ScrollView>
@@ -1029,5 +1076,29 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginLeft: 8,
     marginBottom: 8,
+  },
+  addBtnSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4A5D4C',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    gap: 6,
+    shadowColor: '#4A5D4C',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  emptyState: {
+    padding: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#ECEFF1',
+    borderStyle: 'dashed',
   },
 });
