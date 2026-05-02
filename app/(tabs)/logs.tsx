@@ -208,9 +208,19 @@ export default function LogsScreen() {
 }
 
 function HistoryRow({ data, isSelected }: { data: any, isSelected: boolean }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <Card style={[styles.historyRowCard, isSelected && { borderColor: '#E8F5E9', borderWidth: 2 }]}>
-      <View style={styles.historyRowContent}>
+    <Card style={[
+      styles.historyRowCard, 
+      isSelected && { borderColor: '#E8F5E9', borderWidth: 2 },
+      isExpanded && { paddingBottom: 0 }
+    ]}>
+      <TouchableOpacity 
+        onPress={() => setIsExpanded(!isExpanded)}
+        activeOpacity={0.8}
+        style={styles.historyRowContent}
+      >
         <View style={styles.historyRowInfo}>
           <Typography variant="bodyLg" weight="800" color="#1B3C35">
             {format(data.date, 'MMMM d')}
@@ -230,9 +240,73 @@ function HistoryRow({ data, isSelected }: { data: any, isSelected: boolean }) {
             <Droplet size={14} color="#E65100" />
             <Typography variant="label" weight="800" color="#455A64">{data.stats.diapers}</Typography>
           </View>
+          <ChevronRight size={18} color="#CFD8DC" style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }} />
         </View>
-      </View>
+      </TouchableOpacity>
+
+      {isExpanded && (
+        <View style={styles.expandedContent}>
+          <View style={styles.divider} />
+          {data.activities.map((activity: any) => (
+            <ActivityItem key={activity.id} activity={activity} />
+          ))}
+          <View style={{ height: 16 }} />
+        </View>
+      )}
     </Card>
+  );
+}
+
+function ActivityItem({ activity }: { activity: any }) {
+  const getIcon = () => {
+    switch (activity.type) {
+      case 'feed': return <Milk size={16} color="#2E7D32" />;
+      case 'sleep': return <Moon size={16} color="#1565C0" />;
+      case 'diaper': return <Droplet size={16} color="#E65100" />;
+      case 'vaccination': return <Syringe size={16} color="#009688" />;
+      case 'medicine': return <Pill size={16} color="#9C27B0" />;
+      default: return <FileText size={16} color="#607D8B" />;
+    }
+  };
+
+  const getDetails = () => {
+    const d = activity.details;
+    if (activity.type === 'feed') {
+      return d.feedMode === 'Breast' 
+        ? `Breastfeed • ${[d.leftDuration ? `L:${Math.round(d.leftDuration/60)}m` : '', d.rightDuration ? `R:${Math.round(d.rightDuration/60)}m` : ''].filter(Boolean).join(' ')}`
+        : `${d.feedMode} • ${d.amount}${d.unit}`;
+    }
+    if (activity.type === 'sleep') {
+      const duration = d.duration || 0;
+      return `Slept for ${Math.floor(duration/3600)}h ${Math.floor((duration%3600)/60)}m`;
+    }
+    if (activity.type === 'diaper') {
+      return `${d.diaperType} • ${d.hasRash ? 'Rash noted' : 'Clean'}`;
+    }
+    if (activity.type === 'vaccination') {
+      return `${d.name}`;
+    }
+    if (activity.type === 'medicine') {
+      return `${d.name} (${d.dosage || 'No dose'})`;
+    }
+    return '';
+  };
+
+  return (
+    <View style={styles.activityItemRow}>
+      <View style={[styles.activityIconMini, { backgroundColor: '#F8FAFB' }]}>
+        {getIcon()}
+      </View>
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="label" weight="800" color="#1B3C35" style={{ fontSize: 11, textTransform: 'uppercase' }}>
+            {activity.type}
+          </Typography>
+          <Typography variant="label" color="#90A4AE">{format(new Date(activity.timestamp), 'h:mm a')}</Typography>
+        </View>
+        <Typography variant="label" weight="600" color="#607D8B" style={{ fontSize: 12 }}>{getDetails()}</Typography>
+      </View>
+    </View>
   );
 }
 
@@ -340,7 +414,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   historyRowCard: {
-    padding: 20,
+    padding: 0,
     borderRadius: 28,
     backgroundColor: '#fff',
     shadowColor: '#000',
@@ -348,8 +422,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.03,
     shadowRadius: 10,
     elevation: 2,
+    overflow: 'hidden',
   },
   historyRowContent: {
+    padding: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -359,16 +435,39 @@ const styles = StyleSheet.create({
   },
   historyRowStats: {
     flexDirection: 'row',
-    gap: 12,
+    alignItems: 'center',
+    gap: 8,
   },
   smallStat: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#F8FAFB',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  expandedContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 4,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#F1F5F9',
+    marginBottom: 16,
+  },
+  activityItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  activityIconMini: {
+    width: 36,
+    height: 36,
     borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyState: {
     padding: 60,
