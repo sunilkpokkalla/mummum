@@ -471,73 +471,84 @@ export default function MedicalLogScreen() {
           </ScrollView>
 
           {/* Record Vaccination Modal */}
-          <Modal visible={isVaccineModalVisible} transparent animationType="slide">
-            <KeyboardAvoidingView 
-              behavior={Platform.OS === 'ios' ? 'position' : 'height'}
-              style={styles.modalOverlay}
-            >
-              <View style={styles.modalContent}>
-                <View style={styles.modalHeader}>
-                  <View>
-                    <Typography variant="headline" weight="700" color="#1B3C35">Record Vaccination</Typography>
-                    <Typography variant="label" color="#607D8B">Capture clinical immunization info</Typography>
-                  </View>
-                  <TouchableOpacity onPress={() => setIsVaccineModalVisible(false)} style={styles.closeBtn}>
-                    <X size={24} color="#1B3C35" />
-                  </TouchableOpacity>
-                </View>
-
-                <View style={styles.modalBody}>
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>VACCINE NAME</Typography>
-                    <TextInput 
-                      style={styles.textInput}
-                      placeholder="e.g., 6-in-1 Vaccine"
-                      value={vaccineName}
-                      onChangeText={setVaccineName}
-                      autoFocus={!vaccineName}
-                    />
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Typography variant="label" weight="700" color="#90A4AE" style={{ marginBottom: 8 }}>DATE & TIME GIVEN</Typography>
-                    <TouchableOpacity style={styles.dateDisplay} onPress={() => showDatePicker('VACCINE')}>
-                      <Calendar size={18} color="#607D8B" />
-                      <Typography variant="body" color="#1B3C35">{format(vaccineDate, 'PPP • p')}</Typography>
+          <Modal visible={isVaccineModalVisible} transparent animationType="fade">
+            <View style={styles.modalOverlay}>
+              <KeyboardAvoidingView 
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ width: '100%', alignItems: 'center' }}
+              >
+                <Card style={styles.calendarModal}>
+                  <View style={styles.modalHeader}>
+                    <View style={{ flex: 1 }}>
+                      <Typography variant="headline" weight="800" color="#1B3C35">Record Vaccine</Typography>
+                      <Typography variant="label" weight="600" color="#607D8B">Capture clinical immunization info</Typography>
+                    </View>
+                    <TouchableOpacity onPress={() => setIsVaccineModalVisible(false)} style={styles.navBtnSmall}>
+                      <X size={20} color="#1B3C35" />
                     </TouchableOpacity>
                   </View>
 
-                  <View style={styles.infoBox}>
-                    <ShieldCheck size={20} color="#4CAF50" />
-                    <Typography variant="label" color="#2E7D32" style={{ flex: 1 }}>
-                      This record will be locked into {currentBaby?.name || 'baby'}'s permanent clinical timeline.
-                    </Typography>
-                  </View>
+                  <View style={[styles.modalBody, { gap: 20 }]}>
+                    <View style={styles.inputGroup}>
+                      <Typography variant="label" weight="800" color="#90A4AE" style={{ marginBottom: 8, letterSpacing: 1 }}>VACCINE NAME</Typography>
+                      <TextInput 
+                        style={styles.textInput}
+                        placeholder="e.g., 6-in-1 Vaccine"
+                        value={vaccineName}
+                        onChangeText={setVaccineName}
+                        autoFocus={!vaccineName}
+                      />
+                    </View>
 
-                  <TouchableOpacity 
-                    style={[styles.saveBtn, !vaccineName.trim() && { opacity: 0.5 }, isSuccess && { backgroundColor: '#4CAF50' }]} 
-                    onPress={handleSaveVaccine}
-                    disabled={!vaccineName.trim() || isSuccess}
-                  >
-                    {isSuccess ? (
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                        <CheckCircle size={24} color="#fff" />
-                        <Typography variant="bodyLg" weight="700" color="#fff">Recorded</Typography>
-                      </View>
-                    ) : (
-                      <Typography variant="bodyLg" weight="700" color="#fff">Record Vaccination</Typography>
+                    <View style={styles.inputGroup}>
+                      <Typography variant="label" weight="800" color="#90A4AE" style={{ marginBottom: 8, letterSpacing: 1 }}>DATE & TIME GIVEN</Typography>
+                      <TouchableOpacity style={styles.dateDisplay} onPress={() => showDatePicker('VACCINE')}>
+                        <Calendar size={18} color="#4A5D4C" />
+                        <Typography variant="bodyMd" weight="700" color="#1B3C35">{format(vaccineDate, 'MMM d, yyyy • h:mm a')}</Typography>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={[styles.infoBox, { backgroundColor: '#F1F8E9', borderWidth: 1, borderColor: '#E8F5E9' }]}>
+                      <ShieldCheck size={18} color="#4CAF50" />
+                      <Typography variant="label" weight="600" color="#2E7D32" style={{ flex: 1, fontSize: 11 }}>
+                        This record will be locked into {currentBaby?.name || 'baby'}'s permanent clinical timeline.
+                      </Typography>
+                    </View>
+
+                    <View style={[styles.modalFooter, { marginTop: 12 }]}>
+                      <TouchableOpacity 
+                        style={styles.cancelModalBtn}
+                        onPress={() => setIsVaccineModalVisible(false)}
+                      >
+                        <Typography weight="700" color="#90A4AE">Cancel</Typography>
+                      </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={[styles.confirmModalBtn, !vaccineName.trim() && { opacity: 0.5 }, isSuccess && { backgroundColor: '#4CAF50' }]} 
+                        onPress={handleSaveVaccine}
+                        disabled={!vaccineName.trim() || isSuccess}
+                      >
+                        {isSuccess ? (
+                          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            <CheckCircle size={20} color="#fff" />
+                            <Typography variant="bodyMd" weight="700" color="#fff">Success</Typography>
+                          </View>
+                        ) : (
+                          <Typography variant="bodyMd" weight="700" color="#fff">Lock Vaccine</Typography>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+
+                    {isDatePickerVisible && dateTarget === 'VACCINE' && (
+                      <DateTimePickerModal 
+                        onClose={() => setIsDatePickerVisible(false)}
+                        onSelect={handleDateSelect}
+                        initialDate={vaccineDate}
+                      />
                     )}
-                  </TouchableOpacity>
-                  {isDatePickerVisible && dateTarget === 'VACCINE' && (
-                    <DateTimePickerModal 
-                      onClose={() => setIsDatePickerVisible(false)}
-                      onSelect={handleDateSelect}
-                      initialDate={vaccineDate}
-                    />
-                  )}
-                </View>
-              </View>
-            </KeyboardAvoidingView>
+                  </View>
+                </Card>
+              </KeyboardAvoidingView>
+            </View>
           </Modal>
 
           {isDatePickerVisible && dateTarget === 'MEDICINE' && (
