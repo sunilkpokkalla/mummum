@@ -259,72 +259,81 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
-          <View style={styles.bannerGradient}>
+          <View style={styles.bannerContent}>
             {/* Logo and App Name */}
             <View style={styles.bannerHeader}>
-              <View style={styles.logoCircle}>
+              <View style={[styles.logoCircle, { backgroundColor: '#F8FAFB' }]}>
                 <Baby size={28} color="#4A5D4C" />
               </View>
-              <Typography variant="display" weight="900" color="#fff" style={{ fontSize: 24, letterSpacing: -1 }}>MUMMUM</Typography>
+              <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 24, letterSpacing: -1 }}>MUMMUM</Typography>
             </View>
 
             {/* Baby Hero Section */}
             <View style={styles.bannerHero}>
-              <View style={styles.heroProfileContainer}>
+              <View style={[styles.heroProfileContainer, { borderColor: '#F1F5F9' }]}>
                 <Image 
                   source={baby?.photoUri ? { uri: baby.photoUri } : require('@/assets/images/baby_avatar.png')} 
                   style={styles.bannerAvatar}
                 />
               </View>
               <View style={styles.heroTextContainer}>
-                <Typography variant="display" weight="900" color="#fff" style={{ fontSize: 44, lineHeight: 48 }}>{baby?.name || 'Baby'}</Typography>
+                <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 44, lineHeight: 48 }}>{baby?.name || 'Baby'}</Typography>
                 <View style={styles.locationRow}>
-                  <Typography variant="body" weight="700" color="#E8F5E9">{ageInDays} DAYS OLD</Typography>
-                  <View style={styles.dotSeparator} />
-                  <Typography variant="body" weight="700" color="#E8F5E9">BANGALORE, INDIA</Typography>
+                  <Typography variant="body" weight="700" color="#607D8B">{ageInDays} DAYS OLD</Typography>
+                  <View style={[styles.dotSeparator, { backgroundColor: '#CFD8DC' }]} />
+                  <Typography variant="body" weight="700" color="#607D8B">BANGALORE, INDIA</Typography>
                 </View>
               </View>
+            </View>
+
+            <View style={styles.reportTag}>
+              <Typography variant="label" weight="900" color="#4A5D4C">DAILY NURTURE REPORT</Typography>
             </View>
 
             {/* Vitals Section */}
             <View style={styles.bannerVitals}>
               <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#C8E6C9">WEIGHT</Typography>
-                <Typography variant="headline" weight="900" color="#fff">{lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}</Typography>
+                <Typography variant="label" weight="800" color="#90A4AE">WEIGHT</Typography>
+                <Typography variant="headline" weight="900" color="#1B3C35">{lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}</Typography>
               </View>
               <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#C8E6C9">HEIGHT</Typography>
-                <Typography variant="headline" weight="900" color="#fff">{lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}</Typography>
+                <Typography variant="label" weight="800" color="#90A4AE">HEIGHT</Typography>
+                <Typography variant="headline" weight="900" color="#1B3C35">{lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}</Typography>
               </View>
               <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#C8E6C9">HEAD CIRC</Typography>
-                <Typography variant="headline" weight="900" color="#fff">{lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}</Typography>
+                <Typography variant="label" weight="800" color="#90A4AE">HEAD CIRC</Typography>
+                <Typography variant="headline" weight="900" color="#1B3C35">{lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}</Typography>
               </View>
             </View>
 
             {/* Today's Stats */}
-            <View style={styles.bannerStatsCard}>
-              <Typography variant="label" weight="900" color="#4A5D4C" style={{ letterSpacing: 1, marginBottom: 16, textAlign: 'center' }}>TODAY'S NURTURE PROGRESS</Typography>
-              <View style={styles.bannerStatsRow}>
-                <View style={styles.bannerStatItem}>
+            <View style={styles.bannerStatsGrid}>
+              <View style={styles.bannerStatCard}>
+                <View style={[styles.bannerStatIcon, { backgroundColor: '#E8F5E9' }]}>
                   <Milk size={20} color="#2E7D32" />
-                  <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.feeds}</Typography>
-                  <Typography variant="label" weight="700" color="#90A4AE">FEEDS</Typography>
                 </View>
-                <View style={styles.bannerStatItem}>
+                <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.feeds}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">FEEDS</Typography>
+              </View>
+              <View style={styles.bannerStatCard}>
+                <View style={[styles.bannerStatIcon, { backgroundColor: '#E3F2FD' }]}>
                   <Moon size={20} color="#1565C0" />
-                  <Typography variant="headline" weight="900" color="#1B3C35">{Math.floor(data.stats.sleep/3600)}h</Typography>
-                  <Typography variant="label" weight="700" color="#90A4AE">SLEEP</Typography>
                 </View>
-                <View style={styles.bannerStatItem}>
+                <Typography variant="headline" weight="900" color="#1B3C35">{Math.floor(data.stats.sleep/3600)}h</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">SLEEP</Typography>
+              </View>
+              <View style={styles.bannerStatCard}>
+                <View style={[styles.bannerStatIcon, { backgroundColor: '#FFF3E0' }]}>
                   <Droplet size={20} color="#E65100" />
-                  <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.diapers}</Typography>
-                  <Typography variant="label" weight="700" color="#90A4AE">DIAPER</Typography>
                 </View>
+                <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.diapers}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">DIAPER</Typography>
               </View>
             </View>
 
-            <Typography variant="label" weight="800" color="#E8F5E9" style={{ textAlign: 'center', marginTop: 32, opacity: 0.8 }}>NURTURED WITH MUMMUM HUB</Typography>
+            <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 32 }}>
+              GENERATED BY MUMMUM MEDICAL HUB
+            </Typography>
           </View>
 
           <TouchableOpacity style={styles.closeBannerBtn} onPress={onClose}>
@@ -629,31 +638,34 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    backgroundColor: 'rgba(0,0,0,0.85)',
     justifyContent: 'center',
-    padding: 24,
+    padding: 20,
   },
   bannerContainer: {
     backgroundColor: '#fff',
     borderRadius: 40,
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.3,
+    shadowRadius: 40,
+    elevation: 24,
   },
-  bannerGradient: {
-    backgroundColor: '#4A5D4C',
+  bannerContent: {
     padding: 32,
-    paddingBottom: 40,
+    backgroundColor: '#fff',
   },
   bannerHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginBottom: 40,
+    marginBottom: 32,
   },
   logoCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -661,14 +673,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
-    marginBottom: 40,
+    marginBottom: 32,
   },
   heroProfileContainer: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth: 4,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderWidth: 2,
     overflow: 'hidden',
   },
   bannerAvatar: {
@@ -688,14 +699,20 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#E8F5E9',
-    opacity: 0.5,
+  },
+  reportTag: {
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+    marginBottom: 24,
   },
   bannerVitals: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 40,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    marginBottom: 32,
+    backgroundColor: '#F8FAFB',
     padding: 20,
     borderRadius: 24,
   },
@@ -703,26 +720,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  bannerStatsCard: {
-    backgroundColor: '#fff',
-    borderRadius: 32,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-  },
-  bannerStatsRow: {
+  bannerStatsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 12,
   },
-  bannerStatItem: {
+  bannerStatCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 16,
     alignItems: 'center',
     gap: 4,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+  },
+  bannerStatIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
   },
   closeBannerBtn: {
     paddingVertical: 20,
     alignItems: 'center',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F8FAFB',
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
   }
 });
