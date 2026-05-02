@@ -265,9 +265,11 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
             {/* Header: Logo Left, Baby Name Right */}
             <View style={styles.bannerHeaderSplit}>
               <View style={styles.bannerHeaderLeft}>
-                <View style={[styles.logoCircle, { backgroundColor: '#F8FAFB', width: 40, height: 40 }]}>
-                  <Baby size={22} color="#4A5D4C" />
-                </View>
+                <Image 
+                  source={require('@/assets/images/mummum_logo.png')} 
+                  style={{ width: 32, height: 32 }}
+                  resizeMode="contain"
+                />
                 <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 20, letterSpacing: -1 }}>MUMMUM</Typography>
               </View>
               <Typography variant="headline" weight="900" color="#4A5D4C" style={{ fontSize: 20 }}>{baby?.name || 'Baby'}</Typography>
