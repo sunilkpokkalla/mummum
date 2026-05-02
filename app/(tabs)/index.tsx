@@ -127,47 +127,45 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Official Brand Logo */}
-        <View style={styles.brandingHeader}>
-          <Image 
-            source={require('@/assets/images/MUMMUM_FINAL.png')} 
-            style={styles.mainLogo}
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* Dynamic Header */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Pressable 
-              onPress={handlePickImage}
-              hitSlop={8}
-              style={({ pressed }) => [
-                styles.avatarContainer, 
-                { borderColor: themeColors.surfaceVariant, opacity: pressed ? 0.7 : 1 }
-              ]}
-            >
-              <Image 
-                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-                style={styles.avatar}
-              />
-            </Pressable>
-            <View style={styles.headerInfo}>
-              <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
-              <Typography variant="label" color={themeColors.icon}>{getBabyAge(currentBaby?.birthDate)}</Typography>
+      <ScrollView 
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Elite Elegant Header */}
+        <View style={styles.elegantHeaderContainer}>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Pressable 
+                onPress={handlePickImage}
+                style={styles.avatarContainer}
+              >
+                <Image 
+                  source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
+                  style={styles.avatar}
+                />
+              </Pressable>
+              <View style={styles.headerInfo}>
+                <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 28, lineHeight: 32 }}>
+                  {currentBaby?.name || 'Shriyukth'}
+                </Typography>
+                <Typography variant="body" weight="600" color="#90A4AE" style={{ marginTop: 2 }}>
+                  {getBabyAge(currentBaby?.birthDate)}
+                </Typography>
+              </View>
             </View>
-          </View>
-          <View style={styles.headerRight}>
+            
             <Pressable 
-              style={({ pressed }) => [
-                styles.notificationButton, 
-                { backgroundColor: themeColors.surface, opacity: pressed ? 0.8 : 1 }
-              ]}
+              style={styles.settingsButton}
               onPress={() => router.push('/settings')}
             >
-              <Settings size={22} color={themeColors.text} />
+              <Settings size={24} color="#4A5D4C" strokeWidth={1.5} />
             </Pressable>
           </View>
+        </View>
+
+        <View style={styles.summarySection}>
+          <Typography variant="headline" weight="800" color="#1B3C35" style={{ marginBottom: 4 }}>Daily Nurture</Typography>
+          <Typography variant="body" color="#90A4AE">Today's growth & care progress</Typography>
         </View>
 
         {/* Active Session Integration */}
@@ -549,46 +547,69 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-    gap: 20, // Reduced from 28 to pull content higher
+  elegantHeaderContainer: {
+    paddingTop: 12,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    backgroundColor: '#FDFCFB',
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+    shadowColor: '#E0E0E0',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    zIndex: 10,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 8, // Reduced from 12
+    justifyContent: 'space-between',
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    gap: 20,
   },
   avatarContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderWidth: 2,
-    overflow: 'hidden',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#fff',
+    padding: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   avatar: {
     width: '100%',
     height: '100%',
+    borderRadius: 40,
   },
   headerInfo: {
-    gap: 2,
+    justifyContent: 'center',
   },
-  notificationButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+  settingsButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  summarySection: {
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 8,
+  },
+  content: {
+    paddingBottom: 40,
   },
   notificationDot: {
     position: 'absolute',
