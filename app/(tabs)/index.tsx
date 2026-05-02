@@ -127,10 +127,6 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-      <ScrollView 
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
         {/* Elite Elegant Header */}
         <View style={styles.elegantHeaderContainer}>
           <View style={styles.header}>
