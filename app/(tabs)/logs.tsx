@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal, Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
@@ -270,11 +270,19 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
 
             {/* Baby Hero Section */}
             <View style={styles.bannerHero}>
-              <Typography variant="display" weight="900" color="#fff" style={{ fontSize: 44 }}>{baby?.name || 'Baby'}</Typography>
-              <View style={styles.locationRow}>
-                <Typography variant="body" weight="700" color="#E8F5E9">{ageInDays} DAYS OLD</Typography>
-                <View style={styles.dotSeparator} />
-                <Typography variant="body" weight="700" color="#E8F5E9">BANGALORE, INDIA</Typography>
+              <View style={styles.heroProfileContainer}>
+                <Image 
+                  source={baby?.photoUri ? { uri: baby.photoUri } : require('@/assets/images/baby_avatar.png')} 
+                  style={styles.bannerAvatar}
+                />
+              </View>
+              <View style={styles.heroTextContainer}>
+                <Typography variant="display" weight="900" color="#fff" style={{ fontSize: 44, lineHeight: 48 }}>{baby?.name || 'Baby'}</Typography>
+                <View style={styles.locationRow}>
+                  <Typography variant="body" weight="700" color="#E8F5E9">{ageInDays} DAYS OLD</Typography>
+                  <View style={styles.dotSeparator} />
+                  <Typography variant="body" weight="700" color="#E8F5E9">BANGALORE, INDIA</Typography>
+                </View>
               </View>
             </View>
 
@@ -650,7 +658,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bannerHero: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
     marginBottom: 40,
+  },
+  heroProfileContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: 'rgba(255,255,255,0.2)',
+    overflow: 'hidden',
+  },
+  bannerAvatar: {
+    width: '100%',
+    height: '100%',
+  },
+  heroTextContainer: {
+    flex: 1,
   },
   locationRow: {
     flexDirection: 'row',
