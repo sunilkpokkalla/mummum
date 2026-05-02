@@ -249,8 +249,13 @@ export default function LogsScreen() {
 }
 
 function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
-  const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date))
-    .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date));
+  
+  const lastWeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Weight');
+  const lastHeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Height');
+  const lastHeadCirc = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Head Circ');
+
+  const medsCount = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination').length;
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -271,48 +276,41 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
             <View style={styles.reportDivider} />
 
             <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 24 }}>
-              {format(data.date, 'MMMM d, yyyy')} • {format(data.date, 'EEEE')}
+              {format(data.date, 'MMMM d, yyyy')} • Daily Report
             </Typography>
 
-            {/* Stats Grid: Circles like Summary Card */}
-            <View style={styles.statsGrid}>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: '#E8F5E9' }]}>
-                  <Milk size={24} color="#2E7D32" />
-                </View>
-                <Typography variant="display" weight="800" color="#1B3C35">{data.stats.feeds}</Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">Feeds</Typography>
-              </View>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: '#E3F2FD' }]}>
-                  <Moon size={24} color="#1565C0" />
-                </View>
-                <Typography variant="display" weight="800" color="#1B3C35">
-                  {Math.floor(data.stats.sleep/3600)}h {Math.floor((data.stats.sleep%3600)/60)}m
-                </Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">Sleep</Typography>
-              </View>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: '#FFF3E0' }]}>
-                  <Droplet size={24} color="#E65100" />
-                </View>
-                <Typography variant="display" weight="800" color="#1B3C35">{data.stats.diapers}</Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">Diaper</Typography>
-              </View>
-            </View>
-
-            <View style={[styles.divider, { marginTop: 32, marginBottom: 24 }]} />
-
-            {/* Activities List */}
-            <View style={{ gap: 16 }}>
-              {selectedDateActivities.slice(0, 5).map((activity: any) => (
-                <ActivityItem key={activity.id} activity={activity} />
-              ))}
-              {selectedDateActivities.length > 5 && (
-                <Typography variant="label" color="#90A4AE" style={{ textAlign: 'center' }}>
-                  + {selectedDateActivities.length - 5} more activities today
-                </Typography>
-              )}
+            {/* High Level Category Grid */}
+            <View style={styles.categoryGrid}>
+              <CategoryItem 
+                icon={<Scale size={20} color="#795548" />} 
+                title="VITALS" 
+                detail={lastWeight || lastHeight || lastHeadCirc ? `${lastWeight?.details?.value || '--'}${lastWeight?.details?.unit || 'lbs'} • ${lastHeight?.details?.value || '--'}${lastHeight?.details?.unit || 'cm'}` : 'No records'} 
+                bgColor="#EFEBE9"
+              />
+              <CategoryItem 
+                icon={<Milk size={20} color="#2E7D32" />} 
+                title="NUTRITION" 
+                detail={`${data.stats.feeds} Feeds • ${data.stats.amount}oz Total`} 
+                bgColor="#E8F5E9"
+              />
+              <CategoryItem 
+                icon={<Moon size={20} color="#1565C0" />} 
+                title="REST" 
+                detail={`${Math.floor(data.stats.sleep/3600)}h ${Math.floor((data.stats.sleep%3600)/60)}m Sleep`} 
+                bgColor="#E3F2FD"
+              />
+              <CategoryItem 
+                icon={<Droplet size={20} color="#E65100" />} 
+                title="HYGIENE" 
+                detail={`${data.stats.diapers} Diaper Changes`} 
+                bgColor="#FFF3E0"
+              />
+              <CategoryItem 
+                icon={<Pill size={20} color="#9C27B0" />} 
+                title="MEDICAL" 
+                detail={medsCount > 0 ? `${medsCount} Health Events` : 'No health events'} 
+                bgColor="#F3E5F5"
+              />
             </View>
 
             <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
@@ -326,6 +324,20 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
         </View>
       </View>
     </Modal>
+  );
+}
+
+function CategoryItem({ icon, title, detail, bgColor }: any) {
+  return (
+    <View style={styles.categoryItem}>
+      <View style={[styles.categoryIcon, { backgroundColor: bgColor }]}>
+        {icon}
+      </View>
+      <View style={{ flex: 1 }}>
+        <Typography variant="label" weight="900" color="#90A4AE" style={{ fontSize: 10 }}>{title}</Typography>
+        <Typography variant="body" weight="700" color="#1B3C35">{detail}</Typography>
+      </View>
+    </View>
   );
 }
 
@@ -660,6 +672,24 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#F1F5F9',
     marginBottom: 24,
+  },
+  categoryGrid: {
+    gap: 12,
+  },
+  categoryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    backgroundColor: '#F8FAFB',
+    padding: 16,
+    borderRadius: 20,
+  },
+  categoryIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeBannerBtn: {
     paddingVertical: 20,
