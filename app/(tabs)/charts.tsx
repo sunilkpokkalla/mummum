@@ -156,8 +156,8 @@ export default function ChartsScreen() {
       >
         <View style={styles.header}>
           <View>
-            <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>Growth</Typography>
-            <Typography variant="bodyMd" weight="600" color="#607D8B">Vitality Progress for {currentBaby?.name || 'Baby'}</Typography>
+            <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>Growth Tracking</Typography>
+            <Typography variant="bodyMd" weight="600" color="#607D8B">Monitoring {currentBaby?.name || 'your baby'}'s healthy development ({getAgeDisplay()})</Typography>
           </View>
         </View>
 
