@@ -171,7 +171,8 @@ export default function FeedLogScreen() {
                       }]} />
                       <View style={styles.nipple} />
                       <Typography weight="800" style={styles.timerText}>{formatTime(leftTimer)}</Typography>
-                    </View                    <TouchableOpacity 
+                    </View>
+                    <TouchableOpacity 
                       style={[styles.timerButton, activeSide === 'L' ? { backgroundColor: '#C69C82' } : { backgroundColor: '#FBE9E7' }]}
                       onPress={() => {
                         const newSide = activeSide === 'L' ? null : 'L';
@@ -231,7 +232,7 @@ export default function FeedLogScreen() {
                       <Typography weight="700" style={{ color: activeSide === 'R' ? '#fff' : '#8D6E63' }}>
                         {activeSide === 'R' ? 'Pause' : 'Start'}
                       </Typography>
-                    </TouchableOpacity>y>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </Card>
