@@ -102,43 +102,42 @@ function DateTimePickerModal({ onClose, onSelect, initialDate }: any) {
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View style={[styles.calendarModal, { backgroundColor: themeColors.surface, paddingBottom: 24 }]}>
+            <View style={[styles.calendarModal, { backgroundColor: '#fff' }]}>
               <View style={styles.calendarHeader}>
-                <View style={styles.navGroup}>
-                  <TouchableOpacity onPress={() => moveYear(-1)} style={styles.navBtnSmall}>
-                    <ChevronsLeft size={18} color={themeColors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => moveMonth(-1)} style={styles.navBtnSmall}>
-                    <ChevronLeft size={18} color={themeColors.primary} />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => moveYear(-1)} style={styles.navBtnSmall}>
+                  <ChevronsLeft size={20} color="#4A5D4C" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => moveMonth(-1)} style={styles.navBtnSmall}>
+                  <ChevronLeft size={20} color="#4A5D4C" />
+                </TouchableOpacity>
                 
-                <View style={{ alignItems: 'center' }}>
-                  <Typography variant="bodyMd" weight="800">{format(currentMonth, 'MMMM yyyy')}</Typography>
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                  <Typography variant="bodyLg" weight="800" color="#1B3C35">{format(currentMonth, 'MMMM yyyy')}</Typography>
                 </View>
 
-                <View style={styles.navGroup}>
-                  <TouchableOpacity onPress={() => moveMonth(1)} style={styles.navBtnSmall}>
-                    <ChevronRight size={18} color={themeColors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => moveYear(1)} style={styles.navBtnSmall}>
-                    <ChevronsRight size={18} color={themeColors.primary} />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => moveMonth(1)} style={styles.navBtnSmall}>
+                  <ChevronRight size={20} color="#4A5D4C" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => moveYear(1)} style={styles.navBtnSmall}>
+                  <ChevronsRight size={20} color="#4A5D4C" />
+                </TouchableOpacity>
               </View>
 
               <View style={styles.daysGrid}>
                 {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                  <Typography key={i} variant="label" weight="700" style={styles.dayLabel}>{day}</Typography>
+                  <Typography key={i} variant="label" weight="800" style={styles.dayLabel}>{day}</Typography>
                 ))}
                 {emptyDays.map((_, i) => <View key={i} style={styles.dayCell} />)}
                 {days.map((day) => (
                   <TouchableOpacity 
                     key={day.toISOString()} 
-                    style={[styles.dayCell, isSameDay(day, selectedDate) && { backgroundColor: themeColors.primary }]}
+                    style={[
+                      styles.dayCell, 
+                      isSameDay(day, selectedDate) && { backgroundColor: '#4A5D4C', shadowColor: '#4A5D4C', shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
+                    ]}
                     onPress={() => setSelectedDate(day)}
                   >
-                    <Typography variant="label" weight="700" color={isSameDay(day, selectedDate) ? '#fff' : themeColors.text}>
+                    <Typography variant="bodyMd" weight="800" color={isSameDay(day, selectedDate) ? '#fff' : '#455A64'}>
                       {format(day, 'd')}
                     </Typography>
                   </TouchableOpacity>
@@ -823,117 +822,32 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 9999,
   },
-  modalContent: {
+  calendarModal: {
+    width: SCREEN_WIDTH - 32,
     backgroundColor: '#fff',
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
+    borderRadius: 40,
     padding: 24,
-    paddingBottom: Platform.OS === 'ios' ? 48 : 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 20 },
+    shadowOpacity: 0.15,
+    shadowRadius: 30,
     elevation: 10,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  closeBtn: {
-    padding: 8,
-  },
-  modalBody: {
-    gap: 24,
-  },
-  DateTimePickerModal: {
-    width: SCREEN_WIDTH - 40,
-    borderRadius: 32,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 5,
-  },
-  timePickerContainer: {
-    marginTop: 24,
-    paddingTop: 24,
-    borderTopWidth: 1,
-    borderTopColor: '#ECEFF1',
-    alignItems: 'center',
-  },
-  timeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  timeInputGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: '#F8FAFB',
-    padding: 8,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: '#ECEFF1',
-  },
-  timeInput: {
-    width: 44,
-    height: 44,
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1B3C35',
-  },
-  ampmGroup: {
-    flexDirection: 'row',
-    backgroundColor: '#F8FAFB',
-    padding: 4,
-    borderRadius: 12,
-    gap: 4,
-  },
-  ampmBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  modalFooter: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 32,
-    gap: 12,
-  },
-  cancelModalBtn: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-  },
-  confirmModalBtn: {
-    backgroundColor: '#4A5D4C',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 20,
   },
   calendarHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 24,
-  },
-  navGroup: {
-    flexDirection: 'row',
     gap: 8,
   },
   navBtnSmall: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#F8FAFB',
     alignItems: 'center',
     justifyContent: 'center',
@@ -941,24 +855,98 @@ const styles = StyleSheet.create({
   daysGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginBottom: 16,
   },
   dayLabel: {
-    width: (SCREEN_WIDTH - 88) / 7,
+    width: (SCREEN_WIDTH - 80) / 7,
     textAlign: 'center',
-    marginBottom: 12,
-    color: '#90A4AE',
+    marginBottom: 16,
+    color: '#B0BEC5',
+    fontSize: 13,
   },
   dayCell: {
-    width: (SCREEN_WIDTH - 88) / 7,
-    height: (SCREEN_WIDTH - 88) / 7,
+    width: (SCREEN_WIDTH - 80) / 7,
+    height: (SCREEN_WIDTH - 80) / 7,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 20,
+    marginVertical: 2,
   },
-  closeModalBtn: {
-    marginTop: 20,
+  timePickerContainer: {
+    marginTop: 16,
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F5F6',
     alignItems: 'center',
+  },
+  timeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    marginTop: 8,
+  },
+  timeInputGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFB',
+    paddingHorizontal: 16,
     paddingVertical: 12,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: '#ECEFF1',
+  },
+  timeInput: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1B3C35',
+    width: 44,
+    textAlign: 'center',
+  },
+  timeSeparator: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#CFD8DC',
+    paddingHorizontal: 4,
+  },
+  ampmGroup: {
+    flexDirection: 'row',
+    backgroundColor: '#F2F5F6',
+    padding: 6,
+    borderRadius: 20,
+    gap: 4,
+  },
+  ampmBtn: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 16,
+  },
+  modalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 32,
+    gap: 16,
+  },
+  cancelModalBtn: {
+    flex: 1,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 28,
+  },
+  confirmModalBtn: {
+    flex: 2,
+    height: 56,
+    backgroundColor: '#4A5D4C',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 28,
+    shadowColor: '#4A5D4C',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   historyRow: {
     flexDirection: 'row',
