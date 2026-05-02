@@ -249,90 +249,74 @@ export default function LogsScreen() {
 }
 
 function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
-  const ageInDays = baby?.birthDate ? Math.floor((new Date().getTime() - new Date(baby.birthDate).getTime()) / (1000 * 60 * 60 * 24)) : 0;
-  
-  const lastWeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Weight');
-  const lastHeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Height');
-  const lastHeadCirc = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Head Circ');
+  const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date))
+    .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
           <View style={styles.bannerContent}>
-            {/* Logo and App Name */}
-            <View style={styles.bannerHeader}>
-              <View style={[styles.logoCircle, { backgroundColor: '#F8FAFB' }]}>
-                <Baby size={28} color="#4A5D4C" />
-              </View>
-              <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 24, letterSpacing: -1 }}>MUMMUM</Typography>
-            </View>
-
-            {/* Baby Hero Section */}
-            <View style={styles.bannerHero}>
-              <View style={[styles.heroProfileContainer, { borderColor: '#F1F5F9' }]}>
-                <Image 
-                  source={baby?.photoUri ? { uri: baby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-                  style={styles.bannerAvatar}
-                />
-              </View>
-              <View style={styles.heroTextContainer}>
-                <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 44, lineHeight: 48 }}>{baby?.name || 'Baby'}</Typography>
-                <View style={styles.locationRow}>
-                  <Typography variant="body" weight="700" color="#607D8B">{ageInDays} DAYS OLD</Typography>
-                  <View style={[styles.dotSeparator, { backgroundColor: '#CFD8DC' }]} />
-                  <Typography variant="body" weight="700" color="#607D8B">BANGALORE, INDIA</Typography>
+            {/* Header: Logo Left, Baby Name Right */}
+            <View style={styles.bannerHeaderSplit}>
+              <View style={styles.bannerHeaderLeft}>
+                <View style={[styles.logoCircle, { backgroundColor: '#F8FAFB', width: 40, height: 40 }]}>
+                  <Baby size={22} color="#4A5D4C" />
                 </View>
+                <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 20, letterSpacing: -1 }}>MUMMUM</Typography>
               </View>
+              <Typography variant="headline" weight="900" color="#4A5D4C" style={{ fontSize: 20 }}>{baby?.name || 'Baby'}</Typography>
             </View>
 
-            <View style={styles.reportTag}>
-              <Typography variant="label" weight="900" color="#4A5D4C">DAILY NURTURE REPORT</Typography>
-            </View>
+            <View style={styles.reportDivider} />
 
-            {/* Vitals Section */}
-            <View style={styles.bannerVitals}>
-              <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#90A4AE">WEIGHT</Typography>
-                <Typography variant="headline" weight="900" color="#1B3C35">{lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}</Typography>
-              </View>
-              <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#90A4AE">HEIGHT</Typography>
-                <Typography variant="headline" weight="900" color="#1B3C35">{lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}</Typography>
-              </View>
-              <View style={styles.bannerVitalItem}>
-                <Typography variant="label" weight="800" color="#90A4AE">HEAD CIRC</Typography>
-                <Typography variant="headline" weight="900" color="#1B3C35">{lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}</Typography>
-              </View>
-            </View>
+            <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 24 }}>
+              {format(data.date, 'MMMM d, yyyy')} • {format(data.date, 'EEEE')}
+            </Typography>
 
-            {/* Today's Stats */}
-            <View style={styles.bannerStatsGrid}>
-              <View style={styles.bannerStatCard}>
-                <View style={[styles.bannerStatIcon, { backgroundColor: '#E8F5E9' }]}>
-                  <Milk size={20} color="#2E7D32" />
+            {/* Stats Grid: Circles like Summary Card */}
+            <View style={styles.statsGrid}>
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#E8F5E9' }]}>
+                  <Milk size={24} color="#2E7D32" />
                 </View>
-                <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.feeds}</Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">FEEDS</Typography>
+                <Typography variant="display" weight="800" color="#1B3C35">{data.stats.feeds}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Feeds</Typography>
               </View>
-              <View style={styles.bannerStatCard}>
-                <View style={[styles.bannerStatIcon, { backgroundColor: '#E3F2FD' }]}>
-                  <Moon size={20} color="#1565C0" />
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#E3F2FD' }]}>
+                  <Moon size={24} color="#1565C0" />
                 </View>
-                <Typography variant="headline" weight="900" color="#1B3C35">{Math.floor(data.stats.sleep/3600)}h</Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">SLEEP</Typography>
+                <Typography variant="display" weight="800" color="#1B3C35">
+                  {Math.floor(data.stats.sleep/3600)}h {Math.floor((data.stats.sleep%3600)/60)}m
+                </Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Sleep</Typography>
               </View>
-              <View style={styles.bannerStatCard}>
-                <View style={[styles.bannerStatIcon, { backgroundColor: '#FFF3E0' }]}>
-                  <Droplet size={20} color="#E65100" />
+              <View style={styles.statBox}>
+                <View style={[styles.statIconCircle, { backgroundColor: '#FFF3E0' }]}>
+                  <Droplet size={24} color="#E65100" />
                 </View>
-                <Typography variant="headline" weight="900" color="#1B3C35">{data.stats.diapers}</Typography>
-                <Typography variant="label" weight="700" color="#90A4AE">DIAPER</Typography>
+                <Typography variant="display" weight="800" color="#1B3C35">{data.stats.diapers}</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">Diaper</Typography>
               </View>
             </View>
 
-            <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 32 }}>
-              GENERATED BY MUMMUM MEDICAL HUB
+            <View style={[styles.divider, { marginTop: 32, marginBottom: 24 }]} />
+
+            {/* Activities List */}
+            <View style={{ gap: 16 }}>
+              {selectedDateActivities.slice(0, 5).map((activity: any) => (
+                <ActivityItem key={activity.id} activity={activity} />
+              ))}
+              {selectedDateActivities.length > 5 && (
+                <Typography variant="label" color="#90A4AE" style={{ textAlign: 'center' }}>
+                  + {selectedDateActivities.length - 5} more activities today
+                </Typography>
+              )}
+            </View>
+
+            <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
+              GENERATED BY MUMMUM HUB
             </Typography>
           </View>
 
@@ -656,91 +640,26 @@ const styles = StyleSheet.create({
     padding: 32,
     backgroundColor: '#fff',
   },
-  bannerHeader: {
+  bannerHeaderSplit: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 32,
+    marginBottom: 16,
   },
-  logoCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bannerHero: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
-    marginBottom: 32,
-  },
-  heroProfileContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 2,
-    overflow: 'hidden',
-  },
-  bannerAvatar: {
-    width: '100%',
-    height: '100%',
-  },
-  heroTextContainer: {
-    flex: 1,
-  },
-  locationRow: {
+  bannerHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 4,
   },
-  dotSeparator: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-  },
-  reportTag: {
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
-    marginBottom: 24,
-  },
-  bannerVitals: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 32,
-    backgroundColor: '#F8FAFB',
-    padding: 20,
-    borderRadius: 24,
-  },
-  bannerVitalItem: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  bannerStatsGrid: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  bannerStatCard: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    padding: 16,
-    alignItems: 'center',
-    gap: 4,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
-  },
-  bannerStatIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+  logoCircle: {
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+  },
+  reportDivider: {
+    height: 1,
+    backgroundColor: '#F1F5F9',
+    marginBottom: 24,
   },
   closeBannerBtn: {
     paddingVertical: 20,
