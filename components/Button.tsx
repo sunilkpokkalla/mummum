@@ -1,7 +1,7 @@
 import { TouchableOpacity, TouchableOpacityProps, StyleSheet, ActivityIndicator } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Typography } from './Typography';
+import Typography from './Typography';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -20,7 +20,7 @@ export function Button({
   ...props 
 }: ButtonProps) {
   const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
+  const themeColors = (Colors as any)[colorScheme];
 
   const getVariantStyles = () => {
     switch (variant) {

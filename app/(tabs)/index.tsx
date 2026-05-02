@@ -36,7 +36,7 @@ export default function DashboardScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
+  const themeColors = (Colors as any)[colorScheme];
   const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);

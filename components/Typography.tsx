@@ -3,7 +3,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 interface TypographyProps extends TextProps {
-  variant?: 'display' | 'headline' | 'bodyLg' | 'bodyMd' | 'label';
+  variant?: 'display' | 'headline' | 'bodyLg' | 'bodyMd' | 'body' | 'label';
   color?: string;
   weight?: '400' | '500' | '600' | '700' | '800';
   align?: 'left' | 'center' | 'right';
@@ -18,9 +18,9 @@ export default function Typography({
   ...props 
 }: TypographyProps) {
   const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
+  const themeColors = (Colors as any)[colorScheme];
 
-  const variantStyle = styles[variant];
+  const variantStyle = styles[variant as keyof typeof styles];
   const textColor = color || themeColors.text;
 
   return (
@@ -56,6 +56,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   bodyMd: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '400',
+  },
+  body: {
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '400',

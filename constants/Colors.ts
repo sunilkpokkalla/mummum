@@ -2,7 +2,23 @@ const primary = '#4a6549';
 const secondary = '#446277';
 const tertiary = '#7e553d';
 
-export const Colors = {
+export interface ThemeColors {
+  text: string;
+  background: string;
+  tint: string;
+  icon: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+  primary: string;
+  secondary: string;
+  tertiary: string;
+  surface: string;
+  surfaceVariant: string;
+  outline: string;
+  error: string;
+}
+
+export const Colors: { [key: string]: ThemeColors } = {
   light: {
     text: '#181c1e',
     background: '#ffffff',
