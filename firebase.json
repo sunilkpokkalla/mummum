@@ -1,0 +1,6 @@
+{
+  "react-native": {
+    "messaging_auto_setup": true,
+    "notifications_auto_setup": true
+  }
+}
