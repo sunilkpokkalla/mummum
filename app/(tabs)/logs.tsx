@@ -26,6 +26,7 @@ export default function LogsScreen() {
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isMainExpanded, setIsMainExpanded] = useState(false);
 
   // Create a 14-day strip centered around today
   const calendarDays = useMemo(() => {
@@ -148,12 +149,18 @@ export default function LogsScreen() {
 
         {/* Main Prominent Summary Card */}
         <View style={styles.mainCardContainer}>
-          <Card style={styles.summaryCard}>
-            <View style={styles.summaryCardHeader}>
+          <Card style={[styles.summaryCard, isMainExpanded && { paddingBottom: 0 }]}>
+            <TouchableOpacity 
+              activeOpacity={0.8} 
+              onPress={() => setIsMainExpanded(!isMainExpanded)}
+              style={styles.summaryCardHeader}
+            >
               <Typography variant="bodyLg" weight="800" color="#1B3C35">
                 {format(selectedDate, 'MMMM d, yyyy')} • {format(selectedDate, 'EEEE')}
               </Typography>
-            </View>
+              <ChevronRight size={20} color="#CFD8DC" style={{ transform: [{ rotate: isMainExpanded ? '90deg' : '0deg' }] }} />
+            </TouchableOpacity>
+            
             <View style={styles.statsGrid}>
               <View style={styles.statBox}>
                 <View style={[styles.statIconCircle, { backgroundColor: '#E8F5E9' }]}>
@@ -179,6 +186,22 @@ export default function LogsScreen() {
                 <Typography variant="label" weight="700" color="#90A4AE">Diaper</Typography>
               </View>
             </View>
+
+            {isMainExpanded && (
+              <View style={{ marginTop: 24 }}>
+                <View style={styles.divider} />
+                {selectedDayData.activities?.length > 0 ? (
+                  selectedDayData.activities.map((activity: any) => (
+                    <ActivityItem key={activity.id} activity={activity} />
+                  ))
+                ) : (
+                  <Typography variant="label" color="#B0BEC5" style={{ textAlign: 'center', paddingVertical: 12 }}>
+                    No activity records found for this day
+                  </Typography>
+                )}
+                <View style={{ height: 16 }} />
+              </View>
+            )}
           </Card>
         </View>
         
@@ -384,6 +407,8 @@ const styles = StyleSheet.create({
   },
   summaryCardHeader: {
     marginBottom: 24,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   statsGrid: {
