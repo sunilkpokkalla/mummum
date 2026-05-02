@@ -17,11 +17,11 @@ import {
   Baby as BabyIcon,
   ChevronRight,
   BarChart2,
-  X,
   MessageSquare,
   Pill,
   CheckSquare,
-  Syringe
+  Syringe,
+  Scale
 } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
@@ -82,6 +82,10 @@ export default function DashboardScreen() {
 
   const todaysActivities = babyActivities.filter(a => isToday(new Date(a.timestamp)));
   const activeSession = activeSessions.find(s => s.babyId === currentBabyId);
+  
+  const lastWeight = babyActivities.find(a => a.type === 'growth' && a.details?.metric === 'Weight');
+  const lastHeight = babyActivities.find(a => a.type === 'growth' && a.details?.metric === 'Height');
+  const lastHeadCirc = babyActivities.find(a => a.type === 'growth' && a.details?.metric === 'Head Circ');
 
 
   // Live timer for active session
@@ -270,6 +274,22 @@ export default function DashboardScreen() {
               value={lastDiaper ? formatDistanceToNow(new Date(lastDiaper.timestamp)) + ' ago' : 'No data'}
               accent={themeColors.tertiary}
             />
+            {lastWeight && (
+              <SummaryCard 
+                icon={<Scale size={20} color="#795548" />}
+                label="Weight"
+                value={`${lastWeight.details.value}${lastWeight.details.unit || 'lbs'}`}
+                accent="#795548"
+              />
+            )}
+            {lastHeight && (
+              <SummaryCard 
+                icon={<TrendingUp size={20} color="#009688" />}
+                label="Height"
+                value={`${lastHeight.details.value}${lastHeight.details.unit || 'cm'}`}
+                accent="#009688"
+              />
+            )}
           </ScrollView>
         </View>
 
@@ -463,6 +483,9 @@ function TimelineItem({ activity, icon, backgroundColor, isLast }: any) {
     if (type === 'medicine') {
       return `${details?.name} (${details?.dosage || 'No dose'}) • ${details?.reason}`;
     }
+    if (type === 'growth') {
+      return `${details?.metric} • ${details?.value}${details?.unit || ''}`;
+    }
     return details?.note || 'Activity completed';
   };
 
@@ -496,6 +519,7 @@ function getIconForActivity(type: string, themeColors: any) {
     case 'diaper': return <Droplet size={18} color={themeColors.tertiary} />;
     case 'vaccination': return <Syringe size={18} color="#009688" />;
     case 'medicine': return <Pill size={18} color="#9C27B0" />;
+    case 'growth': return <Scale size={18} color="#795548" />;
     default: return <BabyIcon size={18} color={themeColors.icon} />;
   }
 }
@@ -507,6 +531,7 @@ function getBgForActivity(type: string, colorScheme: string, themeColors: any) {
     case 'diaper': return colorScheme === 'light' ? '#FFF3E0' : '#3E272320';
     case 'vaccination': return colorScheme === 'light' ? '#E0F2F1' : '#004D4020';
     case 'medicine': return colorScheme === 'light' ? '#F3E5F5' : '#4A148C20';
+    case 'growth': return colorScheme === 'light' ? '#EFEBE9' : '#3E272320';
     default: return themeColors.surfaceVariant + '40';
   }
 }
