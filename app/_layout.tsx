@@ -10,6 +10,15 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useBabyStore } from '@/store/useBabyStore';
 import { useRouter, useSegments, useRootNavigationState } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,7 +56,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme() ?? 'light';
+  const colorScheme = 'light';
   const { isOnboarded } = useBabyStore();
   const segments = useSegments();
   const router = useRouter();
@@ -73,7 +82,7 @@ function RootLayoutNav() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="onboarding/index" />
           <Stack.Screen name="onboarding/name" />

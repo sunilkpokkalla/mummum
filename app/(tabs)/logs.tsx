@@ -10,7 +10,7 @@ import {
   isSameDay, 
   subDays
 } from 'date-fns';
-import { Milk, Moon, Droplet, ChevronRight, FileText, Share2 } from 'lucide-react-native';
+import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
 
 const { width } = Dimensions.get('window');
@@ -27,9 +27,13 @@ export default function LogsScreen() {
     return Array.from({ length: 7 }).map((_, i) => subDays(new Date(), i)).reverse();
   }, []);
 
+  const babyActivities = useMemo(() => {
+    return activities.filter(a => a.babyId === currentBabyId);
+  }, [activities, currentBabyId]);
+
   const sortedActivities = useMemo(() => {
-    return [...activities].sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  }, [activities]);
+    return [...babyActivities].sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [babyActivities]);
 
   const dailySummaries = useMemo(() => {
     const groups: { [key: string]: { 
@@ -81,7 +85,7 @@ export default function LogsScreen() {
       <View style={styles.header}>
         <View>
           <Typography variant="display" weight="700" style={{ color: '#1B3C35' }}>History</Typography>
-          <Typography variant="bodyMd" color="#607D8B">{currentBaby?.name || 'Baby'}'s Clinical Record</Typography>
+          <Typography variant="bodyMd" color="#607D8B">Daily Nurture for {currentBaby?.name || 'Baby'}</Typography>
         </View>
         <TouchableOpacity 
           style={styles.shareButton}
@@ -220,6 +224,8 @@ function ActivityItem({ activity }: { activity: any }) {
       case 'feed': return <Milk size={18} color="#2E7D32" />;
       case 'sleep': return <Moon size={18} color="#1565C0" />;
       case 'diaper': return <Droplet size={18} color="#E65100" />;
+      case 'vaccination': return <Syringe size={18} color="#009688" />;
+      case 'medicine': return <Pill size={18} color="#9C27B0" />;
       default: return <FileText size={18} color="#607D8B" />;
     }
   };
@@ -238,6 +244,12 @@ function ActivityItem({ activity }: { activity: any }) {
     }
     if (activity.type === 'diaper') {
       return `${d.diaperType} • ${d.hasRash ? 'Rash noted' : 'Clean'}`;
+    }
+    if (activity.type === 'vaccination') {
+      return `${d.name} • Recorded as permanent record`;
+    }
+    if (activity.type === 'medicine') {
+      return `${d.name} (${d.dosage || 'No dose'})\nReason: ${d.reason}`;
     }
     return '';
   };

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "339373048707",
+    "project_id": "mummum-babytracker",
+    "storage_bucket": "mummum-babytracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339373048707:android:12eeef4c2092a5a9ed6cb6",
+        "android_client_info": {
+          "package_name": "com.ambright.mummum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChMeuCXU-xl7Vg9mXD_-ILA3udeint_Tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

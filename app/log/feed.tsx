@@ -60,7 +60,7 @@ export default function FeedLogScreen() {
   const sliderFillWidth = (amount / maxAmount) * 100;
 
   // Timers for Left and Right
-  const activeFeed = activeSessions.find(s => s.type === 'feed');
+  const activeFeed = activeSessions.find(s => s.type === 'feed' && s.babyId === currentBabyId);
   const [leftTimer, setLeftTimer] = useState(0);
   const [rightTimer, setRightTimer] = useState(0);
   const [activeSide, setActiveSide] = useState<'L' | 'R' | null>(activeFeed?.side || null);
@@ -162,7 +162,15 @@ export default function FeedLogScreen() {
                     </View>
                     <TouchableOpacity 
                       style={[styles.timerButton, activeSide === 'L' ? { backgroundColor: '#C69C82' } : { backgroundColor: '#FBE9E7' }]}
-                      onPress={() => setActiveSide(activeSide === 'L' ? null : 'L')}
+                      onPress={() => {
+                        const newSide = activeSide === 'L' ? null : 'L';
+                        setActiveSide(newSide);
+                        if (newSide) {
+                          startSession({ babyId: currentBabyId || '', type: 'feed', startTime: new Date(), side: 'L' });
+                        } else {
+                          stopSession('feed');
+                        }
+                      }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'L' ? '#fff' : '#8D6E63' }}>
                         {activeSide === 'L' ? 'Pause' : 'Start'}
@@ -185,7 +193,15 @@ export default function FeedLogScreen() {
                     </View>
                     <TouchableOpacity 
                       style={[styles.timerButton, activeSide === 'R' ? { backgroundColor: '#C69C82' } : { backgroundColor: '#FBE9E7' }]}
-                      onPress={() => setActiveSide(activeSide === 'R' ? null : 'R')}
+                      onPress={() => {
+                        const newSide = activeSide === 'R' ? null : 'R';
+                        setActiveSide(newSide);
+                        if (newSide) {
+                          startSession({ babyId: currentBabyId || '', type: 'feed', startTime: new Date(), side: 'R' });
+                        } else {
+                          stopSession('feed');
+                        }
+                      }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'R' ? '#fff' : '#8D6E63' }}>
                         {activeSide === 'R' ? 'Pause' : 'Start'}

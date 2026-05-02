@@ -63,9 +63,10 @@ const MILESTONE_DATA = [
 export default function MilestonesScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies, currentBabyId, memories, addMemory } = useBabyStore();
+  const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [completedMilestones, setCompletedMilestones] = useState<string[]>(['m1', 'm2']);
+  const completedIds = (completedMilestones as any)[currentBabyId || ''] || [];
+  const babyMemories = memories.filter(m => m.babyId === currentBabyId);
 
   const handleAddMemory = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -93,12 +94,6 @@ export default function MilestonesScreen() {
     }
   };
 
-  const toggleMilestone = (id: string) => {
-    setCompletedMilestones(prev => 
-      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
-    );
-  };
-
   const getBabyAge = (birthDate: Date | string | undefined) => {
     if (!birthDate) return '';
     const birth = new Date(birthDate);
@@ -122,12 +117,12 @@ export default function MilestonesScreen() {
           <View style={styles.scoreHeader}>
             <View>
               <Typography variant="bodyLg" weight="700" color="#4A5D4C">Mastery Score</Typography>
-              <Typography variant="label" color="#607D8B">{completedMilestones.length} milestones reached</Typography>
+              <Typography variant="label" color="#607D8B">{completedIds.length} milestones reached</Typography>
             </View>
             <Award size={40} color="#C69C82" />
           </View>
           <View style={styles.progressBarBg}>
-            <View style={[styles.progressBarFill, { width: `${(completedMilestones.length / MILESTONE_DATA.length) * 100}%` }]} />
+            <View style={[styles.progressBarFill, { width: `${(completedIds.length / MILESTONE_DATA.length) * 100}%` }]} />
           </View>
         </Card>
 
@@ -137,7 +132,7 @@ export default function MilestonesScreen() {
           {MILESTONE_DATA.map((milestone) => (
             <Pressable 
               key={milestone.id} 
-              style={[styles.milestoneCard, completedMilestones.includes(milestone.id) && styles.milestoneCardCompleted]}
+              style={[styles.milestoneCard, completedIds.includes(milestone.id) && styles.milestoneCardCompleted]}
               onPress={() => toggleMilestone(milestone.id)}
             >
               <View style={[styles.categoryBadge, { backgroundColor: getCategoryColor(milestone.category) }]}>
@@ -148,7 +143,7 @@ export default function MilestonesScreen() {
                 <Typography variant="label" color="#90A4AE">{milestone.age} • {milestone.description}</Typography>
               </View>
               <View style={styles.checkContainer}>
-                {completedMilestones.includes(milestone.id) ? (
+                {completedIds.includes(milestone.id) ? (
                   <CheckCircle size={26} color="#4CAF50" />
                 ) : (
                   <Circle size={26} color="#CFD8DC" />
@@ -173,7 +168,7 @@ export default function MilestonesScreen() {
                 <Typography variant="label" color="#C69C82" weight="700">Add Photo</Typography>
               </TouchableOpacity>
               
-              {memories.map((memory, index) => (
+              {babyMemories.map((memory, index) => (
                 <View 
                   key={memory.id} 
                   style={[

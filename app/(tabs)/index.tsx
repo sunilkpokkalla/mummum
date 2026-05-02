@@ -13,13 +13,15 @@ import {
   Plus, 
   TrendingUp,
   Bell,
+  Settings,
   Baby as BabyIcon,
   ChevronRight,
   BarChart2,
   X,
   MessageSquare,
   Pill,
-  CheckSquare
+  CheckSquare,
+  Syringe
 } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
@@ -72,12 +74,15 @@ export default function DashboardScreen() {
     return `${days} days old`;
   };
 
-  const lastFeed = activities.find(a => a.type === 'feed');
-  const lastSleep = activities.find(a => a.type === 'sleep');
-  const lastDiaper = activities.find(a => a.type === 'diaper');
+  const babyActivities = activities.filter(a => a.babyId === currentBabyId);
 
-  const todaysActivities = activities.filter(a => isToday(new Date(a.timestamp)));
-  const activeSession = activeSessions[0];
+  const lastFeed = babyActivities.find(a => a.type === 'feed');
+  const lastSleep = babyActivities.find(a => a.type === 'sleep');
+  const lastDiaper = babyActivities.find(a => a.type === 'diaper');
+
+  const todaysActivities = babyActivities.filter(a => isToday(new Date(a.timestamp)));
+  const activeSession = activeSessions.find(s => s.babyId === currentBabyId);
+
 
   // Live timer for active session
   const [sessionTimer, setSessionTimer] = useState(0);
@@ -145,16 +150,22 @@ export default function DashboardScreen() {
                 styles.notificationButton, 
                 { backgroundColor: themeColors.surface, opacity: pressed ? 0.8 : 1 }
               ]}
+              onPress={() => router.push('/settings')}
             >
-              <Bell size={22} color={themeColors.text} />
-              <View style={[styles.notificationDot, { backgroundColor: themeColors.error }]} />
+              <Settings size={22} color={themeColors.text} />
             </Pressable>
           </View>
         </View>
 
         {/* Active Session Integration */}
         {activeSession && (
-          <Card style={[styles.activeSessionCard, { backgroundColor: activeSession.type === 'feed' ? '#E8F5E9' : '#E3F2FD' }]}>
+          <Card style={[
+            styles.activeSessionCard, 
+            { backgroundColor: colorScheme === 'light' 
+              ? (activeSession.type === 'feed' ? '#E8F5E9' : '#E3F2FD')
+              : (activeSession.type === 'feed' ? '#1B2E1D' : '#1A237E40') 
+            }
+          ]}>
             <Pressable 
               style={styles.activeSessionMain}
               hitSlop={10}
@@ -166,14 +177,22 @@ export default function DashboardScreen() {
               }}
             >
               <View style={styles.activeSessionInfo}>
-                <View style={[styles.activeIconCircle, { backgroundColor: activeSession.type === 'feed' ? '#4A5D4C' : '#1A237E' }]}>
+                <View style={[styles.activeIconCircle, { backgroundColor: activeSession.type === 'feed' ? '#4A5D4C' : '#3949AB' }]}>
                   {activeSession.type === 'feed' ? <Milk size={20} color="#fff" /> : <Moon size={20} color="#fff" />}
                 </View>
                 <View>
-                  <Typography weight="700" color={activeSession.type === 'feed' ? '#2E7D32' : '#1A237E'}>
-                    {activeSession.type === 'feed' ? 'Feeding in Progress' : 'Baby is Sleeping'}
+                  <Typography weight="700" color={colorScheme === 'light' 
+                    ? (activeSession.type === 'feed' ? '#2E7D32' : '#1A237E')
+                    : (activeSession.type === 'feed' ? '#81C784' : '#9FA8DA')
+                  }>
+                    {activeSession.type === 'feed' 
+                      ? `Feeding (${activeSession.side === 'L' ? 'Left' : 'Right'})` 
+                      : 'Baby is Sleeping'}
                   </Typography>
-                  <Typography variant="bodyMd" weight="600" color={activeSession.type === 'feed' ? '#4CAF50' : '#3F51B5'}>
+                  <Typography variant="bodyMd" weight="600" color={colorScheme === 'light'
+                    ? (activeSession.type === 'feed' ? '#4CAF50' : '#3F51B5')
+                    : (activeSession.type === 'feed' ? '#A5D6A7' : '#C5CAE9')
+                  }>
                     Duration: {formatSessionTime(sessionTimer)}
                   </Typography>
                 </View>
@@ -184,30 +203,51 @@ export default function DashboardScreen() {
               hitSlop={15}
               style={({ pressed }) => [
                 styles.stopButton, 
-                { backgroundColor: activeSession.type === 'feed' ? '#C8E6C9' : '#C5CAE9', opacity: pressed ? 0.7 : 1 }
+                { backgroundColor: colorScheme === 'light'
+                    ? (activeSession.type === 'feed' ? '#C8E6C9' : '#C5CAE9')
+                    : (activeSession.type === 'feed' ? '#2E7D3240' : '#3F51B540'),
+                  opacity: pressed ? 0.7 : 1 
+                }
               ]}
               onPress={() => {
                 if (activeSession.type === 'sleep') {
-                  // If it's sleep, we usually want to log it
                   router.push('/log/sleep');
                 } else {
                   useBabyStore.getState().stopSession(activeSession.type);
                 }
               }}
             >
-              <X size={20} color={activeSession.type === 'feed' ? '#2E7D32' : '#1A237E'} />
+              <X size={20} color={colorScheme === 'light' 
+                ? (activeSession.type === 'feed' ? '#2E7D32' : '#1A237E')
+                : (activeSession.type === 'feed' ? '#81C784' : '#9FA8DA')
+              } />
             </Pressable>
           </Card>
         )}
 
-        {/* Consolidated Daily Summary */}
+        {/* Consolidated Daily Nurture Progress */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Typography variant="headline" weight="700">Today's Summary</Typography>
+            <View>
+              <Typography variant="headline" weight="700">Daily Nurture</Typography>
+              <Typography variant="label" color={themeColors.icon}>Today's Progress</Typography>
+            </View>
             <View style={styles.statsRow}>
-              <StatPill icon={<Milk size={14} color="#4A5D4C" />} count={feedCount} color="#E8F5E9" />
-              <StatPill icon={<Moon size={14} color="#1A237E" />} count={sleepCount} color="#E3F2FD" />
-              <StatPill icon={<Droplet size={14} color="#E65100" />} count={diaperCount} color="#FFF3E0" />
+              <StatPill 
+                icon={<Milk size={14} color={colorScheme === 'light' ? '#4A5D4C' : '#81C784'} />} 
+                count={feedCount} 
+                backgroundColor={colorScheme === 'light' ? '#E8F5E9' : '#1B2E1D'} 
+              />
+              <StatPill 
+                icon={<Moon size={14} color={colorScheme === 'light' ? '#1A237E' : '#9FA8DA'} />} 
+                count={sleepCount} 
+                backgroundColor={colorScheme === 'light' ? '#E3F2FD' : '#1A237E20'} 
+              />
+              <StatPill 
+                icon={<Droplet size={14} color={colorScheme === 'light' ? '#E65100' : '#FFAB91'} />} 
+                count={diaperCount} 
+                backgroundColor={colorScheme === 'light' ? '#FFF3E0' : '#3E272320'} 
+              />
             </View>
           </View>
 
@@ -256,13 +296,52 @@ export default function DashboardScreen() {
               onPress={() => router.push('/log/diaper')}
             />
             <QuickAction 
-              icon={<Pill size={32} color={themeColors.primary} />}
-              label="Medication"
-              backgroundColor={themeColors.surfaceVariant + '40'}
-              onPress={() => router.push('/checklists')}
+              icon={<Pill size={32} color="#9C27B0" />}
+              label="Medical"
+              backgroundColor={colorScheme === 'light' ? '#F3E5F5' : '#4A148C20'}
+              onPress={() => router.push('/log/medical')}
             />
           </View>
         </View>
+
+        {/* Checklist Progress Block */}
+        <Pressable 
+          onPress={() => router.push('/checklists')}
+          style={({ pressed }) => [
+            styles.checklistBlock, 
+            { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] }
+          ]}
+        >
+          {(() => {
+            const completedItems = (useBabyStore.getState().completedChecklistItems as any)[currentBabyId || ''] || [];
+            const userTasks = useBabyStore.getState().userStandardTasks || [];
+            const totalTasks = 4 + userTasks.length;
+            const progress = Math.round((completedItems.length / totalTasks) * 100);
+
+            return (
+              <Card style={[styles.checklistCard, { backgroundColor: themeColors.surface, borderColor: themeColors.surfaceVariant }]}>
+                <View style={styles.checklistHeader}>
+                  <View style={styles.checklistTitleGroup}>
+                    <CheckSquare size={20} color={themeColors.text} />
+                    <Typography variant="bodyLg" weight="700" color={themeColors.text}>Daily Checklist</Typography>
+                    <Bell size={16} color={themeColors.icon} style={{ marginLeft: 4 }} />
+                  </View>
+                  <Typography variant="label" weight="700" color={themeColors.icon}>
+                    {completedItems.length} of {totalTasks} TASKS
+                  </Typography>
+                </View>
+                <View style={[styles.progressBarBg, { backgroundColor: themeColors.surfaceVariant }]}>
+                  <View 
+                    style={[
+                      styles.progressBarFill, 
+                      { width: `${progress}%`, backgroundColor: progress === 100 ? '#4CAF50' : themeColors.primary }
+                    ]} 
+                  />
+                </View>
+              </Card>
+            );
+          })()}
+        </Pressable>
 
         {/* Today's Timeline */}
         <View style={styles.section}>
@@ -291,11 +370,14 @@ export default function DashboardScreen() {
   );
 }
 
-function StatPill({ icon, count, color }: any) {
+function StatPill({ icon, count, backgroundColor }: any) {
+  const colorScheme = useColorScheme() ?? 'light';
+  const themeColors = Colors[colorScheme];
+
   return (
-    <View style={[styles.statPill, { backgroundColor: color }]}>
+    <View style={[styles.statPill, { backgroundColor }]}>
       {icon}
-      <Typography variant="label" weight="700" style={{ marginLeft: 4 }}>{count}</Typography>
+      <Typography variant="label" weight="700" style={{ marginLeft: 4, color: themeColors.text }}>{count}</Typography>
     </View>
   );
 }
@@ -340,6 +422,8 @@ function TimelineItem({ activity, icon, backgroundColor, isLast }: any) {
       case 'feed': return 'Feeding';
       case 'sleep': return 'Sleep';
       case 'diaper': return 'Diaper Change';
+      case 'vaccination': return 'Vaccination';
+      case 'medicine': return 'Medicine';
       default: return type.charAt(0).toUpperCase() + type.slice(1);
     }
   };
@@ -373,6 +457,12 @@ function TimelineItem({ activity, icon, backgroundColor, isLast }: any) {
     if (type === 'diaper') {
       return `Type: ${details?.diaperType || 'Wet'} • ${details?.hasRash ? 'Rash noted' : 'Clean'}`;
     }
+    if (type === 'vaccination') {
+      return `${details?.name} • Given on ${details?.date}`;
+    }
+    if (type === 'medicine') {
+      return `${details?.name} (${details?.dosage || 'No dose'}) • ${details?.reason}`;
+    }
     return details?.note || 'Activity completed';
   };
 
@@ -404,6 +494,8 @@ function getIconForActivity(type: string, themeColors: any) {
     case 'feed': return <Milk size={18} color={themeColors.primary} />;
     case 'sleep': return <Moon size={18} color={themeColors.secondary} />;
     case 'diaper': return <Droplet size={18} color={themeColors.tertiary} />;
+    case 'vaccination': return <Syringe size={18} color="#009688" />;
+    case 'medicine': return <Pill size={18} color="#9C27B0" />;
     default: return <BabyIcon size={18} color={themeColors.icon} />;
   }
 }
@@ -413,6 +505,8 @@ function getBgForActivity(type: string, colorScheme: string, themeColors: any) {
     case 'feed': return colorScheme === 'light' ? '#E8F5E9' : '#1B2E1D';
     case 'sleep': return colorScheme === 'light' ? '#E3F2FD' : '#1A237E20';
     case 'diaper': return colorScheme === 'light' ? '#FFF3E0' : '#3E272320';
+    case 'vaccination': return colorScheme === 'light' ? '#E0F2F1' : '#004D4020';
+    case 'medicine': return colorScheme === 'light' ? '#F3E5F5' : '#4A148C20';
     default: return themeColors.surfaceVariant + '40';
   }
 }
@@ -657,5 +751,36 @@ const styles = StyleSheet.create({
     flex: 1,
     fontStyle: 'italic',
     fontSize: 11,
+  },
+  checklistBlock: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  checklistCard: {
+    padding: 20,
+    borderRadius: 24,
+    borderWidth: 1,
+    gap: 16,
+  },
+  checklistHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  checklistTitleGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  progressBarBg: {
+    height: 8,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: '#4A5D4C',
+    borderRadius: 4,
   },
 });

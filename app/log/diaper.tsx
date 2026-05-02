@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  TouchableOpacity, 
+  ScrollView, 
+  Image, 
+  TextInput, 
+  KeyboardAvoidingView, 
+  Platform, 
+  TouchableWithoutFeedback, 
+  Keyboard 
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { Bell, Droplet, AlertCircle } from 'lucide-react-native';
+import { Bell, Droplet, AlertCircle, FileText } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 
 export default function DiaperLogScreen() {
@@ -42,74 +53,98 @@ export default function DiaperLogScreen() {
   };
 
   return (
-    <ScrollView 
-      style={[styles.container, { backgroundColor: themeColors.background }]}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
     >
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={20} style={styles.backBtn}>
-          <Image 
-            source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-            style={styles.avatar}
-          />
-        </TouchableOpacity>
-        <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
-        <View style={{ width: 40 }} />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView 
+          style={[styles.container, { backgroundColor: '#F8FAFB' }]}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()} hitSlop={20} style={styles.backBtn}>
+              <Image 
+                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
+                style={styles.avatar}
+              />
+            </TouchableOpacity>
+            <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
+            <View style={{ width: 40 }} />
+          </View>
 
-      {/* Title */}
-      <View style={styles.titleSection}>
-        <Typography variant="bodyLg" color={themeColors.icon} align="center">
-          Monitoring {currentBaby?.name || 'Baby'}'s comfort
-        </Typography>
-      </View>
+          {/* Title */}
+          <View style={styles.titleSection}>
+            <Typography variant="bodyLg" color={themeColors.icon} align="center">
+              Monitoring {currentBaby?.name || 'Baby'}'s comfort
+            </Typography>
+          </View>
 
-      {/* Type Selection Grid */}
-      <View style={styles.gridContainer}>
-        {['Wet', 'Dirty', 'Both'].map((t) => (
+          {/* Type Selection Grid */}
+          <View style={styles.gridContainer}>
+            {['Wet', 'Dirty', 'Both'].map((t) => (
+              <TouchableOpacity 
+                key={t}
+                style={[
+                  styles.typeCard, 
+                  type === t ? [styles.activeTypeCard, { backgroundColor: '#FBE9E7', borderColor: '#C69C82' }] : { backgroundColor: '#fff', borderColor: '#F5F5F5' }
+                ]}
+                onPress={() => setType(t)}
+              >
+                <View style={[styles.iconCircle, { backgroundColor: type === t ? '#C69C82' : '#F5F5F5' }]}>
+                  <Droplet size={24} color={type === t ? '#fff' : '#C69C82'} />
+                </View>
+                <Typography weight="700" color={type === t ? '#8D6E63' : '#A0A0A0'}>{t}</Typography>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Rash Warning */}
           <TouchableOpacity 
-            key={t}
-            style={[
-              styles.typeCard, 
-              type === t ? [styles.activeTypeCard, { backgroundColor: '#FBE9E7', borderColor: '#C69C82' }] : { backgroundColor: '#fff', borderColor: '#F5F5F5' }
-            ]}
-            onPress={() => setType(t)}
+            style={[styles.rashCard, rash && { backgroundColor: '#FFEBEE', borderColor: '#F44336' }]}
+            onPress={() => setRash(!rash)}
           >
-            <View style={[styles.iconCircle, { backgroundColor: type === t ? '#C69C82' : '#F5F5F5' }]}>
-              <Droplet size={24} color={type === t ? '#fff' : '#C69C82'} />
+            <View style={[styles.rashIcon, { backgroundColor: rash ? '#F44336' : '#F5F5F5' }]}>
+              <AlertCircle size={20} color={rash ? '#fff' : '#F44336'} />
             </View>
-            <Typography weight="700" color={type === t ? '#8D6E63' : '#A0A0A0'}>{t}</Typography>
+            <View style={{ flex: 1 }}>
+              <Typography weight="700" color={rash ? '#C62828' : '#1A1A1A'}>Diaper Rash?</Typography>
+              <Typography variant="label" color={rash ? '#E57373' : themeColors.icon}>Toggle if you notice any irritation</Typography>
+            </View>
+            <View style={[styles.checkbox, rash && { backgroundColor: '#F44336', borderColor: '#F44336' }]}>
+              {rash && <AlertCircle size={14} color="#fff" />}
+            </View>
           </TouchableOpacity>
-        ))}
-      </View>
 
-      {/* Rash Warning */}
-      <TouchableOpacity 
-        style={[styles.rashCard, rash && { backgroundColor: '#FFEBEE', borderColor: '#F44336' }]}
-        onPress={() => setRash(!rash)}
-      >
-        <View style={[styles.rashIcon, { backgroundColor: rash ? '#F44336' : '#F5F5F5' }]}>
-          <AlertCircle size={20} color={rash ? '#fff' : '#F44336'} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Typography weight="700" color={rash ? '#C62828' : '#1A1A1A'}>Diaper Rash?</Typography>
-          <Typography variant="label" color={rash ? '#E57373' : themeColors.icon}>Toggle if you notice any irritation</Typography>
-        </View>
-        <View style={[styles.checkbox, rash && { backgroundColor: '#F44336', borderColor: '#F44336' }]}>
-          {rash && <AlertCircle size={14} color="#fff" />}
-        </View>
-      </TouchableOpacity>
+          {/* Notes Section */}
+          <Card style={styles.notesCard}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <FileText size={18} color="#8D6E63" />
+              <Typography variant="bodyLg" weight="600" color="#8D6E63">Clinical Notes</Typography>
+            </View>
+            <TextInput
+              style={styles.notesInput}
+              placeholder="Record any observations..."
+              multiline
+              value={notes}
+              onChangeText={setNotes}
+              placeholderTextColor="#B0BEC5"
+            />
+          </Card>
 
-      {/* Save Button */}
-      <TouchableOpacity 
-        style={[styles.saveButton, { backgroundColor: '#C69C82' }]}
-        onPress={handleSave}
-      >
-        <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Save Log</Typography>
-      </TouchableOpacity>
-    </ScrollView>
+          {/* Save Button */}
+          <TouchableOpacity 
+            style={[styles.saveButton, { backgroundColor: '#C69C82' }]}
+            onPress={handleSave}
+          >
+            <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Save Diaper Log</Typography>
+          </TouchableOpacity>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -212,4 +247,21 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 4,
   },
+  notesCard: {
+    padding: 24,
+    borderRadius: 32,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#FBE9E7',
+    gap: 4,
+  },
+  notesInput: {
+    backgroundColor: '#F8FAFB',
+    borderRadius: 16,
+    padding: 16,
+    height: 100,
+    textAlignVertical: 'top',
+    fontSize: 16,
+    color: '#37474F',
+  }
 });

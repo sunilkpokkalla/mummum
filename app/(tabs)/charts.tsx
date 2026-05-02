@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { TrendingUp, Bell, ChevronRight, Plus, X } from 'lucide-react-native';
+import { TrendingUp, Bell, ChevronRight, Plus, X, Trash2, Lock, Unlock } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
 import { differenceInMonths, differenceInDays, format } from 'date-fns';
+import { Swipeable, RectButton } from 'react-native-gesture-handler';
 
 export default function ChartsScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies, currentBabyId, activities, addActivity, updateBaby } = useBabyStore();
+  const { babies, currentBabyId, activities, addActivity, updateBaby, deleteActivity, updateActivity } = useBabyStore();
   const [activeTab, setActiveTab] = useState('Weight');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newValue, setNewValue] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const birthDate = currentBaby?.birthDate ? new Date(currentBaby.birthDate) : new Date();
@@ -50,20 +52,51 @@ export default function ChartsScreen() {
       return;
     }
 
-    addActivity({
-      type: 'growth',
-      timestamp: new Date(),
-      details: {
-        metric: activeTab,
-        value: numValue.toString(),
-        unit: activeTab === 'Weight' ? 'lbs' : 'cm'
-      }
-    });
+    if (editingId) {
+      updateActivity(editingId, {
+        details: {
+          ...activities.find(a => a.id === editingId)?.details,
+          value: numValue.toString()
+        }
+      });
+    } else {
+      addActivity({
+        type: 'growth',
+        timestamp: new Date(),
+        details: {
+          metric: activeTab,
+          value: numValue.toString(),
+          unit: activeTab === 'Weight' ? 'lbs' : 'cm'
+        }
+      });
+    }
     setNewValue('');
+    setEditingId(null);
     setIsModalVisible(false);
   };
 
-  const growthHistory = activities.filter(a => a.type === 'growth' && a.details?.metric === activeTab);
+  const handleEdit = (id: string, value: string) => {
+    setEditingId(id);
+    setNewValue(value);
+    setIsModalVisible(true);
+  };
+
+  const handleDelete = (id: string) => {
+    Alert.alert(
+      "Delete Record",
+      "Are you sure you want to remove this measurement?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: () => deleteActivity(id) }
+      ]
+    );
+  };
+
+  const growthHistory = activities.filter(a => 
+    a.babyId === currentBabyId && 
+    a.type === 'growth' && 
+    a.details?.metric === activeTab
+  );
   const latestValue = growthHistory[0]?.details?.value ? parseFloat(growthHistory[0].details.value) : null;
   const previousValue = growthHistory[1]?.details?.value ? parseFloat(growthHistory[1].details.value) : null;
 
@@ -85,15 +118,33 @@ export default function ChartsScreen() {
     }
 
     const diff = previousValue ? (latestValue - previousValue).toFixed(1) : null;
-    const trendText = diff ? ` (Gained ${diff} ${activeTab === 'Weight' ? 'lbs' : 'cm'} since last check)` : '';
+    const isGain = previousValue ? latestValue >= previousValue : true;
+    const trendText = diff ? ` (${isGain ? 'Gained' : 'Lost'} ${Math.abs(Number(diff))} ${activeTab === 'Weight' ? 'lbs' : 'cm'} since last check)` : '';
 
     return {
       title: `Current ${activeTab} Insight`,
-      description: `${currentBaby?.name || 'your baby'} is in the ${percentile} percentile. This is considered ${status}${trendText}.`
+      description: `${currentBaby?.name || 'your baby'} is in the ${percentile} percentile. This is considered ${status}${trendText}.`,
+      diff,
+      isGain
     };
   };
 
   const insight = getDynamicInsight();
+
+  const getDataForMonth = (monthOffset: number) => {
+    const targetDate = new Date();
+    targetDate.setMonth(targetDate.getMonth() - monthOffset);
+    
+    // Find measurement closest to that month
+    const monthData = growthHistory.find(h => {
+      const hDate = new Date(h.timestamp);
+      return hDate.getMonth() === targetDate.getMonth() && hDate.getFullYear() === targetDate.getFullYear();
+    });
+
+    return monthData?.details?.value ? parseFloat(monthData.details.value) : null;
+  };
+
+  const maxVal = Math.max(...growthHistory.map(h => parseFloat(h.details?.value || '0')), 1);
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
@@ -157,7 +208,9 @@ export default function ChartsScreen() {
               </Typography>
             </View>
             <View style={styles.trendInfo}>
-              <Typography variant="bodyLg" weight="700" color="#2E7D32">{growthHistory.length > 1 ? '+1.2 lbs' : 'New'}</Typography>
+              <Typography variant="bodyLg" weight="700" color={insight.isGain ? "#2E7D32" : "#E57373"}>
+                {insight.diff ? `${insight.isGain ? '+' : ''}${insight.diff} ${activeTab === 'Weight' ? 'lbs' : 'cm'}` : 'New'}
+              </Typography>
               <Typography variant="label" color={themeColors.icon}>since last entry</Typography>
             </View>
           </View>
@@ -165,26 +218,32 @@ export default function ChartsScreen() {
           {/* Dynamic Bar Chart based on baby's age */}
           <View style={styles.chartArea}>
             {[...Array(6)].map((_, i) => {
-              const displayMonth = Math.max(0, monthsOld - (5 - i));
-              const isCurrentMonth = displayMonth === monthsOld;
-              const barHeight = 40 + (i * 8); // Mock trend
+              const offset = 5 - i;
+              const displayMonth = Math.max(0, monthsOld - offset);
+              const isCurrentMonth = offset === 0;
+              
+              const monthValue = getDataForMonth(offset);
+              // Scale bar height based on max value in history, min 20% height
+              const barHeight = monthValue ? (monthValue / maxVal) * 80 + 10 : 0;
+
               return (
                 <View key={i} style={styles.barWrapper}>
                   <View 
                     style={[
                       styles.bar, 
                       { 
-                        height: `${barHeight}%`, 
-                        backgroundColor: isCurrentMonth ? '#BCC6BC' : '#F5F5F5',
+                        height: monthValue ? `${barHeight}%` : 4, 
+                        backgroundColor: isCurrentMonth ? '#BCC6BC' : (monthValue ? '#F5F5F5' : '#ECEFF1'),
                         borderTopLeftRadius: 16,
                         borderTopRightRadius: 16,
+                        borderRadius: monthValue ? 0 : 2,
                       }
                     ]} 
                   >
-                    {isCurrentMonth && (
+                    {monthValue && isCurrentMonth && (
                       <View style={styles.barValueBubble}>
                         <Typography variant="label" weight="700" style={{ color: '#fff', fontSize: 10 }}>
-                          {growthHistory[0]?.details?.value || '-'}
+                          {monthValue}
                         </Typography>
                       </View>
                     )}
@@ -229,10 +288,12 @@ export default function ChartsScreen() {
             {growthHistory.length > 0 ? (
               growthHistory.map((item, idx) => (
                 <HistoryItem 
-                  key={idx}
+                  key={item.id}
                   date={new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   value={`${item.details?.value} ${item.details?.unit}`}
-                  accent="#4A5D4C" 
+                  accent="#4A5D4C"
+                  onDelete={() => handleDelete(item.id)}
+                  onEdit={() => handleEdit(item.id, item.details?.value)}
                 />
               ))
             ) : (
@@ -255,18 +316,23 @@ export default function ChartsScreen() {
 
       <Modal visible={isModalVisible} transparent animationType="fade">
         <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? -40 : 0}
           style={styles.modalOverlay}
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <View>
-                <Typography variant="headline" weight="700">Add {activeTab}</Typography>
+                <Typography variant="headline" weight="700">{editingId ? 'Edit' : 'Add'} {activeTab}</Typography>
                 <Typography variant="label" color={themeColors.icon}>Recording for {currentBaby?.name || 'Baby'}</Typography>
               </View>
               <TouchableOpacity 
                 style={[styles.closeBtn, { backgroundColor: themeColors.surfaceVariant + '40' }]} 
-                onPress={() => setIsModalVisible(false)}
+                onPress={() => {
+                  setIsModalVisible(false);
+                  setEditingId(null);
+                  setNewValue('');
+                }}
               >
                 <X size={20} color={themeColors.text} />
               </TouchableOpacity>
@@ -310,20 +376,50 @@ export default function ChartsScreen() {
   );
 }
 
-function HistoryItem({ date, value, accent }: any) {
+function HistoryItem({ date, value, accent, onDelete, onEdit }: any) {
+  const [isLocked, setIsLocked] = useState(true);
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
 
+  const renderRightActions = () => (
+    <RectButton style={styles.deleteAction} onPress={onDelete}>
+      <Trash2 size={16} color="#fff" />
+    </RectButton>
+  );
+
   return (
-    <TouchableOpacity activeOpacity={0.7}>
-      <Card style={[styles.historyCard, { borderLeftColor: accent, borderLeftWidth: 4 }]}>
-        <View>
-          <Typography variant="label" weight="600" color={themeColors.icon}>{date}</Typography>
-          <Typography variant="bodyLg" weight="700">{value}</Typography>
-        </View>
-        <ChevronRight size={20} color={themeColors.icon} />
-      </Card>
-    </TouchableOpacity>
+    <Swipeable renderRightActions={renderRightActions} enabled={!isLocked}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity 
+          onPress={() => setIsLocked(!isLocked)} 
+          style={{ paddingRight: 10, paddingLeft: 4 }}
+        >
+          {isLocked ? (
+            <Lock size={16} color="#90A4AE" />
+          ) : (
+            <Unlock size={16} color={accent} />
+          )}
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          activeOpacity={0.7} 
+          onPress={onEdit} 
+          disabled={isLocked}
+          style={{ flex: 1 }}
+        >
+          <Card style={[styles.historyCard, { borderLeftColor: accent, borderLeftWidth: 3, flex: 1 }]}>
+            <View style={{ flex: 1 }}>
+              <Typography variant="label" weight="600" color={themeColors.icon} style={{ fontSize: 10 }}>{date}</Typography>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <TrendingUp size={14} color={accent} />
+              <Typography variant="bodyLg" weight="700" style={{ color: isLocked ? '#90A4AE' : '#1B3C35' }}>{value}</Typography>
+              {!isLocked && <ChevronRight size={16} color={themeColors.icon} />}
+            </View>
+          </Card>
+        </TouchableOpacity>
+      </View>
+    </Swipeable>
   );
 }
 
@@ -473,14 +569,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   historyList: {
-    gap: 12,
+    gap: 8,
   },
   historyCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    borderRadius: 24,
+    padding: 12,
+    borderRadius: 16,
   },
   fab: {
     position: 'absolute',
@@ -567,5 +663,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 12,
     elevation: 8,
-  }
+  },
+  deleteAction: {
+    backgroundColor: '#E57373',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 60,
+    height: '100%',
+    borderRadius: 16,
+    marginBottom: 8,
+  },
 });

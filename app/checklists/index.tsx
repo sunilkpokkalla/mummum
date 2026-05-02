@@ -3,7 +3,7 @@ import Typography from '@/components/Typography';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useRouter } from 'expo-router';
-import { Activity, ArrowLeft, CheckCircle, Circle, Clock, Plus, Bell, X } from 'lucide-react-native';
+import { Activity, ArrowLeft, CheckCircle, Circle, Clock, Plus, Bell, X, Trash2, Syringe, ChevronRight } from 'lucide-react-native';
 import React, { useState, useEffect } from 'react';
 import { 
   Pressable, 
@@ -15,29 +15,19 @@ import {
   Modal, 
   TextInput,
   Platform,
-  Animated 
+  Animated,
+  Alert,
+  KeyboardAvoidingView 
 } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import * as Notifications from 'expo-notifications';
 import { useBabyStore } from '@/store/useBabyStore';
 
-const DAILY_TASKS = [
+const DEFAULT_DAILY_TASKS = [
   { id: 'd1', title: 'Vitamin D Drops', time: 'Morning', type: 'Med' },
   { id: 'd2', title: 'Tummy Time (15 mins)', time: 'Morning', type: 'Daily' },
   { id: 'd3', title: 'Bath / Skin Care', time: 'Evening', type: 'Daily' },
   { id: 'd4', title: 'Gum Cleaning', time: 'Morning', type: 'Daily' },
-];
-
-const VACCINATIONS = [
-  { id: 'v1', title: 'BCG (Tuberculosis)', period: 'At Birth', status: 'Mandatory' },
-  { id: 'v2', title: 'HepB (Hepatitis B)', period: 'At Birth', status: 'Mandatory' },
-  { id: 'v3', title: 'DTP 1 (Diphtheria, Tetanus)', period: '6 Weeks', status: 'Scheduled' },
-  { id: 'v4', title: 'Polio (OPV/IPV) 1', period: '6 Weeks', status: 'Scheduled' },
-  { id: 'v5', title: 'Rotavirus 1', period: '6 Weeks', status: 'Scheduled' },
-  { id: 'v6', title: 'DTP 2 / Polio 2', period: '10 Weeks', status: 'Upcoming' },
-  { id: 'v7', title: 'DTP 3 / Polio 3', period: '14 Weeks', status: 'Upcoming' },
-  { id: 'v8', title: 'Measles 1 / MR', period: '9 Months', status: 'Upcoming' },
-  { id: 'v9', title: 'DTP Booster / MMR', period: '15-18 Months', status: 'Upcoming' },
 ];
 
 export default function ChecklistsScreen() {
@@ -51,16 +41,37 @@ export default function ChecklistsScreen() {
     addReminder,
     deleteReminder,
     toggleReminder,
+    standardTaskSettings,
+    updateStandardTaskSetting,
+    userStandardTasks,
+    addUserStandardTask,
+    deleteUserStandardTask,
     currentBabyId,
     babies
   } = useBabyStore();
   
-  const [activeTab, setActiveTab] = useState<'Daily' | 'Vaccinations'>('Daily');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isStandardModalVisible, setIsStandardModalVisible] = useState(false);
+  const [isAddStandardModalVisible, setIsAddStandardModalVisible] = useState(false);
+  
+  const [selectedTask, setSelectedTask] = useState<any>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newTime, setNewTime] = useState('09:00 AM');
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
+  const items = (completedChecklistItems as any)[currentBabyId || ''] || [];
+
+  const renderRightActions = (id: string, isDefault: boolean) => {
+    if (isDefault) return null;
+    return (
+      <TouchableOpacity 
+        style={styles.deleteAction} 
+        onPress={() => deleteUserStandardTask(id)}
+      >
+        <Trash2 size={24} color="#fff" />
+      </TouchableOpacity>
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -71,75 +82,141 @@ export default function ChecklistsScreen() {
     })();
   }, []);
 
-  const handleAddReminder = async () => {
-    if (!newTitle) return;
-
-    const id = Math.random().toString(36).substring(7);
-    
-    // Schedule Notification
-    let notificationId;
+  const scheduleNotification = async (title: string, timeStr: string) => {
     try {
-      const [time, modifier] = newTime.split(' ');
+      const [time, modifier] = timeStr.split(' ');
       let [hours, minutes] = time.split(':').map(Number);
       if (modifier === 'PM' && hours < 12) hours += 12;
       if (modifier === 'AM' && hours === 12) hours = 0;
 
-      notificationId = await Notifications.scheduleNotificationAsync({
+      return await Notifications.scheduleNotificationAsync({
         content: {
-          title: `Mummum: ${newTitle}`,
-          body: `It's time for ${currentBaby?.name || 'baby'}'s ${newTitle.toLowerCase()}!`,
+          title: `Mummum: ${title}`,
+          body: `It's time for ${currentBaby?.name || 'baby'}'s ${title.toLowerCase()}!`,
           sound: true,
         },
         trigger: {
           hour: hours,
           minute: minutes,
           repeats: true,
-        },
+          type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        } as any,
       });
     } catch (e) {
       console.log('Notification Error', e);
+      return undefined;
     }
+  };
 
-    addReminder({
+  const handleUpdateStandardTask = async () => {
+    if (!selectedTask) return;
+
+    try {
+      let notificationId;
+      if (newTime) {
+        // Cancel old if exists
+        const existing = standardTaskSettings[selectedTask.id];
+        if (existing?.notificationId) {
+          await Notifications.cancelScheduledNotificationAsync(existing.notificationId);
+        }
+        notificationId = await scheduleNotification(selectedTask.title, newTime);
+      }
+
+      updateStandardTaskSetting(selectedTask.id, {
+        time: newTime,
+        enabled: true,
+        notificationId
+      });
+
+      setIsStandardModalVisible(false);
+      setSelectedTask(null);
+    } catch (e) {
+      Alert.alert("Error", "Could not schedule task alert.");
+    }
+  };
+
+  const handleAddUserStandardTask = async () => {
+    if (!newTitle) return;
+
+    const id = Math.random().toString(36).substring(7);
+    addUserStandardTask({
       id,
       title: newTitle,
+      time: newTime,
+      type: 'Custom'
+    });
+
+    // Automatically enable notification if time set
+    const notificationId = await scheduleNotification(newTitle, newTime);
+    updateStandardTaskSetting(id, {
       time: newTime,
       enabled: true,
       notificationId
     });
 
     setNewTitle('');
-    setIsModalVisible(false);
+    setIsAddStandardModalVisible(false);
   };
 
-  const handleToggleReminder = async (id: string, enabled: boolean, reminder: any) => {
-    toggleReminder(id);
-    
-    if (!enabled && reminder.notificationId) {
-      await Notifications.cancelScheduledNotificationAsync(reminder.notificationId);
-    } else if (enabled) {
-      // Re-schedule logic could go here
+  const handleToggleStandardTask = async (id: string, enabled: boolean, title: string) => {
+    const setting = standardTaskSettings[id];
+    if (!setting) return;
+
+    try {
+      if (!enabled && setting.notificationId) {
+        await Notifications.cancelScheduledNotificationAsync(setting.notificationId);
+        updateStandardTaskSetting(id, { ...setting, enabled: false, notificationId: undefined });
+      } else if (enabled) {
+        const notificationId = await scheduleNotification(title, setting.time);
+        updateStandardTaskSetting(id, { ...setting, enabled: true, notificationId });
+      }
+    } catch (e) {
+      Alert.alert("Error", "Could not toggle notification.");
     }
   };
 
-  const renderRightActions = (id: string, reminder: any) => {
-    return (
-      <TouchableOpacity 
-        style={styles.deleteAction} 
-        onPress={() => {
-          if (reminder.notificationId) {
-            Notifications.cancelScheduledNotificationAsync(reminder.notificationId);
-          }
-          deleteReminder(id);
-        }}
-      >
-        <Typography variant="label" weight="700" color="#fff">Delete</Typography>
-      </TouchableOpacity>
-    );
+  const handleTestNotification = async () => {
+    try {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== 'granted') {
+        Alert.alert("Permission Denied", `Status: ${finalStatus}. Please enable notifications for Mummum in your iPhone Settings.`);
+        return;
+      }
+
+      const id = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "🔔 Mummum Test Alert",
+          body: `Testing care alerts for ${currentBaby?.name || 'your baby'}! Success!`,
+          sound: true,
+        },
+        trigger: {
+          seconds: 5,
+          repeats: false,
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        } as any,
+      });
+
+      if (id) {
+        Alert.alert("✅ Success!", "Notification scheduled. It will appear in 5 seconds. Please stay here or lock your screen.");
+      } else {
+        Alert.alert("❌ Error", "Notification could not be scheduled.");
+      }
+    } catch (error) {
+      console.log('Test Notification Error', error);
+      Alert.alert("Error", "Something went wrong while scheduling the test notification.");
+    }
   };
 
-  const currentTasks = activeTab === 'Daily' ? DAILY_TASKS : VACCINATIONS;
-  const progress = Math.round((completedChecklistItems.length / (DAILY_TASKS.length + VACCINATIONS.length)) * 100);
+  const combinedTasks = [...DEFAULT_DAILY_TASKS, ...userStandardTasks];
+
+  const progress = Math.round((items.length / (combinedTasks.length)) * 100);
 
   return (
     <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
@@ -158,7 +235,7 @@ export default function ChecklistsScreen() {
           <View style={styles.progressHeader}>
             <View>
               <Typography variant="bodyLg" weight="700" color="#4A5D4C">Overall Progress</Typography>
-              <Typography variant="label" color="#607D8B">{completedChecklistItems.length} tasks completed</Typography>
+              <Typography variant="label" color="#607D8B">{items.length} tasks completed</Typography>
             </View>
             <View style={styles.progressBadge}>
               <Typography variant="label" weight="700" color="#fff">{progress}%</Typography>
@@ -169,113 +246,114 @@ export default function ChecklistsScreen() {
           </View>
         </Card>
 
-        {/* Tabs */}
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'Daily' && styles.activeTab]}
-            onPress={() => setActiveTab('Daily')}
-          >
-            <Typography weight="600" color={activeTab === 'Daily' ? '#fff' : '#607D8B'}>Daily Nurture</Typography>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'Vaccinations' && styles.activeTab]}
-            onPress={() => setActiveTab('Vaccinations')}
-          >
-            <Typography weight="600" color={activeTab === 'Vaccinations' ? '#fff' : '#607D8B'}>Vaccinations</Typography>
-          </TouchableOpacity>
+        <View style={styles.sectionHeader}>
+           <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>DAILY NURTURE</Typography>
+           <TouchableOpacity onPress={() => setIsAddStandardModalVisible(true)}>
+             <Plus size={20} color="#4A5D4C" />
+           </TouchableOpacity>
         </View>
 
-        {activeTab === 'Daily' && (
-          <View style={styles.sectionHeader}>
-             <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>STANDARD CARE</Typography>
-          </View>
-        )}
+        {combinedTasks.map((item: any) => {
+          const setting = standardTaskSettings[item.id];
+          const displayTime = setting?.time || item.time;
+          const isEnabled = setting?.enabled || false;
+          const isDefault = DEFAULT_DAILY_TASKS.some(d => d.id === item.id);
 
-        {currentTasks.map((item: any) => (
-          <Pressable
-            key={item.id}
-            style={[styles.taskCard, completedChecklistItems.includes(item.id) && styles.taskCardCompleted]}
-            onPress={() => toggleChecklistItem(item.id)}
-          >
-            <View style={styles.taskIconContainer}>
-              {activeTab === 'Daily' ? (
-                <Clock size={20} color={completedChecklistItems.includes(item.id) ? '#4CAF50' : '#8D6E63'} />
-              ) : (
-                <Activity size={20} color={completedChecklistItems.includes(item.id) ? '#4CAF50' : '#8D6E63'} />
-              )}
-            </View>
-            <View style={styles.taskInfo}>
-              <Typography
-                variant="bodyMd"
-                weight="700"
-                color={completedChecklistItems.includes(item.id) ? '#B0BEC5' : '#455A64'}
-                style={completedChecklistItems.includes(item.id) && { textDecorationLine: 'line-through' }}
-              >
-                {item.title}
-              </Typography>
-              <Typography variant="label" color="#90A4AE">
-                {activeTab === 'Daily' ? item.time : item.period} • {item.type || item.status}
-              </Typography>
-            </View>
-            <View style={styles.checkIcon}>
-              {completedChecklistItems.includes(item.id) ? (
-                <CheckCircle size={24} color="#4CAF50" />
-              ) : (
-                <Circle size={24} color="#CFD8DC" />
-              )}
-            </View>
-          </Pressable>
-        ))}
-
-        {activeTab === 'Daily' && (
-          <>
-            <View style={[styles.sectionHeader, { marginTop: 20 }]}>
-               <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>CUSTOM REMINDERS</Typography>
-               <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                 <Plus size={20} color="#4A5D4C" />
-               </TouchableOpacity>
-            </View>
-
-            {customReminders.map((reminder) => (
-              <Swipeable
-                key={reminder.id}
-                renderRightActions={() => renderRightActions(reminder.id, reminder)}
-              >
-                <View style={styles.taskCard}>
-                  <View style={[styles.taskIconContainer, { backgroundColor: '#E3F2FD' }]}>
-                    <Bell size={20} color="#1565C0" />
-                  </View>
-                  <View style={styles.taskInfo}>
-                    <Typography variant="bodyMd" weight="700" color="#455A64">{reminder.title}</Typography>
-                    <Typography variant="label" color="#90A4AE">{reminder.time}</Typography>
-                  </View>
-                  <Switch 
-                    value={reminder.enabled}
-                    onValueChange={(val) => handleToggleReminder(reminder.id, val, reminder)}
-                    trackColor={{ false: '#CFD8DC', true: '#4A5D4C' }}
-                  />
-                </View>
-              </Swipeable>
-            ))}
-
-            <TouchableOpacity 
-              style={styles.addBtn}
-              onPress={() => setIsModalVisible(true)}
+          return (
+            <Swipeable
+              key={item.id}
+              renderRightActions={() => renderRightActions(item.id, isDefault)}
+              friction={2}
+              rightThreshold={40}
             >
-              <Plus size={20} color="#4A5D4C" />
-              <Typography variant="body" weight="700" color="#4A5D4C">Add New Reminder</Typography>
-            </TouchableOpacity>
-          </>
-        )}
+              <View style={[styles.taskCard, items.includes(item.id) && styles.taskCardCompleted]}>
+                <TouchableOpacity 
+                  style={styles.taskIconContainer}
+                  onPress={() => {
+                    setSelectedTask(item);
+                    setNewTime(setting?.time || (item.time === 'Morning' ? '08:00 AM' : '06:00 PM'));
+                    setIsStandardModalVisible(true);
+                  }}
+                >
+                  <Clock size={20} color={items.includes(item.id) ? '#4CAF50' : '#8D6E63'} />
+                </TouchableOpacity>
+
+                <Pressable
+                  style={styles.taskPressArea}
+                  onPress={() => toggleChecklistItem(item.id)}
+                >
+                  <View style={styles.taskInfo}>
+                    <Typography
+                      variant="bodyMd"
+                      weight="700"
+                      color={items.includes(item.id) ? '#B0BEC5' : '#455A64'}
+                      style={items.includes(item.id) && { textDecorationLine: 'line-through' }}
+                    >
+                      {item.title}
+                    </Typography>
+                    <Typography variant="label" color="#90A4AE">
+                      {displayTime} • {item.type || 'Daily'}
+                    </Typography>
+                  </View>
+                </Pressable>
+
+                <View style={styles.taskActions}>
+                  <TouchableOpacity 
+                    onPress={() => handleToggleStandardTask(item.id, !isEnabled, item.title)}
+                    style={styles.actionIcon}
+                  >
+                    <Bell size={20} color={isEnabled ? '#4CAF50' : '#CFD8DC'} />
+                  </TouchableOpacity>
+                  <Pressable onPress={() => toggleChecklistItem(item.id)}>
+                     {items.includes(item.id) ? (
+                      <CheckCircle size={24} color="#4CAF50" />
+                    ) : (
+                      <Circle size={24} color="#CFD8DC" />
+                    )}
+                  </Pressable>
+                </View>
+              </View>
+            </Swipeable>
+          );
+        })}
+
+        {/* Record Vaccination Shortcut */}
+        <TouchableOpacity 
+          style={styles.medicalShortcutCard}
+          onPress={() => router.push('/log/medical')}
+        >
+          <View style={styles.medicalShortcutIcon}>
+            <Syringe size={20} color="#009688" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Typography variant="bodyMd" weight="700" color="#009688">Record Vaccination</Typography>
+            <Typography variant="label" color="#90A4AE">Update {currentBaby?.name || 'Baby'}'s clinical records</Typography>
+          </View>
+          <ChevronRight size={20} color="#009688" />
+        </TouchableOpacity>
+
+        <View style={{ marginTop: 40, paddingBottom: 40 }}>
+          <Typography 
+            variant="label" 
+            color="#B0BEC5" 
+            style={{ textAlign: 'center', paddingHorizontal: 40, lineHeight: 18 }}
+          >
+            Clinical care alerts are active. Tap the bell icon on any task above to adjust its daily notification time.
+          </Typography>
+        </View>
       </ScrollView>
 
-      {/* Add Reminder Modal */}
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
+      {/* Add New Standard Task Modal */}
+      <Modal visible={isAddStandardModalVisible} transparent animationType="slide">
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? -40 : 0}
+          style={styles.modalOverlay}
+        >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Typography variant="headline" weight="700" color="#1B3C35">New Reminder</Typography>
-              <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+              <Typography variant="headline" weight="700" color="#1B3C35">New Standard Task</Typography>
+              <TouchableOpacity onPress={() => setIsAddStandardModalVisible(false)}>
                 <X size={24} color="#1B3C35" />
               </TouchableOpacity>
             </View>
@@ -285,7 +363,7 @@ export default function ChecklistsScreen() {
                 <Typography variant="label" weight="700" color="#90A4AE">TASK NAME</Typography>
                 <TextInput 
                   style={styles.textInput}
-                  placeholder="e.g., Afternoon Walk"
+                  placeholder="e.g., Probiotic Drops"
                   value={newTitle}
                   onChangeText={setNewTitle}
                   autoFocus
@@ -293,21 +371,71 @@ export default function ChecklistsScreen() {
               </View>
 
               <View style={styles.inputSection}>
-                <Typography variant="label" weight="700" color="#90A4AE">REMINDER TIME</Typography>
+                <Typography variant="label" weight="700" color="#90A4AE">DAILY TIME</Typography>
                 <TextInput 
                   style={styles.textInput}
-                  placeholder="09:00 AM"
+                  placeholder="08:30 AM"
                   value={newTime}
                   onChangeText={setNewTime}
                 />
               </View>
 
-              <TouchableOpacity style={styles.saveBtn} onPress={handleAddReminder}>
-                <Typography variant="bodyLg" weight="700" color="#fff">Schedule Reminder</Typography>
+              <TouchableOpacity style={styles.saveBtn} onPress={handleAddUserStandardTask}>
+                <Typography variant="bodyLg" weight="700" color="#fff">Create Clinical Task</Typography>
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      {/* Edit Standard Task Modal */}
+      <Modal visible={isStandardModalVisible} transparent animationType="slide">
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? -40 : 0}
+          style={styles.modalOverlay}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <View>
+                <Typography variant="headline" weight="700" color="#1B3C35">{selectedTask?.title}</Typography>
+                <Typography variant="label" color="#607D8B">Set Daily Notification Time</Typography>
+              </View>
+              <TouchableOpacity onPress={() => setIsStandardModalVisible(false)}>
+                <X size={24} color="#1B3C35" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalBody}>
+              <View style={styles.inputSection}>
+                <Typography variant="label" weight="700" color="#90A4AE">NOTIFICATION TIME</Typography>
+                <TextInput 
+                  style={styles.textInput}
+                  placeholder="09:00 AM"
+                  value={newTime}
+                  onChangeText={setNewTime}
+                  autoFocus
+                />
+              </View>
+
+              <View style={styles.switchRow}>
+                <View>
+                  <Typography variant="body" weight="700" color="#1B3C35">Enable Alerts</Typography>
+                  <Typography variant="label" color="#90A4AE">Get notified on your device</Typography>
+                </View>
+                <Switch 
+                  value={standardTaskSettings[selectedTask?.id]?.enabled}
+                  onValueChange={(val) => handleToggleStandardTask(selectedTask.id, val, selectedTask.title)}
+                  trackColor={{ false: '#CFD8DC', true: '#4A5D4C' }}
+                />
+              </View>
+
+              <TouchableOpacity style={styles.saveBtn} onPress={handleUpdateStandardTask}>
+                <Typography variant="bodyLg" weight="700" color="#fff">Save Settings</Typography>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -356,7 +484,7 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 24,
     backgroundColor: '#F2F5F6',
     borderRadius: 16,
     padding: 4,
@@ -394,6 +522,11 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
+  taskPressArea: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   taskCardCompleted: {
     backgroundColor: '#F8F9FA',
     opacity: 0.8,
@@ -410,8 +543,13 @@ const styles = StyleSheet.create({
   taskInfo: {
     flex: 1,
   },
-  checkIcon: {
-    marginLeft: 12,
+  taskActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  actionIcon: {
+    padding: 8,
   },
   addBtn: {
     flexDirection: 'row',
@@ -457,6 +595,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     color: '#1B3C35',
   },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
   saveBtn: {
     backgroundColor: '#4A5D4C',
     padding: 20,
@@ -469,8 +613,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
-    height: '84%', // Match card height
+    height: '84%',
     borderRadius: 20,
     marginBottom: 12,
-  }
+  },
+  medicalShortcutCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E0F2F1',
+    padding: 20,
+    borderRadius: 24,
+    marginTop: 24,
+    gap: 16,
+    borderWidth: 1,
+    borderColor: '#B2DFDB',
+  },
+  medicalShortcutIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

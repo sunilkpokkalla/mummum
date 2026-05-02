@@ -46,11 +46,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="logs"
+        name="charts"
         options={{
-          title: 'History',
+          title: 'Charts',
           headerShown: false,
-          tabBarIcon: ({ color }) => <List size={24} color={color} />,
+          tabBarIcon: ({ color }) => <BarChart2 size={24} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -63,17 +63,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="charts"
-        options={{
-          title: 'Charts',
-          tabBarIcon: ({ color }) => <BarChart2 size={24} color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="milestones"
         options={{
           title: 'Milestones',
+          headerShown: false,
           tabBarIcon: ({ color }) => <Award size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="logs"
+        options={{
+          title: 'History',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <List size={24} color={color} />,
         }}
       />
     </Tabs>

@@ -15,12 +15,6 @@ export default function WelcomeScreen() {
   const { tempBaby, addBaby, completeOnboarding } = useBabyStore();
 
   const handleFinish = () => {
-    const newBaby = {
-      id: Math.random().toString(36).substring(7),
-      name: tempBaby.name || 'Noah',
-      birthDate: tempBaby.birthDate || new Date(),
-    };
-    addBaby(newBaby);
     completeOnboarding();
     router.replace('/(tabs)');
   };

@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/MUMMUM_FINAL.png",
     "scheme": "mummum",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/MUMMUM_FINAL.png",
@@ -31,7 +31,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.ambright.mummum"
+      "package": "com.ambright.mummum",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -48,6 +49,7 @@
             "forceStaticLinking": [
               "RNFBApp",
               "RNFBAuth",
+              "RNFBFirestore",
               "RNFBSharedUtils",
               "RNFBUtilsModule"
             ]

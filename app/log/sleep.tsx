@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Pressable, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { 
+  StyleSheet, 
+  View, 
+  Pressable, 
+  ScrollView, 
+  Image, 
+  Dimensions, 
+  TouchableOpacity, 
+  TextInput, 
+  KeyboardAvoidingView, 
+  Platform, 
+  TouchableWithoutFeedback, 
+  Keyboard 
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { format } from 'date-fns';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,7 +20,17 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { Bell, Moon, TrendingUp, ChevronRight, Smile, CloudMoon as MoonCloud, Frown } from 'lucide-react-native';
+import { 
+  Bell, 
+  Moon, 
+  TrendingUp, 
+  ChevronRight, 
+  Smile, 
+  CloudMoon as MoonCloud, 
+  Frown, 
+  FileText,
+  ArrowLeft 
+} from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 
 const { width } = Dimensions.get('window');
@@ -20,10 +43,10 @@ export default function SleepLogScreen() {
   const { activities, activeSessions, startSession, stopSession, addActivity, babies, currentBabyId } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
-  const activeSleep = activeSessions.find(s => s.type === 'sleep');
+  const activeSleep = activeSessions.find(s => s.type === 'sleep' && s.babyId === currentBabyId);
   const [timer, setTimer] = useState(0);
   const [showMoodPicker, setShowMoodPicker] = useState(false);
-  const [selectedMood, setSelectedMood] = useState('PEACEFUL');
+  const [notes, setNotes] = useState('');
 
   const getBabyAge = (birthDate: Date | string | undefined) => {
     if (!birthDate) return '';
@@ -34,11 +57,11 @@ export default function SleepLogScreen() {
   };
 
   const sleepActivities = activities
-    .filter(a => a.type === 'sleep')
+    .filter(a => a.babyId === currentBabyId && a.type === 'sleep')
     .sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   const totalSleepToday = sleepActivities
-    .filter(a => new Date(a.timestamp).toDateString() === new Date().toDateString())
+    .filter(a => a.babyId === currentBabyId && new Date(a.timestamp).toDateString() === new Date().toDateString())
     .reduce((acc, s) => acc + (s.details?.duration || 0), 0);
 
   useEffect(() => {
@@ -85,7 +108,8 @@ export default function SleepLogScreen() {
       details: {
         startTime: activeSleep?.startTime || new Date(),
         duration: timer,
-        quality: mood
+        quality: mood,
+        notes: notes
       },
     });
     stopSession('sleep');
@@ -94,154 +118,146 @@ export default function SleepLogScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image 
-            source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-            style={styles.avatar} 
-          />
-          <View>
-            <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Sleep Log</Typography>
-            <Typography variant="label" color="#607D8B">{currentBaby?.name || 'your baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
-          </View>
-        </View>
-        <Pressable 
-          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
-          hitSlop={10}
-        >
-          <Bell size={24} color="#1B3C35" />
-        </Pressable>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Current Session Card */}
-        <Card style={[styles.sessionCard, !activeSleep && { backgroundColor: '#4A5D4C' }]}>
-          <Typography variant="label" weight="700" color="#B0BEC5" style={{ letterSpacing: 1 }}>
-            {activeSleep ? 'CURRENT SESSION' : 'AWAKE'}
-          </Typography>
-          <View style={styles.timerRow}>
-            <View>
-              <Typography variant="display" weight="700" color="#fff" style={{ fontSize: 28, textAlign: 'center' }}>
-                {activeSleep ? `Sleeping for ${formatDuration(timer)}` : 'Baby is currently awake'}
-              </Typography>
-            </View>
-            <Moon size={40} color="#fff" opacity={0.2} style={{ position: 'absolute', right: 0, top: 0 }} />
-          </View>
-
-          <View style={styles.timerCircle}>
-            <View style={[styles.progressRing, !activeSleep && { borderTopColor: 'rgba(255,255,255,0.2)' }]} />
-            <Moon size={32} color="#fff" opacity={activeSleep ? 1 : 0.5} />
-          </View>
-
-          {showMoodPicker ? (
-            <View style={styles.moodPicker}>
-              <Typography variant="label" weight="700" color="rgba(255,255,255,0.7)" style={{ marginBottom: 20, letterSpacing: 1.2 }}>HOW DID BABY WAKE UP? </Typography>
-              <View style={styles.moodGrid}>
-                <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('HAPPY')}>
-                  <View style={[styles.moodIconCircle, { backgroundColor: '#E8F5E9' }]}>
-                    <Smile size={28} color="#4CAF50" />
-                  </View>
-                  <Typography variant="label" weight="700" color="#fff">Happy</Typography>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('PEACEFUL')}>
-                  <View style={[styles.moodIconCircle, { backgroundColor: '#E3F2FD' }]}>
-                    <MoonCloud size={28} color="#2196F3" />
-                  </View>
-                  <Typography variant="label" weight="700" color="#fff">Calm</Typography>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('FUSSY')}>
-                  <View style={[styles.moodIconCircle, { backgroundColor: '#FFEBEE' }]}>
-                    <Frown size={28} color="#F44336" />
-                  </View>
-                  <Typography variant="label" weight="700" color="#fff">Fussy</Typography>
-                </TouchableOpacity>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <Image 
+                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
+                style={styles.avatar} 
+              />
+              <View>
+                <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Sleep Log</Typography>
+                <Typography variant="label" color="#607D8B">{currentBaby?.name || 'your baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
               </View>
             </View>
-          ) : (
-            <Pressable 
-              style={({ pressed }) => [
-                styles.wakeUpBtn, 
-                { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
-              ]} 
-              onPress={activeSleep ? handleWakeUp : handleStartSleep}
-              hitSlop={10}
-            >
-              <Typography variant="bodyLg" weight="700" color={activeSleep ? '#345261' : '#4A5D4C'}>
-                {activeSleep ? 'Wake Up' : 'Start Sleep'}
+            <TouchableOpacity onPress={() => router.back()}>
+              <ArrowLeft size={24} color="#1B3C35" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+            {/* Current Session Card */}
+            <Card style={[styles.sessionCard, !activeSleep && { backgroundColor: '#4A5D4C' }]}>
+              <Typography variant="label" weight="700" color="#B0BEC5" style={{ letterSpacing: 1 }}>
+                {activeSleep ? 'CURRENT SESSION' : 'AWAKE'}
               </Typography>
-            </Pressable>
-          )}
-        </Card>
+              <View style={styles.timerRow}>
+                <View>
+                  <Typography variant="display" weight="700" color="#fff" style={{ fontSize: 28, textAlign: 'center' }}>
+                    {activeSleep ? `Sleeping for ${formatDuration(timer)}` : 'Baby is currently awake'}
+                  </Typography>
+                </View>
+                <Moon size={40} color="#fff" opacity={0.2} style={{ position: 'absolute', right: 0, top: 0 }} />
+              </View>
 
-        {/* Daily Summary Card */}
-        <Card style={styles.summaryCard}>
-          <View style={styles.summaryHeaderRow}>
-            <View style={styles.summaryIconContainer}>
-              <TrendingUp size={20} color="#2196F3" />
-            </View>
-            <View style={styles.summaryBadge}>
-              <Typography variant="label" weight="700" color="#2196F3">Today</Typography>
-            </View>
-          </View>
-          <View style={{ marginTop: 16 }}>
-            <Typography variant="display" weight="700" color="#1A1A1A" style={{ fontSize: 28 }}>
-              {formatDuration(totalSleepToday)}
-            </Typography>
-            <Typography variant="bodyMd" color="#607D8B">Total sleep tracked today.</Typography>
-          </View>
-        </Card>
+              <View style={styles.timerCircle}>
+                <View style={[styles.progressRing, !activeSleep && { borderTopColor: 'rgba(255,255,255,0.2)' }]} />
+                <Moon size={32} color="#fff" opacity={activeSleep ? 1 : 0.5} />
+              </View>
 
-        {/* Pro Tip Card */}
-        <Card style={styles.tipCard}>
-          <View style={styles.tipIcon}>
-            <TrendingUp size={24} color="#8D6E63" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Typography variant="label" weight="700" color="#8D6E63">PRO TIP</Typography>
-            <Typography variant="bodyMd" color="#3E2723">
-              Keep the room dim during naps for better night rest.
-            </Typography>
-          </View>
-        </Card>
+              {showMoodPicker ? (
+                <View style={styles.moodPicker}>
+                  <Typography variant="label" weight="700" color="rgba(255,255,255,0.7)" style={{ marginBottom: 20, letterSpacing: 1.2 }}>HOW DID BABY WAKE UP? </Typography>
+                  <View style={styles.moodGrid}>
+                    <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('HAPPY')}>
+                      <View style={[styles.moodIconCircle, { backgroundColor: '#E8F5E9' }]}>
+                        <Smile size={28} color="#4CAF50" />
+                      </View>
+                      <Typography variant="label" weight="700" color="#fff">Happy</Typography>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('PEACEFUL')}>
+                      <View style={[styles.moodIconCircle, { backgroundColor: '#E3F2FD' }]}>
+                        <MoonCloud size={28} color="#2196F3" />
+                      </View>
+                      <Typography variant="label" weight="700" color="#fff">Calm</Typography>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.moodBtn} onPress={() => handleWakeUpComplete('FUSSY')}>
+                      <View style={[styles.moodIconCircle, { backgroundColor: '#FFEBEE' }]}>
+                        <Frown size={28} color="#F44336" />
+                      </View>
+                      <Typography variant="label" weight="700" color="#fff">Fussy</Typography>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : (
+                <Pressable 
+                  style={({ pressed }) => [
+                    styles.wakeUpBtn, 
+                    { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+                  ]} 
+                  onPress={activeSleep ? handleWakeUp : handleStartSleep}
+                  hitSlop={10}
+                >
+                  <Typography variant="bodyLg" weight="700" color={activeSleep ? '#345261' : '#4A5D4C'}>
+                    {activeSleep ? 'Wake Up' : 'Start Sleep'}
+                  </Typography>
+                </Pressable>
+              )}
+            </Card>
 
-        {/* Log History */}
-        <View style={styles.historySection}>
-          <View style={styles.sectionHeader}>
-            <Typography variant="headline" weight="700" color="#1A1A1A">Log History</Typography>
-            <Pressable hitSlop={10} style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
-              <Typography variant="label" weight="600" color="#4A5D4C">View Trends</Typography>
-            </Pressable>
-          </View>
-
-          <View style={styles.historyList}>
-            {sleepActivities.slice(0, 5).map((activity) => (
-              <HistoryItem 
-                key={activity.id}
-                title={new Date(activity.timestamp).getHours() > 19 || new Date(activity.timestamp).getHours() < 6 ? "Night Sleep" : "Nap"} 
-                time={`${format(new Date(activity.details?.startTime || activity.timestamp), 'HH:mm')} - ${format(new Date(activity.timestamp), 'HH:mm')}`} 
-                duration={formatDuration(activity.details?.duration || 0)} 
-                mood={activity.details?.quality || "PEACEFUL"} 
-                icon={<Moon size={24} color="#FFD54F" />} 
+            {/* Notes Section (New) */}
+            <Card style={styles.notesCard}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <FileText size={18} color="#8D6E63" />
+                <Typography variant="bodyLg" weight="600" color="#8D6E63">Sleep Notes</Typography>
+              </View>
+              <TextInput
+                style={styles.notesInput}
+                placeholder="Any night terrors or observations?"
+                multiline
+                value={notes}
+                onChangeText={setNotes}
+                placeholderTextColor="#B0BEC5"
               />
-            ))}
-            {sleepActivities.length === 0 && (
-              <Typography variant="label" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 20 }}>
-                No sleep history recorded yet.
-              </Typography>
-            )}
-          </View>
-        </View>
+            </Card>
 
-        {/* Decoration */}
-        <View style={styles.decoration}>
-          <View style={styles.moonDecoration}>
-            <Moon size={48} color="#FFF9C4" />
-          </View>
+            {/* Daily Summary Card */}
+            <Card style={styles.summaryCard}>
+              <View style={styles.summaryHeaderRow}>
+                <View style={styles.summaryIconContainer}>
+                  <TrendingUp size={20} color="#2196F3" />
+                </View>
+                <View style={styles.summaryBadge}>
+                  <Typography variant="label" weight="700" color="#2196F3">Today</Typography>
+                </View>
+              </View>
+              <View style={{ marginTop: 16 }}>
+                <Typography variant="display" weight="700" color="#1A1A1A" style={{ fontSize: 28 }}>
+                  {formatDuration(totalSleepToday)}
+                </Typography>
+                <Typography variant="bodyMd" color="#607D8B">Total sleep tracked today.</Typography>
+              </View>
+            </Card>
+
+            {/* Log History */}
+            <View style={styles.historySection}>
+              <View style={styles.sectionHeader}>
+                <Typography variant="headline" weight="700" color="#1A1A1A">Log History</Typography>
+              </View>
+
+              <View style={styles.historyList}>
+                {sleepActivities.slice(0, 5).map((activity) => (
+                  <HistoryItem 
+                    key={activity.id}
+                    title={new Date(activity.timestamp).getHours() > 19 || new Date(activity.timestamp).getHours() < 6 ? "Night Sleep" : "Nap"} 
+                    time={`${format(new Date(activity.details?.startTime || activity.timestamp), 'HH:mm')} - ${format(new Date(activity.timestamp), 'HH:mm')}`} 
+                    duration={formatDuration(activity.details?.duration || 0)} 
+                    mood={activity.details?.quality || "PEACEFUL"} 
+                    icon={<Moon size={24} color="#FFD54F" />} 
+                  />
+                ))}
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -291,7 +307,7 @@ const styles = StyleSheet.create({
   sessionCard: {
     padding: 32,
     borderRadius: 40,
-    backgroundColor: '#345261', // Dark blue from image
+    backgroundColor: '#345261', 
     alignItems: 'center',
     borderWidth: 0,
     shadowColor: '#000',
@@ -348,6 +364,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  moodIconCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  notesCard: {
+    padding: 24,
+    borderRadius: 32,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#FBE9E7',
+    gap: 4,
+  },
+  notesInput: {
+    backgroundColor: '#F8FAFB',
+    borderRadius: 16,
+    padding: 16,
+    height: 100,
+    textAlignVertical: 'top',
+    fontSize: 16,
+    color: '#37474F',
+  },
   summaryCard: {
     padding: 24,
     borderRadius: 32,
@@ -373,14 +414,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     backgroundColor: '#fff',
     borderRadius: 12,
-  },
-  moodIconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
   },
   tipCard: {
     flexDirection: 'row',
