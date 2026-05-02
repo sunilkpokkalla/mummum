@@ -314,11 +314,10 @@ function ActivityItem({ activity }: { activity: any }) {
       return `${d.name} (${d.dosage || 'No dose'})`;
     }
     if (activity.type === 'growth') {
-      const parts = [];
-      if (d.weight) parts.push(`W: ${d.weight}${d.weightUnit || 'kg'}`);
-      if (d.height) parts.push(`H: ${d.height}${d.heightUnit || 'cm'}`);
-      if (d.headCirc) parts.push(`HC: ${d.headCirc}${d.headCircUnit || 'cm'}`);
-      return parts.join(' • ') || 'Measurement recorded';
+      if (d.metric && d.value) {
+        return `${d.metric} • ${d.value}${d.unit || ''}`;
+      }
+      return 'Measurement recorded';
     }
     return '';
   };
