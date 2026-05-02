@@ -664,30 +664,30 @@ function VaccineRow({ title, period, record, onPress, onDelete }: any) {
         >
           <Card style={[
             styles.vaccineCardCompact, 
-            { flex: 1, padding: 16, borderRadius: 20 },
+            { flex: 1, padding: record ? 10 : 16, borderRadius: record ? 16 : 20 },
             record && { 
               borderLeftColor: '#4CAF50', 
               borderLeftWidth: 4, 
-              backgroundColor: isLocked ? '#F8FAFB' : '#F1F8E9',
+              backgroundColor: '#E8F5E9',
               shadowColor: '#4CAF50',
               shadowOpacity: 0.05
             }
           ]}>
             <View style={{ flex: 1, gap: 2 }}>
-              <Typography variant="label" weight="800" color={record ? '#4CAF50' : '#B0BEC5'} style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: 1 }}>{period}</Typography>
-              <Typography variant="body" weight="700" style={{ fontSize: 16, color: isLocked && record ? '#90A4AE' : '#1B3C35' }} numberOfLines={1}>{title}</Typography>
+              <Typography variant="label" weight="800" color={record ? '#2E7D32' : '#B0BEC5'} style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: 1 }}>{period}</Typography>
+              <Typography variant="body" weight="700" style={{ fontSize: record ? 14 : 16, color: record ? '#1B5E20' : '#1B3C35' }} numberOfLines={1}>{title}</Typography>
             </View>
             
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               {record ? (
-                <View style={{ backgroundColor: isLocked ? '#ECEFF1' : '#E8F5E9', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Syringe size={12} color={isLocked ? '#90A4AE' : '#4CAF50'} />
-                  <Typography variant="label" weight="800" style={{ fontSize: 11, color: isLocked ? '#607D8B' : '#2E7D32' }}>
-                    {format(new Date(record.timestamp), 'MMM d')}
+                <View style={{ backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: '#C8E6C9' }}>
+                  <Syringe size={10} color="#4CAF50" />
+                  <Typography variant="label" weight="800" style={{ fontSize: 10, color: '#2E7D32' }}>
+                    {format(new Date(record.timestamp), 'MMM d, yyyy')}
                   </Typography>
                 </View>
               ) : (
-                <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#F8FAFB', alignItems: 'center', justifyCenter: 'center', borderWidth: 1, borderColor: '#ECEFF1', borderStyle: 'dashed' }}>
+                <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#F8FAFB', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#ECEFF1', borderStyle: 'dashed' }}>
                   <Plus size={16} color="#CFD8DC" />
                 </View>
               )}
