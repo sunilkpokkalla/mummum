@@ -253,6 +253,7 @@ export default function MedicalLogScreen() {
   };
 
   const openVaccineEntry = (name = '', activity?: any) => {
+    Keyboard.dismiss();
     setVaccineName(name);
     if (activity) {
       setVaccineDate(new Date(activity.timestamp));
@@ -265,6 +266,7 @@ export default function MedicalLogScreen() {
   };
 
   const showDatePicker = (target: 'VACCINE' | 'MEDICINE') => {
+    Keyboard.dismiss();
     setDateTarget(target);
     setIsDatePickerVisible(true);
   };
