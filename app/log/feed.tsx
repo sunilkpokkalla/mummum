@@ -120,15 +120,15 @@ export default function FeedLogScreen() {
     >
       <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
         {/* Header */}
-        <View style={[styles.header, { justifyContent: 'center' }]}>
-          <View style={{ alignItems: 'center' }}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtnHeader}>
+            <ArrowLeft size={24} color="#1B3C35" />
+          </TouchableOpacity>
+          <View style={styles.headerCenter}>
             <Typography variant="headline" weight="700" style={{ color: '#4A5D4C' }}>Log Feed</Typography>
             <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Noah'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
           </View>
-          <Image 
-            source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-            style={[styles.avatar, { position: 'absolute', right: 20 }]} 
-          />
+          <View style={{ width: 40 }} />
         </View>
 
           <ScrollView 
@@ -338,15 +338,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: 20,
     backgroundColor: '#fff',
   },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+  backBtnHeader: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
   },
   content: {
     padding: 20,

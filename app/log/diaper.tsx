@@ -66,13 +66,13 @@ export default function DiaperLogScreen() {
         >
           {/* Header */}
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()} hitSlop={20} style={styles.backBtn}>
-              <Image 
-                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-                style={styles.avatar}
-              />
+            <TouchableOpacity onPress={() => router.back()} style={styles.backBtnHeader}>
+              <ArrowLeft size={24} color="#1B3C35" />
             </TouchableOpacity>
-            <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
+            <View style={styles.headerCenter}>
+              <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
+              <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
+            </View>
             <View style={{ width: 40 }} />
           </View>
 
@@ -161,20 +161,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 12,
+    paddingTop: 60,
     paddingBottom: 20,
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
   },
-  backBtn: {
+  backBtnHeader: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#F2F5F6',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
   },
-  avatar: {
-    width: '100%',
-    height: '100%',
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
   },
   titleSection: {
     gap: 4,
