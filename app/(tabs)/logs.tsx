@@ -12,7 +12,7 @@ import {
   addDays,
   startOfToday
 } from 'date-fns';
-import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby } from 'lucide-react-native';
+import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby, Scale } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -288,6 +288,7 @@ function ActivityItem({ activity }: { activity: any }) {
       case 'diaper': return <Droplet size={16} color="#E65100" />;
       case 'vaccination': return <Syringe size={16} color="#009688" />;
       case 'medicine': return <Pill size={16} color="#9C27B0" />;
+      case 'growth': return <Scale size={16} color="#795548" />;
       default: return <FileText size={16} color="#607D8B" />;
     }
   };
@@ -311,6 +312,13 @@ function ActivityItem({ activity }: { activity: any }) {
     }
     if (activity.type === 'medicine') {
       return `${d.name} (${d.dosage || 'No dose'})`;
+    }
+    if (activity.type === 'growth') {
+      const parts = [];
+      if (d.weight) parts.push(`W: ${d.weight}${d.weightUnit || 'kg'}`);
+      if (d.height) parts.push(`H: ${d.height}${d.heightUnit || 'cm'}`);
+      if (d.headCirc) parts.push(`HC: ${d.headCirc}${d.headCircUnit || 'cm'}`);
+      return parts.join(' • ') || 'Measurement recorded';
     }
     return '';
   };
