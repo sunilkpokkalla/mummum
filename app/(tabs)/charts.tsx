@@ -9,8 +9,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
 import { differenceInMonths, differenceInDays, format } from 'date-fns';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ChartsScreen() {
+  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
   const { babies, currentBabyId, activities, addActivity, updateBaby, deleteActivity, updateActivity } = useBabyStore();
@@ -147,18 +149,16 @@ export default function ChartsScreen() {
   const maxVal = Math.max(...growthHistory.map(h => parseFloat(h.details?.value || '0')), 1);
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+    <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
       <ScrollView 
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-
-
-        <View style={styles.titleSection}>
-          <Typography variant="display" style={styles.title}>Growth Tracking</Typography>
-          <Typography variant="bodyLg" color={themeColors.icon}>
-            Monitoring {currentBaby?.name || 'your baby'}'s healthy development ({getAgeDisplay()})
-          </Typography>
+        <View style={styles.header}>
+          <View>
+            <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>Growth</Typography>
+            <Typography variant="bodyMd" weight="600" color="#607D8B">Vitality Progress for {currentBaby?.name || 'Baby'}</Typography>
+          </View>
         </View>
 
         {/* Insight Card */}
@@ -428,9 +428,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 8,
     paddingBottom: 100, // Extra space for FAB
     gap: 32,
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 16,
   },
   header: {
     flexDirection: 'row',
