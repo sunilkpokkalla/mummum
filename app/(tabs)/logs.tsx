@@ -266,7 +266,7 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
             <View style={styles.bannerHeaderSplit}>
               <View style={styles.bannerHeaderLeft}>
                 <Image 
-                  source={require('@/assets/images/mummum_logo.png')} 
+                  source={require('@/assets/images/MUMMUM_FINAL.png')} 
                   style={{ width: 32, height: 32 }}
                   resizeMode="contain"
                 />

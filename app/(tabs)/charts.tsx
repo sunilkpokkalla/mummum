@@ -152,7 +152,14 @@ export default function ChartsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-
+        {/* Official Brand Logo */}
+        <View style={styles.brandingHeader}>
+          <Image 
+            source={require('@/assets/images/MUMMUM_FINAL.png')} 
+            style={styles.mainLogo}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.titleSection}>
           <Typography variant="display" style={styles.title}>Growth Tracking</Typography>
@@ -672,5 +679,14 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 16,
     marginBottom: 8,
+  },
+  brandingHeader: {
+    alignItems: 'center',
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  mainLogo: {
+    width: 180,
+    height: 70,
   },
 });

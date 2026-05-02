@@ -104,6 +104,15 @@ export default function MilestonesScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
+        {/* Official Brand Logo */}
+        <View style={styles.brandingHeader}>
+          <Image 
+            source={require('@/assets/images/MUMMUM_FINAL.png')} 
+            style={styles.mainLogo}
+            resizeMode="contain"
+          />
+        </View>
+
         <View style={styles.titleSection}>
           <Typography variant="display" style={styles.title}>Milestones</Typography>
           <Typography variant="bodyLg" color="#607D8B">
@@ -209,10 +218,20 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 10,
     paddingBottom: 20,
     gap: 8,
     backgroundColor: '#fff',
+  },
+  brandingHeader: {
+    alignItems: 'center',
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    paddingTop: 60,
+  },
+  mainLogo: {
+    width: 180,
+    height: 70,
   },
   title: {
     fontSize: 32,

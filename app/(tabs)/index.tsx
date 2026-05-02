@@ -127,6 +127,15 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {/* Official Brand Logo */}
+        <View style={styles.brandingHeader}>
+          <Image 
+            source={require('@/assets/images/MUMMUM_FINAL.png')} 
+            style={styles.mainLogo}
+            resizeMode="contain"
+          />
+        </View>
+
         {/* Dynamic Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -807,5 +816,14 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#4A5D4C',
     borderRadius: 4,
+  },
+  brandingHeader: {
+    alignItems: 'center',
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  mainLogo: {
+    width: 180,
+    height: 70,
   },
 });
