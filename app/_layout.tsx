@@ -13,10 +13,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
+  handleNotification: async (_notification: any) => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
   }),
 });
 

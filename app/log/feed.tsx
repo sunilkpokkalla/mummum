@@ -61,9 +61,9 @@ export default function FeedLogScreen() {
 
   // Timers for Left and Right
   const activeFeed = activeSessions.find(s => s.type === 'feed' && s.babyId === currentBabyId);
-  const [leftTimer, setLeftTimer] = useState(activeFeed?.details?.accumulatedLeft || 0);
-  const [rightTimer, setRightTimer] = useState(activeFeed?.details?.accumulatedRight || 0);
-  const [activeSide, setActiveSide] = useState<'L' | 'R' | null>(activeFeed?.side || null);
+  const [leftTimer, setLeftTimer] = useState((activeFeed?.details as any)?.accumulatedLeft || 0);
+  const [rightTimer, setRightTimer] = useState((activeFeed?.details as any)?.accumulatedRight || 0);
+  const [activeSide, setActiveSide] = useState<'L' | 'R' | null>((activeFeed as any)?.side || null);
 
   useEffect(() => {
     let interval: any = null;
@@ -74,17 +74,17 @@ export default function FeedLogScreen() {
         const currentElapsed = Math.floor((now - start) / 1000);
         
         if (activeSide === 'L') {
-          setLeftTimer((activeFeed.details?.accumulatedLeft || 0) + currentElapsed);
-          setRightTimer(activeFeed.details?.accumulatedRight || 0);
+          setLeftTimer(((activeFeed.details as any)?.accumulatedLeft || 0) + currentElapsed);
+          setRightTimer((activeFeed.details as any)?.accumulatedRight || 0);
         } else {
-          setRightTimer((activeFeed.details?.accumulatedRight || 0) + currentElapsed);
-          setLeftTimer(activeFeed.details?.accumulatedLeft || 0);
+          setRightTimer(((activeFeed.details as any)?.accumulatedRight || 0) + currentElapsed);
+          setLeftTimer((activeFeed.details as any)?.accumulatedLeft || 0);
         }
       }, 1000);
     } else {
       // Sync local state when paused
-      setLeftTimer(activeFeed?.details?.accumulatedLeft || 0);
-      setRightTimer(activeFeed?.details?.accumulatedRight || 0);
+      setLeftTimer((activeFeed?.details as any)?.accumulatedLeft || 0);
+      setRightTimer((activeFeed?.details as any)?.accumulatedRight || 0);
     }
     return () => clearInterval(interval);
   }, [activeSide, activeFeed]);
@@ -120,15 +120,15 @@ export default function FeedLogScreen() {
     >
       <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
         {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtnHeader}>
-            <ArrowLeft size={24} color="#1B3C35" />
-          </TouchableOpacity>
-          <View style={styles.headerCenter}>
+        <View style={[styles.header, { justifyContent: 'center' }]}>
+          <View style={{ alignItems: 'center' }}>
             <Typography variant="headline" weight="700" style={{ color: '#4A5D4C' }}>Log Feed</Typography>
             <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Noah'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
           </View>
-          <View style={{ width: 40 }} />
+          <Image 
+            source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
+            style={[styles.avatar, { position: 'absolute', right: 20 }]} 
+          />
         </View>
 
           <ScrollView 
@@ -338,27 +338,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 16,
     backgroundColor: '#fff',
   },
-  backBtnHeader: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  headerCenter: {
-    flex: 1,
-    alignItems: 'center',
+  avatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   content: {
     padding: 20,

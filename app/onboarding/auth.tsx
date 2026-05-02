@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Shield, Cloud, Mail, ArrowRight, ChevronRight, Apple } from 'lucide-react-native';
 import Typography from '@/components/Typography';
@@ -105,7 +105,7 @@ export default function OnboardingAuthScreen() {
                 onPress={() => handleSocialLogin('google')}
               >
                 <View style={styles.googleIcon}>
-                  <Typography variant="label" weight="900" color="#4285F4">G</Typography>
+                  <Typography variant="label" weight="800" color="#4285F4">G</Typography>
                 </View>
                 <Typography variant="body" weight="700" color="#455A64">Continue with Google</Typography>
               </TouchableOpacity>

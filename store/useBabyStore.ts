@@ -25,6 +25,7 @@ export interface Baby {
   id: string;
   name: string;
   birthDate: Date;
+  gender?: string;
   age?: string;
   photoUri?: string;
 }
@@ -41,6 +42,7 @@ interface ActiveSession {
   babyId: string;
   type: ActivityType;
   startTime: Date;
+  details?: any;
   side?: 'L' | 'R';
 }
 

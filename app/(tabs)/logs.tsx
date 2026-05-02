@@ -271,7 +271,7 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
                   resizeMode="contain"
                 />
               </View>
-              <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 24 }}>{baby?.name || 'Baby'}</Typography>
+              <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
             </View>
 
             <View style={styles.reportDivider} />
@@ -329,8 +329,8 @@ function CategoryItem({ icon, title, detail, bgColor }: any) {
         {icon}
       </View>
       <View style={{ alignItems: 'center' }}>
-        <Typography variant="label" weight="900" color="#90A4AE" style={{ fontSize: 9 }}>{title}</Typography>
-        <Typography variant="bodyMd" weight="900" color="#1B3C35">{detail}</Typography>
+        <Typography variant="label" weight="800" color="#90A4AE" style={{ fontSize: 9 }}>{title}</Typography>
+        <Typography variant="bodyMd" weight="800" color="#1B3C35">{detail}</Typography>
       </View>
     </View>
   );

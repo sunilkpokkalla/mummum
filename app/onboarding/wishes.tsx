@@ -59,7 +59,7 @@ function FloatingHeart({ size, startX, delay, duration, color }: typeof HEART_CO
         {
           position: 'absolute',
           bottom: 10,
-          left: startX,
+          left: startX as any,
         },
         animatedStyle,
       ]}

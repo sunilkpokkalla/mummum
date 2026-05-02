@@ -50,7 +50,7 @@ export default function ControlsScreen() {
     if (currentBabyId) {
       updateBaby(currentBabyId, {
         name: babyName,
-        birthDate: birthDate.toISOString(),
+        birthDate: birthDate,
         gender: gender
       });
     }

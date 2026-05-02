@@ -862,6 +862,15 @@ const styles = StyleSheet.create({
     shadowRadius: 30,
     elevation: 10,
   },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    gap: 8,
+  },
+  modalBody: {
+    gap: 16,
+  },
   calendarHeader: {
     flexDirection: 'row',
     alignItems: 'center',
