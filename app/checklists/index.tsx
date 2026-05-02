@@ -59,7 +59,9 @@ export default function ChecklistsScreen() {
   const [newTime, setNewTime] = useState('09:00 AM');
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const items = (completedChecklistItems as any)[currentBabyId || ''] || [];
+  const dateKey = format(new Date(), 'yyyy-MM-dd');
+  const babyChecklists = (completedChecklistItems as any)[currentBabyId || ''] || {};
+  const items = babyChecklists[dateKey] || [];
 
   const renderRightActions = (id: string, isDefault: boolean) => {
     if (isDefault) return null;

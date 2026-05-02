@@ -37,9 +37,12 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
+  const dateKey = format(new Date(), 'yyyy-MM-dd');
+  const babyChecklists = (completedChecklistItems as any)[currentBabyId || ''] || {};
+  const items = babyChecklists[dateKey] || [];
 
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -333,7 +336,9 @@ export default function DashboardScreen() {
           ]}
         >
           {(() => {
-            const completedItems = (useBabyStore.getState().completedChecklistItems as any)[currentBabyId || ''] || [];
+            const dateKey = format(new Date(), 'yyyy-MM-dd');
+            const babyChecklists = (useBabyStore.getState().completedChecklistItems as any)[currentBabyId || ''] || {};
+            const completedItems = babyChecklists[dateKey] || [];
             const userTasks = useBabyStore.getState().userStandardTasks || [];
             const totalTasks = 4 + userTasks.length;
             const progress = Math.round((completedItems.length / totalTasks) * 100);

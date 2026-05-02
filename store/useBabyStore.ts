@@ -49,7 +49,7 @@ interface BabyState {
   activities: Activity[];
   activeSessions: ActiveSession[];
   memories: Memory[];
-  completedChecklistItems: Record<string, string[]>; // babyId -> itemIds
+  completedChecklistItems: Record<string, Record<string, string[]>>; // babyId -> dateKey -> itemIds
   completedMilestones: Record<string, string[]>; // babyId -> itemIds
   customReminders: Reminder[];
   userStandardTasks: { id: string; title: string; time: string; type: string }[];
@@ -101,15 +101,6 @@ export const useBabyStore = create<BabyState>()(
       userPhotoUri: null,
       userName: 'MumMum Parent',
       tempBaby: {},
-      babies: [],
-      activities: [],
-      activeSessions: [],
-      memories: [],
-      completedChecklistItems: {},
-      completedMilestones: {},
-      customReminders: [],
-      userStandardTasks: [],
-      standardTaskSettings: {},
 
       addBaby: (baby) => set((state) => ({ 
         babies: [...state.babies, baby],
@@ -166,7 +157,10 @@ export const useBabyStore = create<BabyState>()(
 
       toggleChecklistItem: (id) => set((state) => {
         if (!state.currentBabyId) return state;
-        const currentItems = state.completedChecklistItems[state.currentBabyId] || [];
+        const dateKey = format(new Date(), 'yyyy-MM-dd');
+        const babyChecklists = state.completedChecklistItems[state.currentBabyId] || {};
+        const currentItems = babyChecklists[dateKey] || [];
+        
         const newItems = currentItems.includes(id)
           ? currentItems.filter(i => i !== id)
           : [...currentItems, id];
@@ -174,7 +168,10 @@ export const useBabyStore = create<BabyState>()(
         return {
           completedChecklistItems: {
             ...state.completedChecklistItems,
-            [state.currentBabyId]: newItems
+            [state.currentBabyId]: {
+              ...babyChecklists,
+              [dateKey]: newItems
+            }
           }
         };
       }),
