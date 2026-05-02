@@ -262,16 +262,16 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
           <View style={styles.bannerContent}>
-            {/* Header: Logo Left, Baby Name Right */}
+            {/* Header: Large Logo Left, Baby Name Right */}
             <View style={styles.bannerHeaderSplit}>
               <View style={styles.bannerHeaderLeft}>
                 <Image 
-                  source={require('@/assets/images/MUMMUM_FINAL.png')} 
-                  style={{ width: 80, height: 80 }}
+                  source={require('@/assets/images/mummum_logo.png')} 
+                  style={{ width: 64, height: 64 }}
                   resizeMode="contain"
                 />
               </View>
-              <Typography variant="headline" weight="900" color="#4A5D4C" style={{ fontSize: 20 }}>{baby?.name || 'Baby'}</Typography>
+              <Typography variant="display" weight="900" color="#1B3C35" style={{ fontSize: 24 }}>{baby?.name || 'Baby'}</Typography>
             </View>
 
             <View style={styles.reportDivider} />
