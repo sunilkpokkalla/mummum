@@ -83,6 +83,7 @@ interface BabyState {
   completeOnboarding: () => void;
   updateTempBaby: (data: Partial<Baby>) => void;
   resetStore: () => void;
+  toggleReminder: (id: string) => void;
 }
 
 export const useBabyStore = create<BabyState>()(
@@ -204,7 +205,7 @@ export const useBabyStore = create<BabyState>()(
         customReminders: state.customReminders.filter(r => r.id !== id)
       })),
 
-      toggleReminder: (id) => set((state) => ({
+      toggleReminder: (id: string) => set((state) => ({
         customReminders: state.customReminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r)
       })),
 

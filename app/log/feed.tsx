@@ -68,7 +68,6 @@ export default function FeedLogScreen() {
   useEffect(() => {
     let interval: any = null;
     if (activeSide && activeFeed) {
-      // Production Hardening: Calculate elapsed time from the persistent startTime
       interval = setInterval(() => {
         const start = new Date(activeFeed.startTime).getTime();
         const now = Date.now();
@@ -76,8 +75,10 @@ export default function FeedLogScreen() {
         
         if (activeSide === 'L') {
           setLeftTimer((activeFeed.details?.accumulatedLeft || 0) + currentElapsed);
+          setRightTimer(activeFeed.details?.accumulatedRight || 0);
         } else {
           setRightTimer((activeFeed.details?.accumulatedRight || 0) + currentElapsed);
+          setLeftTimer(activeFeed.details?.accumulatedLeft || 0);
         }
       }, 1000);
     } else {

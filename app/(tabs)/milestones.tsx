@@ -8,6 +8,7 @@ import Card from '@/components/Card';
 import { Award, Camera, CheckCircle, Circle, Bell, ChevronRight, Star } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import { saveImagePermanently } from '@/utils/imagePersistor';
+import * as Haptics from 'expo-haptics';
 import { format } from 'date-fns';
 
 const MILESTONE_DATA = [
@@ -133,7 +134,12 @@ export default function MilestonesScreen() {
             <Pressable 
               key={milestone.id} 
               style={[styles.milestoneCard, completedIds.includes(milestone.id) && styles.milestoneCardCompleted]}
-              onPress={() => toggleMilestone(milestone.id)}
+              onPress={() => {
+                toggleMilestone(milestone.id);
+                if (!completedIds.includes(milestone.id)) {
+                  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                }
+              }}
             >
               <View style={[styles.categoryBadge, { backgroundColor: getCategoryColor(milestone.category) }]}>
                 <Typography variant="label" weight="800" color="#fff">{milestone.category[0]}</Typography>
@@ -181,7 +187,7 @@ export default function MilestonesScreen() {
                      style={styles.polaroidImg} 
                    />
                    <Typography variant="label" weight="700" style={styles.polaroidLabel}>{memory.title}</Typography>
-                   <Typography variant="label" color="#90A4AE" style={{ fontSize: 10 }}>{new Date().toLocaleDateString()}</Typography>
+                   <Typography variant="label" color="#90A4AE" style={{ fontSize: 10 }}>{format(new Date(memory.timestamp), 'MMM d, yyyy')}</Typography>
                 </View>
               ))}
             </ScrollView>

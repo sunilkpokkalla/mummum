@@ -75,13 +75,16 @@ export default function SleepLogScreen() {
     let interval: any = null;
     if (activeSleep) {
       interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        const elapsed = Math.floor((new Date().getTime() - new Date(activeSleep.startTime).getTime()) / 1000);
+        setTimer(elapsed);
       }, 1000);
     } else {
       setTimer(0);
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [activeSleep]);
 
   const formatDuration = (seconds: number) => {

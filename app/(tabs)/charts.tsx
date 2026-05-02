@@ -10,6 +10,7 @@ import { useBabyStore } from '@/store/useBabyStore';
 import { differenceInMonths, differenceInDays, format } from 'date-fns';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 
 export default function ChartsScreen() {
   const insets = useSafeAreaInsets();
@@ -72,6 +73,7 @@ export default function ChartsScreen() {
         }
       });
     }
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setNewValue('');
     setEditingId(null);
     setIsModalVisible(false);
@@ -317,7 +319,7 @@ export default function ChartsScreen() {
       <Modal visible={isModalVisible} transparent animationType="fade">
         <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'position' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? -40 : 0}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
           style={styles.modalOverlay}
         >
           <View style={styles.modalContent}>
@@ -434,14 +436,12 @@ const styles = StyleSheet.create({
     gap: 32,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 16,
-  },
-  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 16,
   },
   headerLeft: {
     flexDirection: 'row',
