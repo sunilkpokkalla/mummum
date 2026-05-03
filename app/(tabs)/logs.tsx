@@ -296,11 +296,11 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
 
             <View style={styles.reportDivider} />
 
-            <Typography variant="body" weight="700" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 4 }}>
-              Celebrating {baby?.name}'s {emotionalDay} Day
-            </Typography>
-            <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 24 }}>
+            <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 4 }}>
               {format(data.date, 'MMMM d, yyyy')} • Daily Report
+            </Typography>
+            <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
+              Celebrating {baby?.name}'s {emotionalDay} Day
             </Typography>
 
             {/* High Level 4-Item Grid */}
