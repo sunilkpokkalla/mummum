@@ -12,6 +12,7 @@ import {
   addDays,
   startOfToday
 } from 'date-fns';
+import Svg, { G, Circle, Path, Text as SvgText } from 'react-native-svg';
 import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby, Scale } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -251,6 +252,7 @@ export default function LogsScreen() {
 function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date));
   
+  // Detailed Analytics Calculation
   const sortedGrowth = activities
     .filter((a: any) => a.type === 'growth')
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -259,68 +261,129 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const lastHeight = sortedGrowth.find((a: any) => a.details?.metric === 'Height');
   const lastHeadCirc = sortedGrowth.find((a: any) => a.details?.metric === 'Head Circ');
 
-  const careEvents = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination' || a.type === 'diaper').length;
+  const feedActivities = selectedDateActivities.filter((a: any) => a.type === 'feed');
+  const sleepActivities = selectedDateActivities.filter((a: any) => a.type === 'sleep');
+  const diaperActivities = selectedDateActivities.filter((a: any) => a.type === 'diaper');
+
+  const totalBreastMin = feedActivities.reduce((acc: number, a: any) => 
+    acc + (a.details.feedMode === 'Breast' ? (Math.round((a.details.leftDuration || 0)/60) + Math.round((a.details.rightDuration || 0)/60)) : 0), 0);
+  
+  const totalBottleMl = feedActivities.reduce((acc: number, a: any) => 
+    acc + (a.details.feedMode === 'Bottle' ? parseInt(a.details.amount || 0) : 0), 0);
+
+  const totalSleepSec = sleepActivities.reduce((acc: number, a: any) => acc + (a.details.duration || 0), 0);
+  const sleepHours = (totalSleepSec / 3600).toFixed(1);
+
+  const wetDiapers = diaperActivities.filter((a: any) => a.details.diaperType.includes('Wet')).length;
+  const dirtyDiapers = diaperActivities.filter((a: any) => a.details.diaperType.includes('Dirty') || a.details.diaperType.includes('Both')).length;
+
+  // Chart Percentages
+  const totalWeight = (feedActivities.length * 2) + (sleepActivities.length * 3) + (diaperActivities.length * 1.5);
+  const feedPct = totalWeight > 0 ? ((feedActivities.length * 2) / totalWeight) * 100 : 33;
+  const sleepPct = totalWeight > 0 ? ((sleepActivities.length * 3) / totalWeight) * 100 : 33;
+  const diaperPct = totalWeight > 0 ? ((diaperActivities.length * 1.5) / totalWeight) * 100 : 34;
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
-          <View style={styles.bannerContent}>
-            {/* Header: Large Logo Left, Baby Name & Metrics Right */}
-            <View style={styles.bannerHeaderSplit}>
-              <View style={styles.bannerHeaderLeft}>
-                <Image 
-                  source={require('../../assets/images/MUMMUM_FINAL.png')} 
-                  style={{ width: 64, height: 64 }}
-                  resizeMode="contain"
-                />
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
+            <View style={styles.bannerContent}>
+              {/* Header: Large Logo Left, Baby Name & Metrics Right */}
+              <View style={styles.bannerHeaderSplit}>
+                <View style={styles.bannerHeaderLeft}>
+                  <Image 
+                    source={require('../../assets/images/MUMMUM_FINAL.png')} 
+                    style={{ width: 64, height: 64 }}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                  <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
+                  <Typography variant="label" weight="800" color="#607D8B" style={{ fontSize: 10, marginTop: 4 }}>
+                    W: {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • H: {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • HC: {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                  </Typography>
+                </View>
               </View>
-              <View style={{ alignItems: 'flex-end' }}>
-                <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
-                <Typography variant="label" weight="800" color="#607D8B" style={{ fontSize: 10, marginTop: 4 }}>
-                  W: {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • H: {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • HC: {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
-                </Typography>
+
+              <View style={styles.reportDivider} />
+
+              <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 20 }}>
+                {format(data.date, 'MMMM d, yyyy')} • Clinical Report
+              </Typography>
+
+              {/* Pi Graph Section */}
+              <View style={{ alignItems: 'center', marginBottom: 32 }}>
+                <PiGraph feedPct={feedPct} sleepPct={sleepPct} diaperPct={diaperPct} />
+                <View style={styles.chartLegend}>
+                  <View style={styles.legendItem}><View style={[styles.legendDot, { backgroundColor: '#2E7D32' }]} /><Typography variant="label" weight="700">Feeding</Typography></View>
+                  <View style={styles.legendItem}><View style={[styles.legendDot, { backgroundColor: '#1565C0' }]} /><Typography variant="label" weight="700">Sleep</Typography></View>
+                  <View style={styles.legendItem}><View style={[styles.legendDot, { backgroundColor: '#E65100' }]} /><Typography variant="label" weight="700">Hygiene</Typography></View>
+                </View>
               </View>
+
+              {/* Detailed Breakdown List */}
+              <View style={{ gap: 16 }}>
+                {/* Feeding Category */}
+                <View style={styles.analyticsCard}>
+                  <View style={styles.analyticsHeader}>
+                    <Milk size={18} color="#2E7D32" />
+                    <Typography variant="body" weight="800" color="#1B3C35">NUTRITION TOTALS</Typography>
+                  </View>
+                  <View style={styles.analyticsContent}>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Total Sessions</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{feedActivities.length}</Typography>
+                    </View>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Breast / Bottle</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{totalBreastMin}m / {totalBottleMl}ml</Typography>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Sleep Category */}
+                <View style={styles.analyticsCard}>
+                  <View style={styles.analyticsHeader}>
+                    <Moon size={18} color="#1565C0" />
+                    <Typography variant="body" weight="800" color="#1B3C35">REST TOTALS</Typography>
+                  </View>
+                  <View style={styles.analyticsContent}>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Total Duration</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{sleepHours} Hours</Typography>
+                    </View>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Sleep Cycles</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{sleepActivities.length}</Typography>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Hygiene Category */}
+                <View style={styles.analyticsCard}>
+                  <View style={styles.analyticsHeader}>
+                    <Droplet size={18} color="#E65100" />
+                    <Typography variant="body" weight="800" color="#1B3C35">HYGIENE TOTALS</Typography>
+                  </View>
+                  <View style={styles.analyticsContent}>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Total Changes</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{diaperActivities.length}</Typography>
+                    </View>
+                    <View style={styles.analyticsRow}>
+                      <Typography variant="label" color="#607D8B">Wet / Dirty</Typography>
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">{wetDiapers} / {dirtyDiapers}</Typography>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
+                GENERATED BY MUMMUM HUB
+              </Typography>
             </View>
-
-            <View style={styles.reportDivider} />
-
-            <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 24 }}>
-              {format(data.date, 'MMMM d, yyyy')} • Daily Report
-            </Typography>
-
-            {/* High Level 4-Item Grid */}
-            <View style={styles.categoryGrid}>
-              <CategoryItem 
-                icon={<Scale size={20} color="#795548" />} 
-                title="VITALS" 
-                detail={lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} 
-                bgColor="#EFEBE9"
-              />
-              <CategoryItem 
-                icon={<Milk size={20} color="#2E7D32" />} 
-                title="NUTRITION" 
-                detail={`${data.stats.feeds} Feeds`} 
-                bgColor="#E8F5E9"
-              />
-              <CategoryItem 
-                icon={<Moon size={20} color="#1565C0" />} 
-                title="REST" 
-                detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
-                bgColor="#E3F2FD"
-              />
-              <CategoryItem 
-                icon={<Droplet size={20} color="#E65100" />} 
-                title="CARE" 
-                detail={`${careEvents} Events`} 
-                bgColor="#FFF3E0"
-              />
-            </View>
-
-            <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
-              GENERATED BY MUMMUM HUB
-            </Typography>
-          </View>
+          </ScrollView>
 
           <TouchableOpacity style={styles.closeBannerBtn} onPress={onClose}>
             <Typography variant="body" weight="800" color="#4A5D4C">Close Report</Typography>
@@ -328,6 +391,58 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
         </View>
       </View>
     </Modal>
+  );
+}
+
+function PiGraph({ feedPct, sleepPct, diaperPct }: any) {
+  const size = 120;
+  const strokeWidth = 20;
+  const radius = (size - strokeWidth) / 2;
+  const circum = 2 * Math.PI * radius;
+
+  return (
+    <View style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}>
+      <Svg width={size} height={size}>
+        <G rotation="-90" origin={`${size/2}, ${size/2}`}>
+          {/* Sleep Segment */}
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="#1565C0"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeDasharray={`${circum * (sleepPct / 100)} ${circum}`}
+          />
+          {/* Feed Segment */}
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="#2E7D32"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeDasharray={`${circum * (feedPct / 100)} ${circum}`}
+            strokeDashoffset={-circum * (sleepPct / 100)}
+          />
+          {/* Diaper Segment */}
+          <Circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="#E65100"
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeDasharray={`${circum * (diaperPct / 100)} ${circum}`}
+            strokeDashoffset={-circum * ((sleepPct + feedPct) / 100)}
+          />
+        </G>
+      </Svg>
+      <View style={{ position: 'absolute' }}>
+        <Typography variant="label" weight="800" color="#B0BEC5">DAILY</Typography>
+        <Typography variant="body" weight="800" color="#1B3C35">MIX</Typography>
+      </View>
+    </View>
   );
 }
 
@@ -706,5 +821,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFB',
     borderTopWidth: 1,
     borderTopColor: '#F1F5F9',
-  }
+  },
+  analyticsCard: {
+    backgroundColor: '#F8FAFB',
+    borderRadius: 24,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+  },
+  analyticsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 16,
+  },
+  analyticsContent: {
+    gap: 12,
+  },
+  analyticsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  chartLegend: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 16,
+    marginTop: 20,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  legendDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
 });
