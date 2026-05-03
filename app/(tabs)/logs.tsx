@@ -251,9 +251,13 @@ export default function LogsScreen() {
 function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date));
   
-  const lastWeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Weight');
-  const lastHeight = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Height');
-  const lastHeadCirc = activities.find((a: any) => a.type === 'growth' && a.details?.metric === 'Head Circ');
+  const sortedGrowth = activities
+    .filter((a: any) => a.type === 'growth')
+    .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  
+  const lastWeight = sortedGrowth.find((a: any) => a.details?.metric === 'Weight');
+  const lastHeight = sortedGrowth.find((a: any) => a.details?.metric === 'Height');
+  const lastHeadCirc = sortedGrowth.find((a: any) => a.details?.metric === 'Head Circ');
 
   const careEvents = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination' || a.type === 'diaper').length;
 
@@ -262,7 +266,7 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
           <View style={styles.bannerContent}>
-            {/* Header: Large Logo Left, Baby Name Right */}
+            {/* Header: Large Logo Left, Baby Name & Metrics Right */}
             <View style={styles.bannerHeaderSplit}>
               <View style={styles.bannerHeaderLeft}>
                 <Image 
@@ -271,7 +275,12 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
                   resizeMode="contain"
                 />
               </View>
-              <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
+              <View style={{ alignItems: 'flex-end' }}>
+                <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
+                <Typography variant="label" weight="800" color="#607D8B" style={{ fontSize: 10, marginTop: 4 }}>
+                  {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                </Typography>
+              </View>
             </View>
 
             <View style={styles.reportDivider} />

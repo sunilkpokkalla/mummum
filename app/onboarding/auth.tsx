@@ -6,16 +6,42 @@ import Typography from '@/components/Typography';
 import { useBabyStore } from '@/store/useBabyStore';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { NativeModules } from 'react-native';
 
-const { width } = Dimensions.get('window');
+// Safe Native Module Discovery
+let GoogleSignin: any = null;
+try {
+  // We only require the module if it's actually registered in the native binary
+  if (NativeModules.RNGoogleSignin || NativeModules.RNGoogleSigninModule) {
+    GoogleSignin = require('@react-native-google-signin/google-signin').GoogleSignin;
+  }
+} catch (e) {
+  console.warn('RNGoogleSignin native module not found. Google login will be project-wide disabled.');
+}
+
+// Note: Replace with your actual Web Client ID from Firebase Console
+const GOOGLE_WEB_CLIENT_ID = 'YOUR_GOOGLE_WEB_CLIENT_ID_HERE';
 
 export default function OnboardingAuthScreen() {
   const router = useRouter();
   const { tempBaby, addBaby, setCurrentBaby, resetStore, babies } = useBabyStore();
   const [loading, setLoading] = useState(false);
 
+  React.useEffect(() => {
+    if (GoogleSignin) {
+      try {
+        GoogleSignin.configure({
+          webClientId: GOOGLE_WEB_CLIENT_ID,
+          offlineAccess: true,
+        });
+      } catch (e) {
+        console.error('GoogleSignin configuration failed:', e);
+      }
+    }
+  }, []);
+
   const handleGuestAccess = () => {
-    // If guest, we just save locally
     const id = Math.random().toString(36).substring(7);
     addBaby({
       id,
@@ -29,20 +55,39 @@ export default function OnboardingAuthScreen() {
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
     setLoading(true);
     try {
-      // Production Hardening: Safe check for Firebase native modules
-      let mockUid = `user_${Math.random().toString(36).substring(7)}`;
-      let babyId = Math.random().toString(36).substring(7);
+      let firebaseUser = null;
 
-      try {
-        // Attempt to use Firebase if initialized/linked
-        if (typeof auth === 'function') {
-          // Actual implementation would go here
+      if (provider === 'google') {
+        if (!GoogleSignin) {
+          throw new Error('GoogleSignin native module not project-wide registered.');
         }
-      } catch (e) {
-        console.warn('Firebase module not linked/initialized, falling back to local persistence.');
+        await GoogleSignin.hasPlayServices();
+        const { idToken } = await GoogleSignin.signIn();
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        const userCredential = await auth().signInWithCredential(googleCredential);
+        firebaseUser = userCredential.user;
+      } else if (provider === 'apple') {
+        const isAppleAvailable = await AppleAuthentication.isAvailableAsync();
+        if (!isAppleAvailable) {
+          throw new Error('Apple Authentication not project-wide available on this device.');
+        }
+        const appleCredential = await AppleAuthentication.signInAsync({
+          requestedScopes: [
+            AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+            AppleAuthentication.AppleAuthenticationScope.EMAIL,
+          ],
+        });
+        const { identityToken } = appleCredential;
+        if (identityToken) {
+          const provider = new auth.AppleAuthProvider();
+          const credential = provider.credential(identityToken);
+          const userCredential = await auth().signInWithCredential(credential);
+          firebaseUser = userCredential.user;
+        }
       }
 
-      // Local Persistence Fallback for absolute reliability
+      // Sync with Baby Store
+      const babyId = firebaseUser?.uid || Math.random().toString(36).substring(7);
       addBaby({
         id: babyId,
         name: tempBaby.name || 'Baby',
@@ -52,11 +97,23 @@ export default function OnboardingAuthScreen() {
 
       setLoading(false);
       router.push('/onboarding/welcome');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Auth Flow Error:', error);
       setLoading(false);
-      Alert.alert("Connection Error", "We could not reach the clinical cloud. Continuing with local secure storage.");
-      handleGuestAccess();
+      
+      // If native module is missing or user canceled, we offer local persistence
+      if (error.code === '-1' || error.message?.includes('GoogleSignin')) {
+        Alert.alert(
+          "Cloud Sync Unavailable", 
+          "Native auth modules are not fully configured. Continue with local secure storage?",
+          [
+            { text: "Cancel", style: "cancel" },
+            { text: "Continue Locally", onPress: handleGuestAccess }
+          ]
+        );
+      } else {
+        Alert.alert("Auth Error", "Please try again or continue as guest.");
+      }
     }
   };
 
