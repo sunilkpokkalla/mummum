@@ -278,7 +278,7 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
               <View style={{ alignItems: 'flex-end' }}>
                 <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
                 <Typography variant="label" weight="800" color="#607D8B" style={{ fontSize: 10, marginTop: 4 }}>
-                  {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                  W: {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • H: {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • HC: {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
                 </Typography>
               </View>
             </View>
