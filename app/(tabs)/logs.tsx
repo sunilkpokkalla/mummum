@@ -270,21 +270,33 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   };
   const emotionalDay = getOrdinal(diffDays);
 
-  const careEvents = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination' || a.type === 'diaper').length;
+  const todayMedications = selectedDateActivities.filter((a: any) => a.type === 'medicine');
+  const todayDiapers = selectedDateActivities.filter((a: any) => a.type === 'diaper').length;
+  
+  const totalVolume = selectedDateActivities
+    .filter((a: any) => a.type === 'feed' && a.details?.amount)
+    .reduce((acc: number, curr: any) => acc + (parseFloat(curr.details.amount) || 0), 0);
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
         <View style={styles.bannerContainer}>
           <View style={styles.bannerContent}>
-            {/* Header: Large Logo Left, Baby Name & Metrics Right */}
+            {/* Header: Baby Photo Left, Baby Name & Metrics Right */}
             <View style={styles.bannerHeaderSplit}>
               <View style={styles.bannerHeaderLeft}>
-                <Image 
-                  source={require('../../assets/images/MUMMUM_FINAL.png')} 
-                  style={{ width: 64, height: 64 }}
-                  resizeMode="contain"
-                />
+                {(baby as any)?.image ? (
+                  <Image 
+                    source={{ uri: (baby as any).image }} 
+                    style={{ width: 80, height: 80, borderRadius: 40, borderWidth: 3, borderColor: '#fff', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10 }} 
+                  />
+                ) : (
+                  <Image 
+                    source={require('../../assets/images/MUMMUM_FINAL.png')} 
+                    style={{ width: 64, height: 64 }}
+                    resizeMode="contain"
+                  />
+                )}
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
@@ -300,36 +312,43 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
               {format(data.date, 'MMMM d, yyyy')} • Daily Report
             </Typography>
             <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
-              Celebrating {baby?.name}'s {emotionalDay} Day
+              Celebrating {(baby as any)?.name}'s {emotionalDay} Day
             </Typography>
 
-            {/* High Level 4-Item Grid */}
+            {/* Detailed Stats Grid */}
             <View style={styles.categoryGrid}>
-              <CategoryItem 
-                icon={<Scale size={20} color="#795548" />} 
-                title="VITALS" 
-                detail={lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} 
-                bgColor="#EFEBE9"
-              />
               <CategoryItem 
                 icon={<Milk size={20} color="#2E7D32" />} 
                 title="NUTRITION" 
-                detail={`${data.stats.feeds} Feeds`} 
+                detail={`${data.stats.feeds} Feeds • ${totalVolume}ml`} 
                 bgColor="#E8F5E9"
               />
               <CategoryItem 
                 icon={<Moon size={20} color="#1565C0" />} 
                 title="REST" 
-                detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
+                detail={`${Math.floor(data.stats.sleep/3600)}h ${Math.floor((data.stats.sleep%3600)/60)}m`} 
                 bgColor="#E3F2FD"
               />
               <CategoryItem 
                 icon={<Droplet size={20} color="#E65100" />} 
-                title="CARE" 
-                detail={`${careEvents} Events`} 
+                title="DIAPERS" 
+                detail={`${todayDiapers} Changes`} 
                 bgColor="#FFF3E0"
               />
             </View>
+
+            {/* Medication List (If any) */}
+            {todayMedications.length > 0 && (
+              <View style={{ marginTop: 24, padding: 16, backgroundColor: '#F5F7F8', borderRadius: 20, borderWidth: 1, borderColor: '#ECEFF1' }}>
+                <Typography variant="label" weight="800" color="#607D8B" style={{ marginBottom: 12, letterSpacing: 1 }}>TODAY'S MEDICATIONS</Typography>
+                {todayMedications.map((m: any, idx: number) => (
+                  <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <Typography variant="body" weight="700" color="#1B3C35">{m.details.name} ({m.details.dosage})</Typography>
+                    <Typography variant="label" weight="600" color="#90A4AE">{format(new Date(m.timestamp), 'h:mm a')}</Typography>
+                  </View>
+                ))}
+              </View>
+            )}
 
             <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
               GENERATED BY MUMMUM HUB
