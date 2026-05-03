@@ -259,17 +259,18 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const lastHeight = sortedGrowth.find((a: any) => a.details?.metric === 'Height');
   const lastHeadCirc = sortedGrowth.find((a: any) => a.details?.metric === 'Head Circ');
 
-  const birthDate = new Date(baby?.birthDate || new Date());
-  const reportDate = new Date(data.date);
-  const daysOld = Math.max(1, Math.floor((reportDate.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+  const birthDate = baby?.birthDate ? new Date(baby.birthDate) : new Date();
+  const diffTime = Math.abs(data.date.getTime() - birthDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
   const getOrdinal = (n: number) => {
     const s = ["th", "st", "nd", "rd"];
     const v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   };
+  const emotionalDay = getOrdinal(diffDays);
 
-  const milestoneTitle = `${(baby as any)?.name || 'Baby'}'s ${getOrdinal(daysOld)} Day`;
+  const careEvents = selectedDateActivities.filter((a: any) => a.type === 'medicine' || a.type === 'vaccination' || a.type === 'diaper').length;
 
   return (
     <Modal visible={visible} transparent animationType="slide">
@@ -295,8 +296,11 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
 
             <View style={styles.reportDivider} />
 
+            <Typography variant="body" weight="700" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 4 }}>
+              Celebrating {baby?.name}'s {emotionalDay} Day
+            </Typography>
             <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 24 }}>
-              {milestoneTitle} • {format(data.date, 'MMM d, yyyy')}
+              {format(data.date, 'MMMM d, yyyy')} • Daily Report
             </Typography>
 
             {/* High Level 4-Item Grid */}
