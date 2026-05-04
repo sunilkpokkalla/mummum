@@ -20,6 +20,7 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
+        "NSPhotoLibraryAddUsageDescription": "Mummum needs permission to save daily clinical reports to your photo gallery.",
         "NSCameraUsageDescription": "Mummum needs camera access to capture new milestone photos of your baby.",
         "NSMicrophoneUsageDescription": "Mummum needs microphone access for video milestones."
       }
@@ -46,6 +47,7 @@
         {
           "ios": {
             "useFrameworks": "static",
+            "deploymentTarget": "16.0",
             "enableUserScriptSandboxing": false,
             "forceStaticLinking": [
               "RNFBApp",

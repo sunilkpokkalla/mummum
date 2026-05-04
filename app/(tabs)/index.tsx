@@ -38,7 +38,7 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, isPro } = useBabyStore();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const dateKey = format(new Date(), 'yyyy-MM-dd');
@@ -155,12 +155,14 @@ export default function DashboardScreen() {
           <View style={styles.headerRight}>
             <Pressable 
               style={({ pressed }) => [
-                styles.notificationButton, 
-                { backgroundColor: themeColors.surface, opacity: pressed ? 0.8 : 1 }
+                styles.proBadge, 
+                { backgroundColor: isPro ? '#1B3C35' : '#C69C82', opacity: pressed ? 0.8 : 1 }
               ]}
               onPress={() => router.push('/settings')}
             >
-              <Settings size={22} color={themeColors.text} />
+              <Typography variant="label" weight="800" style={{ color: '#fff' }}>
+                {isPro ? 'PRO' : 'GoPro'}
+              </Typography>
             </Pressable>
           </View>
         </View>
@@ -563,6 +565,13 @@ const styles = StyleSheet.create({
   },
   headerInfo: {
     gap: 2,
+  },
+  proBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   notificationButton: {
     width: 44,

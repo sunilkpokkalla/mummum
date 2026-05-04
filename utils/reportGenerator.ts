@@ -2,6 +2,8 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { format, subDays, isWithinInterval } from 'date-fns';
 import { Alert } from 'react-native';
+import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system/legacy';
 
 export const generateBabyReport = async (baby: any, activities: any[], days: number) => {
   if (!Print.printToFileAsync || !Sharing.shareAsync) {
@@ -9,170 +11,245 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
     return;
   }
 
+  // Load Logo as Base64 for PDF embedding
+  let logoBase64 = '';
+  try {
+    const asset = Asset.fromModule(require('../assets/images/MUMMUM_FINAL.png'));
+    await asset.downloadAsync();
+    logoBase64 = await FileSystem.readAsStringAsync(asset.localUri || asset.uri, {
+      encoding: FileSystem.EncodingType?.Base64 || 'base64',
+    });
+  } catch (error) {
+    console.error('Logo Loading Error:', error);
+  }
+
+  const logoUri = logoBase64 ? `data:image/png;base64,${logoBase64}` : '';
+
   const endDate = new Date();
   const startDate = subDays(endDate, days);
   
-  const filteredActivities = activities.filter(a => {
+  // Categorized Data Filtering
+  const medicineLogs = activities.filter(a => a.type === 'medicine').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const vaccineHistory = activities.filter(a => a.type === 'vaccination' || a.type === 'vaccine').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const growthHistory = activities.filter(a => a.type === 'growth').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  
+  const weeklyCare = activities.filter(a => {
     const activityDate = new Date(a.timestamp);
-    return isWithinInterval(activityDate, { start: startDate, end: endDate });
-  }).sort((a,b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    const isCare = ['feed', 'sleep', 'diaper'].includes(a.type);
+    return isCare && isWithinInterval(activityDate, { start: startDate, end: endDate });
+  }).sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-  // Data Processing for Charts
-  const growthData = filteredActivities.filter(a => a.type === 'growth').map(a => ({
-    x: format(new Date(a.timestamp), 'MMM d'),
-    y: parseFloat(a.details?.weight || 0)
+  // Group weeklyCare by Date
+  const groupedCareByDate: { [key: string]: any[] } = {};
+  weeklyCare.forEach(activity => {
+    const dateKey = format(new Date(activity.timestamp), 'yyyy-MM-dd');
+    if (!groupedCareByDate[dateKey]) groupedCareByDate[dateKey] = [];
+    groupedCareByDate[dateKey].push(activity);
+  });
+
+  const sortedDateKeys = Object.keys(groupedCareByDate).sort((a, b) => b.localeCompare(a));
+
+  // Growth Chart Data (All Time)
+  const growthChartData = growthHistory.slice().reverse().map(a => ({
+    date: format(new Date(a.timestamp), 'MMM d'),
+    weight: parseFloat(a.details?.weight || a.details?.value || 0),
+    height: parseFloat(a.details?.height || a.details?.value || 0)
   }));
-
-  const diaperStats = {
-    wet: filteredActivities.filter(a => a.type === 'diaper' && a.details?.diaperType === 'Wet').length,
-    dirty: filteredActivities.filter(a => a.type === 'diaper' && a.details?.diaperType === 'Dirty').length,
-    mixed: filteredActivities.filter(a => a.type === 'diaper' && a.details?.diaperType === 'Mixed').length,
-  };
-
-  const activityCounts = {
-    Feeding: filteredActivities.filter(a => a.type === 'feed').length,
-    Sleep: filteredActivities.filter(a => a.type === 'sleep').length,
-    Diaper: filteredActivities.filter(a => a.type === 'diaper').length,
-    Milestones: filteredActivities.filter(a => a.type === 'milestone').length,
-  };
 
   const html = `
     <html>
       <head>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
-          body { font-family: 'Helvetica', 'Arial', sans-serif; padding: 40px; color: #1B3C35; background: #fff; }
-          .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #C69C82; padding-bottom: 20px; margin-bottom: 30px; }
-          .title { font-size: 32px; font-weight: 800; color: #1B3C35; }
-          .baby-info { font-size: 16px; color: #607D8B; margin-top: 8px; }
+          body { font-family: 'Helvetica', 'Arial', sans-serif; padding: 25px; color: #1B3C35; background: #fff; line-height: 1.3; }
+          .report-header { border-bottom: 4px solid #C69C82; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+          .main-title { font-size: 24px; font-weight: 900; color: #1B3C35; text-transform: uppercase; letter-spacing: 1px; }
+          .clinical-tag { background: #1B3C35; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; vertical-align: middle; }
           
-          .summary-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
-          .summary-card { background: #F8FAFB; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #E3F2FD; }
-          .summary-card b { font-size: 20px; color: #C69C82; display: block; }
-          .summary-card span { font-size: 10px; text-transform: uppercase; color: #90A4AE; letter-spacing: 1px; }
+          .section-header { background: #F1F4F6; padding: 8px 12px; border-radius: 6px; margin: 20px 0 10px 0; border-left: 4px solid #C69C82; font-weight: 800; color: #4A5D4C; text-transform: uppercase; font-size: 12px; }
+          
+          .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
+          .stat-card { background: #fff; border: 1px solid #EEE; padding: 10px; border-radius: 10px; text-align: center; }
+          .stat-card b { font-size: 16px; color: #C69C82; display: block; }
+          .stat-card span { font-size: 8px; color: #90A4AE; text-transform: uppercase; font-weight: 700; }
 
-          .chart-section { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-bottom: 40px; }
-          .chart-container { background: #fff; border-radius: 24px; padding: 20px; border: 1px solid #F0F0F0; }
-          .chart-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: #4A5D4C; text-transform: uppercase; }
-
-          .pie-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+          .chart-box { background: #fff; border: 1px solid #EEE; border-radius: 14px; padding: 15px; margin-bottom: 20px; }
           
-          table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 20px; }
-          th { text-align: left; padding: 12px; font-size: 11px; color: #90A4AE; text-transform: uppercase; }
-          td { padding: 12px; background: #F8FAFB; font-size: 13px; }
-          td:first-child { border-radius: 12px 0 0 12px; }
-          td:last-child { border-radius: 0 12px 12px 0; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+          th { text-align: left; padding: 8px; font-size: 9px; color: #90A4AE; border-bottom: 2px solid #F1F4F6; text-transform: uppercase; }
+          td { padding: 10px 8px; border-bottom: 1px solid #F1F4F6; font-size: 11px; vertical-align: top; }
           
-          .type-tag { font-weight: 800; font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #C69C82; color: #fff; }
-          .footer { margin-top: 60px; text-align: center; font-size: 12px; color: #B0BEC5; border-top: 1px solid #EEE; padding-top: 20px; }
+          .date-day-header { background: #1B3C35; color: #fff; padding: 6px 12px; border-radius: 4px; margin: 15px 0 10px 0; font-size: 11px; font-weight: 800; }
+          
+          .med-name { font-weight: 700; color: #1B3C35; font-size: 12px; }
+          .vaccine-badge { background: #E8F5E9; color: #2E7D32; padding: 2px 6px; border-radius: 10px; font-weight: 800; font-size: 8px; }
+          .old-badge { background: #ECEFF1; color: #546E7A; }
+          
+          .footer { margin-top: 40px; border-top: 1px solid #EEE; padding-top: 12px; text-align: center; font-size: 9px; color: #90A4AE; }
+          @media print { .page-break { page-break-before: always; } }
         </style>
       </head>
       <body>
-        <div class="header">
+        <!-- PAGE 1: MUMMUM ANALYTICS -->
+        <div class="report-header">
           <div>
-            <div class="title">Mummum Analytics</div>
-            <div class="baby-info"><b>${baby?.name || 'Patient'}</b> • ${days} Day Clinical History • ${format(new Date(), 'MMM d, yyyy')}</div>
-          </div>
-          <div style="text-align: right">
-            <div style="font-weight: bold; color: #C69C82">PREMIUM REPORT</div>
-            <div style="font-size: 12px; color: #90A4AE">v2.4.0</div>
-          </div>
-        </div>
-
-        <div class="summary-dashboard">
-          <div class="summary-card"><b>${activityCounts.Feeding}</b><span>Total Feeds</span></div>
-          <div class="summary-card"><b>${activityCounts.Diaper}</b><span>Diapers</span></div>
-          <div class="summary-card"><b>${activityCounts.Milestones}</b><span>Milestones</span></div>
-          <div class="summary-card"><b>${(filteredActivities.length / days).toFixed(1)}</b><span>Daily Avg</span></div>
-        </div>
-
-        <div class="chart-section">
-          <div class="chart-container">
-            <div class="chart-title">Weight Progression (Trend Analysis)</div>
-            <canvas id="growthChart" height="180"></canvas>
-          </div>
-          <div class="pie-grid">
-            <div class="chart-container">
-              <div class="chart-title">Diaper Health Distribution</div>
-              <canvas id="diaperChart" height="150"></canvas>
+            <span class="clinical-tag">MUMMUM OFFICIAL REPORT</span>
+            <div class="main-title">${baby?.name || 'Baby'}'s Daily Report</div>
+            <div style="color: #607D8B; font-size: 12px; margin-top: 4px;">
+              Born: ${baby?.birthDate ? format(new Date(baby.birthDate), 'PPP') : 'Not Recorded'} • Report: ${format(new Date(), 'PPP')}
             </div>
           </div>
+          <div style="text-align: right">
+            ${logoUri ? `<img src="${logoUri}" style="height: 50px; margin-bottom: 5px;" />` : `<div style="font-size: 20px; font-weight: 900; color: #C69C82">MUMMUM</div>`}
+            <div style="font-size: 9px; color: #90A4AE">Premium Assistant</div>
+          </div>
         </div>
 
-        <h3>Detailed Clinical Timeline</h3>
+        <div class="section-header">1. Growth & Health Analytics</div>
+        <div class="chart-box">
+          <canvas id="growthProgressionChart" height="110"></canvas>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><b>${growthHistory[0]?.details?.weight || growthHistory[0]?.details?.value || '--'}kg</b><span>Current Weight</span></div>
+          <div class="stat-card"><b>${growthHistory[0]?.details?.height || growthHistory[0]?.details?.value || '--'}cm</b><span>Current Height</span></div>
+          <div class="stat-card"><b>${growthHistory.length}</b><span>Total Entries</span></div>
+          <div class="stat-card"><b>${growthHistory.length > 1 ? (parseFloat(growthHistory[0]?.details?.weight || growthHistory[0]?.details?.value) - parseFloat(growthHistory[growthHistory.length-1]?.details?.weight || growthHistory[growthHistory.length-1]?.details?.value)).toFixed(2) : '0.0'}kg</b><span>Total Gain</span></div>
+        </div>
+
+        <div class="section-header">2. Medication & Dosage Log</div>
         <table>
           <thead>
             <tr>
-              <th>Timestamp</th>
-              <th>Category</th>
-              <th>Clinical Details</th>
+              <th width="25%">Timestamp</th>
+              <th width="45%">Medicine & Dosage</th>
+              <th width="30%">Notes</th>
             </tr>
           </thead>
           <tbody>
-            ${filteredActivities.slice().reverse().map(a => {
-              let details = 'Standard Entry';
-              if (a.type === 'feed') {
-                if (a.details?.feedMode === 'Breast') {
-                  const left = a.details.leftDuration ? `L: ${Math.round(a.details.leftDuration/60)}m` : '';
-                  const right = a.details.rightDuration ? `R: ${Math.round(a.details.rightDuration/60)}m` : '';
-                  details = `Breastfeed • ${[left, right].filter(Boolean).join(' • ')}`;
-                } else {
-                  details = `${a.details?.feedMode} • ${a.details?.amount}${a.details?.unit}`;
-                }
-              } else if (a.type === 'sleep') {
-                details = `Slept for ${Math.round((a.details?.duration || 0)/60)} mins • ${a.details?.quality || 'Peaceful'}`;
-              } else if (a.type === 'diaper') {
-                details = `${a.details?.diaperType} • ${a.details?.hasRash ? 'Rash noted' : 'Clean'}`;
-              }
-
-              return `
-                <tr>
-                  <td><b>${format(new Date(a.timestamp), 'MMM d')}</b><br/>${format(new Date(a.timestamp), 'h:mm a')}</td>
-                  <td><span class="type-tag" style="background: ${a.type === 'feed' ? '#2E7D32' : (a.type === 'sleep' ? '#1565C0' : '#E65100')}">${a.type.toUpperCase()}</span></td>
-                  <td>${details}</td>
-                </tr>
-              `;
-            }).join('')}
+            ${medicineLogs.length > 0 ? medicineLogs.map(m => `
+              <tr>
+                <td><b>${format(new Date(m.timestamp), 'MMM d, yyyy')}</b><br/>${format(new Date(m.timestamp), 'h:mm a')}</td>
+                <td><div class="med-name">${m.details?.name}</div><div style="color: #C69C82; font-weight: 700; font-size: 10px;">Dose: ${m.details?.dosage}</div></td>
+                <td style="color: #607D8B; font-size: 10px;">${m.details?.reason || 'Routine care'}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="3" style="text-align: center; color: #90A4AE;">No records.</td></tr>'}
           </tbody>
         </table>
 
+        <div class="section-header">3. Immunization History</div>
+        <table>
+          <thead>
+            <tr>
+              <th width="25%">Date Given</th>
+              <th width="55%">Vaccine Name</th>
+              <th width="20%">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${vaccineHistory.length > 0 ? vaccineHistory.map(v => {
+              const isNew = isWithinInterval(new Date(v.timestamp), { start: startDate, end: endDate });
+              return `
+                <tr>
+                  <td><b>${format(new Date(v.timestamp), 'MMM d, yyyy')}</b></td>
+                  <td class="med-name">${v.details?.name}</td>
+                  <td><span class="vaccine-badge ${isNew ? '' : 'old-badge'}">${isNew ? 'NEW' : 'OLD'}</span></td>
+                </tr>
+              `;
+            }).join('') : '<tr><td colspan="3" style="text-align: center; color: #90A4AE;">No records.</td></tr>'}
+          </tbody>
+        </table>
+
+        <!-- PAGE 2: DAILY ACTIVITY LOG -->
+        <div class="page-break"></div>
+        <div class="report-header">
+          <div>
+            <span class="clinical-tag">DAILY CARE LOG • PAGE 2</span>
+            <div class="main-title">Feeding & Activity History</div>
+            <div style="color: #607D8B; font-size: 12px; margin-top: 4px;">
+              Period: ${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')}
+            </div>
+          </div>
+          <div style="text-align: right">
+            ${logoUri ? `<img src="${logoUri}" style="height: 40px;" />` : ''}
+          </div>
+        </div>
+
+        ${sortedDateKeys.length > 0 ? sortedDateKeys.map(dateKey => {
+          const dailyActivities = groupedCareByDate[dateKey];
+          return `
+            <div class="date-day-header">${format(new Date(dateKey), 'EEEE, MMMM d, yyyy')}</div>
+            <table>
+              <thead>
+                <tr>
+                  <th width="20%">Time</th>
+                  <th width="20%">Category</th>
+                  <th width="60%">Clinical Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${dailyActivities.map(a => {
+                  let details = 'Care entry';
+                  if (a.type === 'feed') {
+                    details = a.details?.feedMode === 'Breast' 
+                      ? `Breastfeed • L: ${Math.round((a.details.leftDuration||0)/60)}m • R: ${Math.round((a.details.rightDuration||0)/60)}m`
+                      : `${a.details?.feedMode} • ${a.details?.amount}${a.details?.unit}`;
+                  } else if (a.type === 'sleep') {
+                    details = `Duration: ${Math.round((a.details?.duration||0)/60)} mins • Quality: ${a.details?.quality || 'Good'}`;
+                  } else if (a.type === 'diaper') {
+                    details = `Type: ${a.details?.diaperType} • Status: ${a.details?.hasRash ? 'Rash noted' : 'Healthy'}`;
+                  }
+                  return `
+                    <tr>
+                      <td><b>${format(new Date(a.timestamp), 'h:mm a')}</b></td>
+                      <td><span class="med-name" style="text-transform: uppercase; font-size: 9px; color: ${a.type === 'feed' ? '#2E7D32' : (a.type === 'sleep' ? '#1565C0' : '#E65100')}">${a.type}</span></td>
+                      <td style="color: #4A5D4C;">${details}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          `;
+        }).join('') : '<div style="text-align: center; margin-top: 40px; color: #90A4AE;">No care activities recorded.</div>'}
+
         <div class="footer">
-          Confidential Medical Data Generated via Mummum Baby Assistant.<br/>
-          This document is intended for professional pediatric review.
+          Generated via Mummum Baby Assistant • Premium Clinical Records<br/>
+          This document is a professional history of care events for ${baby?.name || 'the baby'}.
         </div>
 
         <script>
-          // Growth Chart
-          new Chart(document.getElementById('growthChart'), {
+          const ctx = document.getElementById('growthProgressionChart').getContext('2d');
+          new Chart(ctx, {
             type: 'line',
             data: {
-              labels: ${JSON.stringify(growthData.map(d => d.x))},
+              labels: ${JSON.stringify(growthChartData.map(d => d.date))},
               datasets: [{
                 label: 'Weight (kg)',
-                data: ${JSON.stringify(growthData.map(d => d.y))},
+                data: ${JSON.stringify(growthChartData.map(d => d.weight))},
                 borderColor: '#C69C82',
                 backgroundColor: 'rgba(198, 156, 130, 0.1)',
+                yAxisID: 'yWeight',
                 tension: 0.4,
                 fill: true,
-                pointRadius: 6,
-                pointBackgroundColor: '#C69C82'
+                pointRadius: 4
+              }, {
+                label: 'Height (cm)',
+                data: ${JSON.stringify(growthChartData.map(d => d.height))},
+                borderColor: '#1B3C35',
+                borderDash: [5, 5],
+                yAxisID: 'yHeight',
+                tension: 0.4,
+                fill: false,
+                pointRadius: 4
               }]
             },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
-          });
-
-          // Diaper Chart
-          new Chart(document.getElementById('diaperChart'), {
-            type: 'doughnut',
-            data: {
-              labels: ['Wet', 'Dirty', 'Mixed'],
-              datasets: [{
-                data: [${diaperStats.wet}, ${diaperStats.dirty}, ${diaperStats.mixed}],
-                backgroundColor: ['#90CAF9', '#FFAB91', '#A5D6A7'],
-                borderWidth: 0
-              }]
-            },
-            options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+            options: {
+              responsive: true,
+              scales: {
+                yWeight: { type: 'linear', position: 'left', title: { display: true, text: 'Wt (kg)', font: { size: 9 } } },
+                yHeight: { type: 'linear', position: 'right', title: { display: true, text: 'Ht (cm)', font: { size: 9 } }, grid: { drawOnChartArea: false } }
+              },
+              plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 9 } } } }
+            }
           });
         </script>
       </body>
@@ -183,6 +260,6 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
     const { uri } = await Print.printToFileAsync({ html });
     await Sharing.shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
   } catch (error) {
-    console.error('Advanced PDF Generation Error:', error);
+    console.error('Master Report Generation Error:', error);
   }
 };

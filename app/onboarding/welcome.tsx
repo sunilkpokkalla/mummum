@@ -15,8 +15,7 @@ export default function WelcomeScreen() {
   const { tempBaby, addBaby, completeOnboarding } = useBabyStore();
 
   const handleFinish = () => {
-    completeOnboarding();
-    router.replace('/(tabs)');
+    router.push('/premium');
   };
 
   return (

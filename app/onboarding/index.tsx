@@ -58,15 +58,6 @@ export default function LogoSlideScreen() {
           </Typography>
           <ArrowRight size={20} color="#fff" />
         </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.signInBtn}
-          onPress={() => router.push('/onboarding/auth')}
-        >
-          <Typography variant="body" weight="600" color={themeColors.icon}>
-            Already have an account? <Typography weight="700" color={themeColors.primary}>Sign In</Typography>
-          </Typography>
-        </TouchableOpacity>
       </Animated.View>
     </View>
   );

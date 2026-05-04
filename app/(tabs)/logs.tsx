@@ -1,9 +1,23 @@
-import React, { useMemo, useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal, Image } from 'react-native';
+import React, { useMemo, useState, useRef } from 'react';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal, Image, Alert } from 'react-native';
+
+// Safe Dynamic Imports to prevent crashes in Expo Go/Dev Client without native modules
+let ViewShot: any = View;
+let MediaLibrary: any = null;
+
+try {
+  const RNViewShot = require('react-native-view-shot');
+  ViewShot = RNViewShot.default || RNViewShot;
+} catch (e) {}
+
+try {
+  MediaLibrary = require('expo-media-library');
+} catch (e) {}
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
+import { useRouter } from 'expo-router';
 import { useBabyStore } from '@/store/useBabyStore';
 import { 
   format, 
@@ -12,27 +26,29 @@ import {
   addDays,
   startOfToday
 } from 'date-fns';
-import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby, Scale } from 'lucide-react-native';
+import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby, Scale, Star, Settings } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
 export default function LogsScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { activities, babies, currentBabyId } = useBabyStore();
+  const { activities, babies, currentBabyId, isPro } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [activeView, setActiveView] = useState('daily'); // 'daily', 'weekly', 'monthly'
   const [isMainExpanded, setIsMainExpanded] = useState(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
 
-  // Create a 14-day strip centered around today
+  // Create a 14-day strip terminating today
   const calendarDays = useMemo(() => {
     const today = startOfToday();
-    return Array.from({ length: 14 }).map((_, i) => addDays(subDays(today, 7), i));
+    return Array.from({ length: 14 }).map((_, i) => subDays(today, 13 - i));
   }, []);
 
   const babyActivities = useMemo(() => {
@@ -94,82 +110,134 @@ export default function LogsScreen() {
     <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>History</Typography>
-          <Typography variant="bodyMd" weight="600" color="#607D8B">Daily Nurture for {currentBaby?.name || 'Baby'}</Typography>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <View>
+            <Typography variant="display" weight="800" style={{ color: '#1B3C35', fontSize: 34 }}>History</Typography>
+            <Typography variant="bodyMd" weight="600" color="#607D8B">Daily Nurture for {currentBaby?.name || 'Baby'}</Typography>
+          </View>
+          <View style={styles.headerActions}>
+            <TouchableOpacity 
+              style={styles.headerBtn}
+              onPress={() => router.push('/settings')}
+            >
+              <Settings size={22} color="#1B3C35" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.headerBtn, { backgroundColor: '#1B3C35' }]}
+              onPress={() => setIsShareModalVisible(true)}
+            >
+              <Share2 size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Elegant Report Buttons */}
-        <View style={styles.reportRow}>
-          <TouchableOpacity 
-            style={[styles.pillButton, { backgroundColor: '#FCE4EC' }]}
-            onPress={() => generateBabyReport(currentBaby, activities, 7)}
-          >
-            <FileText size={18} color="#E91E63" />
-            <Typography variant="body" weight="700" color="#E91E63">Weekly Summary</Typography>
-          </TouchableOpacity>
+        {/* Clinical Reporting Hub - Now on History Board */}
+        <Card style={styles.clinicalBoardCard}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+            <Image 
+              source={require('../../assets/images/MUMMUM_FINAL.png')} 
+              style={{ width: 40, height: 40 }}
+              resizeMode="contain"
+            />
+            <View>
+              <Typography variant="label" weight="800" color="#1B3C35">MUMMUM CLINICAL HUB</Typography>
+              <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>PROFESSIONAL PEDIATRIC REPORTING</Typography>
+            </View>
+          </View>
 
-          <TouchableOpacity 
-            style={[styles.pillButton, { backgroundColor: '#E3F2FD' }]}
-            onPress={() => generateBabyReport(currentBaby, activities, 30)}
-          >
-            <Share2 size={18} color="#1565C0" />
-            <Typography variant="body" weight="700" color="#1565C0">Monthly Report</Typography>
-          </TouchableOpacity>
-        </View>
+          {!isPro ? (
+            <View style={{ gap: 12 }}>
+              <Typography variant="label" color="#607D8B" style={{ lineHeight: 16 }}>
+                Generate professional PDF reports, track medical history, and unlock advanced clinical insights with Mummum Pro.
+              </Typography>
+              <TouchableOpacity 
+                style={[styles.boardPdfBtn, { backgroundColor: '#1B3C35' }]} 
+                onPress={() => router.push('/premium')}
+              >
+                <Star size={18} color="#fff" fill="#fff" />
+                <Typography variant="body" weight="800" color="#fff">Unlock Clinical Pro</Typography>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={styles.boardTabContainer}>
+                {['daily', 'weekly', 'monthly'].map((tab) => (
+                  <TouchableOpacity 
+                    key={tab} 
+                    style={[styles.boardTabPill, activeView === tab && { backgroundColor: '#1B3C35', borderColor: '#1B3C35' }]}
+                    onPress={() => setActiveView(tab)}
+                  >
+                    <Typography variant="label" weight="800" color={activeView === tab ? '#fff' : '#90A4AE'}>
+                      {tab.toUpperCase()}
+                    </Typography>
+                  </TouchableOpacity>
+                ))}
+              </View>
 
-        {/* Calendar Strip */}
-        <View style={styles.calendarStripWrapper}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarStrip}>
-            {calendarDays.map((date) => {
-              const isSelected = isSameDay(date, selectedDate);
-              const isToday = isSameDay(date, new Date());
-              return (
-                <TouchableOpacity 
-                  key={date.toISOString()}
-                  style={[
-                    styles.dateCard, 
-                    isSelected && { backgroundColor: '#4A5D4C', shadowColor: '#4A5D4C', shadowOpacity: 0.2 }
-                  ]}
-                  onPress={() => setSelectedDate(date)}
-                >
-                  <Typography variant="label" weight="700" color={isSelected ? '#fff' : '#90A4AE'} style={{ fontSize: 10 }}>
-                    {format(date, 'EEE').toUpperCase()}
-                  </Typography>
-                  <Typography variant="body" weight="800" color={isSelected ? '#fff' : '#1B3C35'} style={{ fontSize: 18 }}>
-                    {format(date, 'd')}
-                  </Typography>
-                  {isToday && !isSelected && <View style={styles.todayIndicator} />}
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+              <TouchableOpacity 
+                style={styles.boardPdfBtn} 
+                onPress={() => generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30))}
+              >
+                <FileText size={18} color="#fff" />
+                <Typography variant="body" weight="800" color="#fff">Generate {activeView.charAt(0).toUpperCase() + activeView.slice(1)} PDF</Typography>
+              </TouchableOpacity>
+            </>
+          )}
+        </Card>
 
-        {/* Share Social Button */}
-        <TouchableOpacity 
-          style={styles.shareSocialButton}
-          onPress={() => setIsShareModalVisible(true)}
-        >
-          <Share2 size={20} color="#fff" />
-          <Typography variant="bodyLg" weight="800" color="#fff">Share Social Report</Typography>
-        </TouchableOpacity>
+        {/* Calendar Strip - Only in Daily View */}
+        {activeView === 'daily' && (
+          <View style={styles.calendarStripWrapper}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarStrip}>
+              {calendarDays.map((date) => {
+                const isSelected = isSameDay(date, selectedDate);
+                const isToday = isSameDay(date, new Date());
+                return (
+                  <TouchableOpacity 
+                    key={date.toISOString()}
+                    style={[
+                      styles.dateCard, 
+                      isSelected && { backgroundColor: '#4A5D4C', shadowColor: '#4A5D4C', shadowOpacity: 0.2 }
+                    ]}
+                    onPress={() => setSelectedDate(date)}
+                  >
+                    <Typography variant="label" weight="700" color={isSelected ? '#fff' : '#90A4AE'} style={{ fontSize: 10 }}>
+                      {format(date, 'EEE').toUpperCase()}
+                    </Typography>
+                    <Typography variant="body" weight="800" color={isSelected ? '#fff' : '#1B3C35'} style={{ fontSize: 18 }}>
+                      {format(date, 'd')}
+                    </Typography>
+                    {isToday && !isSelected && <View style={styles.todayIndicator} />}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
 
         {/* Main Prominent Summary Card */}
         <View style={styles.mainCardContainer}>
           <Card style={[styles.summaryCard, isMainExpanded && { paddingBottom: 0 }]}>
-            <TouchableOpacity 
-              activeOpacity={0.8} 
-              onPress={() => setIsMainExpanded(!isMainExpanded)}
-              style={styles.summaryCardHeader}
-            >
-              <Typography variant="bodyLg" weight="800" color="#1B3C35">
-                {format(selectedDate, 'MMMM d, yyyy')} • {format(selectedDate, 'EEEE')}
-              </Typography>
-              <ChevronRight size={20} color="#CFD8DC" style={{ transform: [{ rotate: isMainExpanded ? '90deg' : '0deg' }] }} />
-            </TouchableOpacity>
+            <View style={styles.summaryCardHeader}>
+              <TouchableOpacity 
+                activeOpacity={0.8} 
+                onPress={() => setIsMainExpanded(!isMainExpanded)}
+                style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+              >
+                <Typography variant="bodyLg" weight="800" color="#1B3C35">
+                  {format(selectedDate, 'MMMM d, yyyy')} • {format(selectedDate, 'EEEE')}
+                </Typography>
+                <ChevronRight size={20} color="#CFD8DC" style={{ transform: [{ rotate: isMainExpanded ? '90deg' : '0deg' }] }} />
+              </TouchableOpacity>
+              
+              <View style={{ width: 1, height: 24, backgroundColor: '#F1F5F9', marginHorizontal: 12 }} />
+              
+              <TouchableOpacity onPress={() => setIsShareModalVisible(true)}>
+                <Share2 size={20} color="#1B3C35" />
+              </TouchableOpacity>
+            </View>
             
             <View style={styles.statsGrid}>
               <View style={styles.statBox}>
@@ -217,12 +285,20 @@ export default function LogsScreen() {
         
         {/* All History Section */}
         <View style={styles.historySection}>
-          <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>ALL HISTORY</Typography>
+          <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>
+            {activeView === 'daily' ? 'DAILY TIMELINE' : (activeView === 'weekly' ? 'WEEKLY SUMMARY' : 'MONTHLY OVERVIEW')}
+          </Typography>
           <View style={styles.historyList}>
             {Object.entries(dailySummaries)
               .sort((a,b) => b[0].localeCompare(a[0]))
+              .filter(([_, data], index) => {
+                if (activeView === 'daily') return isSameDay(data.date, selectedDate);
+                if (activeView === 'weekly') return index < 7;
+                if (activeView === 'monthly') return index < 30;
+                return true;
+              })
               .map(([key, data]) => (
-                <HistoryRow key={key} data={data} isSelected={key === selectedDateKey} />
+                <HistoryRow key={key} data={data} isSelected={key === selectedDateKey && activeView === 'daily'} />
               ))
             }
             {Object.keys(dailySummaries).length === 0 && (
@@ -249,6 +325,9 @@ export default function LogsScreen() {
 }
 
 function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
+  const [reportPeriod, setReportPeriod] = useState(7);
+  const viewShotRef = useRef<any>(null);
+  
   const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date));
   
   const sortedGrowth = activities
@@ -270,95 +349,147 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   };
   const emotionalDay = getOrdinal(diffDays);
 
-  const todayMedications = selectedDateActivities.filter((a: any) => a.type === 'medicine');
-  const todayDiapers = selectedDateActivities.filter((a: any) => a.type === 'diaper').length;
-  
-  const totalVolume = selectedDateActivities
-    .filter((a: any) => a.type === 'feed' && a.details?.amount)
-    .reduce((acc: number, curr: any) => acc + (parseFloat(curr.details.amount) || 0), 0);
+  const medsCount = selectedDateActivities.filter((a: any) => a.type === 'medicine').length;
+  const vaccinesCount = selectedDateActivities.filter((a: any) => a.type === 'vaccine' || a.type === 'vaccination').length;
+  const careEvents = selectedDateActivities.filter((a: any) => a.type === 'diaper').length;
+
+  const handleSaveImage = async () => {
+    try {
+      if (!MediaLibrary) {
+        Alert.alert(
+          'Export Restricted', 
+          'Native image export is only available in the production build. Please use npx expo run:ios to enable this feature locally.',
+          [{ text: 'OK' }]
+        );
+        return;
+      }
+
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Denied', 'Please grant gallery access to save snapshots.');
+        return;
+      }
+
+      const uri = await viewShotRef.current.capture();
+      await MediaLibrary.saveToLibraryAsync(uri);
+      Alert.alert('Saved!', 'Snapshot has been saved to your gallery.');
+    } catch (error) {
+      console.error('Save failed:', error);
+      Alert.alert(
+        'Export Restricted', 
+        'Native image export is only available in the production build. Please use npx expo run:ios to enable this feature locally.',
+        [{ text: 'OK' }]
+      );
+    }
+  };
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
-        <View style={styles.bannerContainer}>
-          <View style={styles.bannerContent}>
-            {/* Header: Baby Photo Left, Baby Name & Metrics Right */}
-            <View style={styles.bannerHeaderSplit}>
-              <View style={styles.bannerHeaderLeft}>
-                {(baby as any)?.image ? (
-                  <Image 
-                    source={{ uri: (baby as any).image }} 
-                    style={{ width: 80, height: 80, borderRadius: 40, borderWidth: 3, borderColor: '#fff', shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10 }} 
+        <ScrollView contentContainerStyle={{ paddingVertical: 40 }} showsVerticalScrollIndicator={false}>
+          <View style={styles.bannerContainer}>
+            <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9, backgroundColor: '#fff' }}>
+              <View style={styles.bannerContent}>
+                {/* Header: Large Logo Left, Baby Name & Metrics Right */}
+                <View style={styles.bannerHeaderSplit}>
+                  <View style={styles.bannerHeaderLeft}>
+                    <Image 
+                      source={require('../../assets/images/MUMMUM_FINAL.png')} 
+                      style={{ width: 64, height: 64 }}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
+                  </View>
+                </View>
+
+                <View style={styles.reportDivider} />
+
+                <View style={styles.bannerVitalsRow}>
+                  <View style={styles.vitalStatItem}>
+                    <Scale size={16} color="#607D8B" />
+                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                      {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}
+                    </Typography>
+                    <Typography variant="label" color="#90A4AE">Weight</Typography>
+                  </View>
+                  <View style={styles.vitalStatItem}>
+                    <Droplet size={16} color="#607D8B" />
+                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                      {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}
+                    </Typography>
+                    <Typography variant="label" color="#90A4AE">Height</Typography>
+                  </View>
+                  <View style={styles.vitalStatItem}>
+                    <Baby size={16} color="#607D8B" />
+                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                      {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                    </Typography>
+                    <Typography variant="label" color="#90A4AE">Head Circ</Typography>
+                  </View>
+                </View>
+
+                <View style={[styles.reportDivider, { marginTop: 16 }]} />
+
+                <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 4 }}>
+                  {format(data.date, 'MMMM d, yyyy')} • Daily Report
+                </Typography>
+                <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
+                  Celebrating {baby?.name}'s {emotionalDay} Day
+                </Typography>
+
+                {/* High Level 4-Item Grid */}
+                <View style={styles.categoryGrid}>
+                  <CategoryItem 
+                    icon={<Pill size={20} color="#D32F2F" />} 
+                    title="HEALTH" 
+                    detail={`${medsCount + vaccinesCount} Events`} 
+                    bgColor="#FFEBEE"
                   />
-                ) : (
-                  <Image 
-                    source={require('../../assets/images/MUMMUM_FINAL.png')} 
-                    style={{ width: 64, height: 64 }}
-                    resizeMode="contain"
+                  <CategoryItem 
+                    icon={<Milk size={20} color="#2E7D32" />} 
+                    title="NUTRITION" 
+                    detail={`${data.stats.feeds} Feeds`} 
+                    bgColor="#E8F5E9"
                   />
-                )}
-              </View>
-              <View style={{ alignItems: 'flex-end' }}>
-                <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
-                <Typography variant="label" weight="800" color="#607D8B" style={{ fontSize: 10, marginTop: 4 }}>
-                  W: {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'} • H: {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'} • HC: {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                  <CategoryItem 
+                    icon={<Moon size={20} color="#1565C0" />} 
+                    title="REST" 
+                    detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
+                    bgColor="#E3F2FD"
+                  />
+                  <CategoryItem 
+                    icon={<Droplet size={20} color="#E65100" />} 
+                    title="CARE" 
+                    detail={`${careEvents} Events`} 
+                    bgColor="#FFF3E0"
+                  />
+                </View>
+
+                <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 16, letterSpacing: 1 }}>
+                  GENERATED BY MUMMUM HUB
                 </Typography>
               </View>
+            </ViewShot>
+
+            <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
+              <TouchableOpacity 
+                style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#C69C82' }]} 
+                onPress={handleSaveImage}
+              >
+                <Typography variant="body" weight="800" color="#fff">Save to Gallery</Typography>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#fff', borderWidth: 1, borderColor: '#F1F5F9' }]} 
+                onPress={onClose}
+              >
+                <Typography variant="body" weight="800" color="#4A5D4C">Close</Typography>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.reportDivider} />
-
-            <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 4 }}>
-              {format(data.date, 'MMMM d, yyyy')} • Daily Report
-            </Typography>
-            <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
-              Celebrating {(baby as any)?.name}'s {emotionalDay} Day
-            </Typography>
-
-            {/* Detailed Stats Grid */}
-            <View style={styles.categoryGrid}>
-              <CategoryItem 
-                icon={<Milk size={20} color="#2E7D32" />} 
-                title="NUTRITION" 
-                detail={`${data.stats.feeds} Feeds • ${totalVolume}ml`} 
-                bgColor="#E8F5E9"
-              />
-              <CategoryItem 
-                icon={<Moon size={20} color="#1565C0" />} 
-                title="REST" 
-                detail={`${Math.floor(data.stats.sleep/3600)}h ${Math.floor((data.stats.sleep%3600)/60)}m`} 
-                bgColor="#E3F2FD"
-              />
-              <CategoryItem 
-                icon={<Droplet size={20} color="#E65100" />} 
-                title="DIAPERS" 
-                detail={`${todayDiapers} Changes`} 
-                bgColor="#FFF3E0"
-              />
-            </View>
-
-            {/* Medication List (If any) */}
-            {todayMedications.length > 0 && (
-              <View style={{ marginTop: 24, padding: 16, backgroundColor: '#F5F7F8', borderRadius: 20, borderWidth: 1, borderColor: '#ECEFF1' }}>
-                <Typography variant="label" weight="800" color="#607D8B" style={{ marginBottom: 12, letterSpacing: 1 }}>TODAY'S MEDICATIONS</Typography>
-                {todayMedications.map((m: any, idx: number) => (
-                  <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <Typography variant="body" weight="700" color="#1B3C35">{m.details.name} ({m.details.dosage})</Typography>
-                    <Typography variant="label" weight="600" color="#90A4AE">{format(new Date(m.timestamp), 'h:mm a')}</Typography>
-                  </View>
-                ))}
-              </View>
-            )}
-
-            <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 40, letterSpacing: 1 }}>
-              GENERATED BY MUMMUM HUB
-            </Typography>
           </View>
-
-          <TouchableOpacity style={styles.closeBannerBtn} onPress={onClose}>
-            <Typography variant="body" weight="800" color="#4A5D4C">Close Report</Typography>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -497,6 +628,53 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 16,
   },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  headerBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  headerShareBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  tabPill: {
+    flex: 1,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   content: {
     paddingHorizontal: 24,
   },
@@ -627,6 +805,46 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 10,
   },
+  clinicalBoardCard: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 32,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.05,
+    shadowRadius: 20,
+    elevation: 4,
+  },
+  boardTabContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  boardTabPill: {
+    flex: 1,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F8FAFB',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  boardPdfBtn: {
+    backgroundColor: '#4A5D4C',
+    height: 48,
+    borderRadius: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    shadowColor: '#4A5D4C',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
+  },
   expandedContent: {
     paddingHorizontal: 20,
     paddingBottom: 4,
@@ -700,6 +918,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  bannerVitalsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 4,
+  },
+  vitalStatItem: {
+    alignItems: 'center',
+    gap: 2,
+  },
+  downloadIconBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    marginLeft: 8,
+  },
   logoCircle: {
     borderRadius: 20,
     alignItems: 'center',
@@ -719,17 +960,17 @@ const styles = StyleSheet.create({
   categoryItem: {
     width: (width - 40 - 64 - 12) / 2, // Adjusted for padding and gap
     alignItems: 'center',
-    gap: 12,
+    gap: 8,
     backgroundColor: '#F8FAFB',
-    padding: 16,
+    padding: 12,
     borderRadius: 24,
     borderWidth: 1,
     borderColor: '#F1F5F9',
   },
   categoryIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -739,5 +980,40 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFB',
     borderTopWidth: 1,
     borderTopColor: '#F1F5F9',
+  },
+  clinicalReportingHub: {
+    backgroundColor: '#F8FAFB',
+    padding: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
+  },
+  periodSelector: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+  periodPill: {
+    flex: 1,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  generatePdfBtn: {
+    backgroundColor: '#1B3C35',
+    height: 56,
+    borderRadius: 28,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    shadowColor: '#1B3C35',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
   }
 });

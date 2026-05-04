@@ -199,7 +199,15 @@ export default function MedicalLogScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { addActivity, updateActivity, deleteActivity, babies, currentBabyId, activities } = useBabyStore();
+  const { 
+    activities, 
+    babies, 
+    currentBabyId, 
+    addActivity, 
+    updateActivity,
+    deleteActivity,
+    isPro
+  } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const babyActivities = activities.filter(a => a.babyId === currentBabyId);
 
@@ -410,7 +418,21 @@ export default function MedicalLogScreen() {
                     <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1.5, marginLeft: 4 }}>RECENT DOSAGES</Typography>
                     <TouchableOpacity 
                       style={styles.addBtnSmall}
-                      onPress={() => setIsMedicineModalVisible(true)}
+                      onPress={() => {
+                        const medCount = babyActivities.filter(a => a.type === 'medicine').length;
+                        if (!isPro && medCount >= 2) {
+                          Alert.alert(
+                            "Unlock Clinical Records",
+                            "Tracking more than 2 medications is a Pro feature. Unlock Mummum Clinical for lifetime access and professional history.",
+                            [
+                              { text: "Later", style: "cancel" },
+                              { text: "Upgrade Now", onPress: () => router.push('/premium') }
+                            ]
+                          );
+                          return;
+                        }
+                        setIsMedicineModalVisible(true);
+                      }}
                     >
                       <Plus size={18} color="#fff" />
                       <Typography variant="label" weight="700" color="#fff">Log New Dose</Typography>
@@ -516,6 +538,13 @@ export default function MedicalLogScreen() {
                             </TouchableOpacity>
                           </View>
                         </View>
+                        {isDatePickerVisible && dateTarget === 'MEDICINE' && (
+                          <DateTimePickerModal 
+                            onClose={() => setIsDatePickerVisible(false)}
+                            onSelect={handleDateSelect}
+                            initialDate={medicineDate}
+                          />
+                        )}
                       </Card>
                     </KeyboardAvoidingView>
                   </View>
@@ -604,14 +633,6 @@ export default function MedicalLogScreen() {
               </KeyboardAvoidingView>
             </View>
           </Modal>
-
-          {isDatePickerVisible && dateTarget === 'MEDICINE' && (
-            <DateTimePickerModal 
-              onClose={() => setIsDatePickerVisible(false)}
-              onSelect={handleDateSelect}
-              initialDate={medicineDate}
-            />
-          )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

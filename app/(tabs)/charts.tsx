@@ -12,6 +12,8 @@ import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 
+import { saveImagePermanently } from '@/utils/imagePersistor';
+
 export default function ChartsScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
@@ -36,7 +38,8 @@ export default function ChartsScreen() {
     });
 
     if (!result.canceled && currentBabyId) {
-      updateBaby(currentBabyId, { photoUri: result.assets[0].uri });
+      const permanentUri = await saveImagePermanently(result.assets[0].uri);
+      updateBaby(currentBabyId, { photoUri: permanentUri });
     }
   };
 

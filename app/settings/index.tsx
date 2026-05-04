@@ -1,207 +1,195 @@
+import React from 'react';
 import { 
   StyleSheet, 
   View, 
   TouchableOpacity, 
   ScrollView, 
-  Alert,
-  Platform,
-  Linking,
-  Image
+  SafeAreaView,
+  Dimensions,
+  Alert
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
-import Card from '@/components/Card';
 import { 
-  ArrowLeft, 
-  User, 
+  ChevronRight, 
+  Baby, 
+  CreditCard, 
+  Bell, 
   Shield, 
-  FileText, 
-  LogOut, 
-  Trash2, 
-  ChevronRight,
-  Info,
-  LifeBuoy,
-  Bell,
-  Camera,
-  Heart
+  HelpCircle,
+  LogOut,
+  Star,
+  Clock,
+  ArrowLeft,
+  Settings as SettingsIcon
 } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
-import { saveImagePermanently } from '@/utils/imagePersistor';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+
+const { width } = Dimensions.get('window');
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
-  const { currentBabyId, babies, resetStore, updateUserPhoto, userPhotoUri, userName } = useBabyStore();
+  const themeColors = (Colors as any)[colorScheme];
+  const { babies, currentBabyId, isPro, trialStartedAt, resetStore } = useBabyStore();
+
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
-  const handleLogout = () => {
+  const getTrialStatus = () => {
+    if (isPro) return "Pro Lifetime Active";
+    if (!trialStartedAt) return "Trial Not Started";
+    
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+    const elapsed = Date.now() - trialStartedAt;
+    const remaining = sevenDaysInMs - elapsed;
+    
+    if (remaining <= 0) return "Trial Expired";
+    
+    const days = Math.ceil(remaining / (1000 * 60 * 60 * 24));
+    return `${days} Days Left in Trial`;
+  };
+
+  const handleReset = () => {
     Alert.alert(
-      "Logout",
-      "Are you sure you want to log out?",
+      "Reset All Data",
+      "This will permanently delete all logs for Shriyukth. This action cannot be undone.",
       [
         { text: "Cancel", style: "cancel" },
-        { 
-          text: "Logout", 
-          style: "destructive", 
-          onPress: () => {
-            router.replace('/onboarding/auth');
-          }
-        }
+        { text: "Reset", style: "destructive", onPress: () => {
+          resetStore();
+          router.replace('/onboarding/welcome');
+        }}
       ]
     );
   };
-
-  const handleDeleteAccount = () => {
-    Alert.alert(
-      "Delete Account",
-      "This action is permanent and will delete all baby data, clinical records, and settings. This cannot be undone.",
-      [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Delete My Data", 
-          style: "destructive", 
-          onPress: () => {
-            resetStore();
-            router.replace('/onboarding');
-          }
-        }
-      ]
-    );
-  };
-
-  const openInfo = (type: string) => {
-    router.push({ pathname: '/settings/info', params: { type } });
-  };
-
-  const openControl = (type: string) => {
-    router.push({ pathname: '/settings/controls', params: { type } });
-  };
-
-  const handlePickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (!result.canceled) {
-      const permanentUri = await saveImagePermanently(result.assets[0].uri);
-      updateUserPhoto(permanentUri);
-    }
-  };
-
-  const SettingItem = ({ icon: Icon, label, onPress, color = themeColors.text, showChevron = true }: any) => (
-    <TouchableOpacity 
-      style={styles.settingItem} 
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
-      <View style={styles.itemLeft}>
-        <View style={[styles.iconContainer, { backgroundColor: colorScheme === 'light' ? '#F8FAFB' : '#1A2327' }]}>
-          <Icon size={20} color={color} />
-        </View>
-        <Typography variant="body" weight="600" color={color}>{label}</Typography>
-      </View>
-      {showChevron && <ChevronRight size={20} color="#CFD8DC" />}
-    </TouchableOpacity>
-  );
 
   return (
-    <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <ArrowLeft size={24} color="#1B3C35" />
-        </TouchableOpacity>
-        <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Settings</Typography>
-        <View style={{ width: 40 }} />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Profile Card */}
-        <Card style={styles.profileCard}>
+    <View style={[styles.container, { backgroundColor: '#FDFCFB' }]}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.header}>
           <TouchableOpacity 
-            style={styles.profileInfo} 
-            onPress={handlePickImage}
-            activeOpacity={0.8}
+            style={styles.backBtn} 
+            onPress={() => router.back()}
           >
-            <View style={styles.avatarContainer}>
-              {userPhotoUri ? (
-                <Image source={{ uri: userPhotoUri }} style={styles.avatar} />
-              ) : (
-                <View style={styles.avatarPlaceholder}>
-                  <User size={32} color="#4A5D4C" />
-                </View>
-              )}
-              <View style={styles.cameraIconBadge}>
-                <Camera size={12} color="#fff" />
-              </View>
-            </View>
-            <View>
-              <Typography variant="bodyLg" weight="700" color="#1B3C35">{userName}</Typography>
-              <Typography variant="label" color="#607D8B">Managing {currentBaby?.name || 'Baby'}'s Hub</Typography>
-            </View>
+            <ArrowLeft size={24} color="#1B3C35" />
           </TouchableOpacity>
-        </Card>
-
-        {/* Account Section */}
-        <View style={styles.section}>
-          <Typography variant="label" weight="800" color="#90A4AE" style={styles.sectionTitle}>ACCOUNT & SECURITY</Typography>
-          <Card style={styles.sectionCard}>
-            <SettingItem icon={User} label="Profile Information" onPress={() => openControl('profile')} />
-            <SettingItem icon={Bell} label="Notifications" onPress={() => openControl('notifications')} />
-            <SettingItem icon={Shield} label="Privacy Settings" onPress={() => openControl('privacy')} />
-          </Card>
         </View>
 
-        {/* Info Section */}
-        <View style={styles.section}>
-          <Typography variant="label" weight="800" color="#90A4AE" style={styles.sectionTitle}>INFORMATION</Typography>
-          <Card style={styles.sectionCard}>
-            <SettingItem icon={FileText} label="Privacy Policy" onPress={() => openInfo('privacy')} />
-            <SettingItem icon={FileText} label="Terms of Service" onPress={() => openInfo('terms')} />
-            <SettingItem icon={Info} label="About Mummum" onPress={() => openInfo('about')} />
-          </Card>
-        </View>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <Animated.View entering={FadeInDown.duration(600)}>
+            <Typography variant="display" weight="800" style={styles.mainTitle}>Settings</Typography>
+            <Typography variant="bodyMd" color="#607D8B" style={styles.subtitle}>
+              Configure Shriyukth's clinical experience
+            </Typography>
+          </Animated.View>
 
-        {/* Support Section */}
-        <View style={styles.section}>
-          <Typography variant="label" weight="800" color="#90A4AE" style={styles.sectionTitle}>SUPPORT</Typography>
-          <Card style={styles.sectionCard}>
-            <SettingItem icon={LifeBuoy} label="Help Center" onPress={() => openInfo('help')} />
-            <SettingItem icon={Info} label="App Version 1.0.0" onPress={() => {}} showChevron={false} />
-          </Card>
-        </View>
+          {/* Luxury Subscription Card */}
+          <Animated.View entering={FadeInDown.delay(200).duration(800)}>
+            <TouchableOpacity 
+              activeOpacity={0.9}
+              onPress={() => router.push('/premium')}
+              style={[styles.luxuryCard, { backgroundColor: isPro ? '#1B3C35' : '#C69C82' }]}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.iconCircle}>
+                  <Star size={24} color={isPro ? '#C69C82' : '#fff'} fill={isPro ? '#C69C82' : '#fff'} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Typography variant="bodyLg" weight="800" color="#fff">
+                    {isPro ? "Mummum Clinical Pro" : "Unlock GoPro Trial"}
+                  </Typography>
+                  <View style={styles.statusRow}>
+                    <Clock size={12} color="rgba(255,255,255,0.7)" />
+                    <Typography variant="label" weight="700" color="rgba(255,255,255,0.7)" style={{ marginLeft: 4 }}>
+                      {getTrialStatus()}
+                    </Typography>
+                  </View>
+                </View>
+                <ChevronRight size={20} color="rgba(255,255,255,0.5)" />
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
 
-        {/* Danger Zone */}
-        <View style={styles.section}>
-          <Typography variant="label" weight="800" color="#E57373" style={styles.sectionTitle}>DANGER ZONE</Typography>
-          <Card style={styles.sectionCard}>
-            <SettingItem icon={LogOut} label="Log Out" onPress={handleLogout} color="#E57373" />
-            <SettingItem icon={Trash2} label="Delete Account" onPress={handleDeleteAccount} color="#E57373" />
-          </Card>
-        </View>
-
-        <View style={styles.footer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 }}>
-            <Typography variant="label" color="#B0BEC5">Made with</Typography>
-            <Heart size={12} color="#E57373" fill="#E57373" />
-            <Typography variant="label" color="#B0BEC5">for babies and parents everywhere</Typography>
+          {/* Account Section */}
+          <View style={styles.section}>
+            <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>ACCOUNT MANAGEMENT</Typography>
+            <View style={styles.elegantGroup}>
+              <ElegantMenuItem 
+                icon={<Baby size={20} color="#1B3C35" />}
+                title="Baby Profile"
+                detail={currentBaby?.name || "Configure Profile"}
+                onPress={() => {}}
+              />
+              <ElegantMenuItem 
+                icon={<Bell size={20} color="#1B3C35" />}
+                title="Notifications"
+                detail="Custom clinical alerts"
+                onPress={() => {}}
+              />
+              <ElegantMenuItem 
+                icon={<CreditCard size={20} color="#1B3C35" />}
+                title="Subscription"
+                detail={isPro ? "Lifetime Access Active" : "Manage billing"}
+                onPress={() => router.push('/premium')}
+                isLast
+              />
+            </View>
           </View>
-          <Typography variant="label" color="#CFD8DC">
-            Version 1.0.0 (Production Build)
-          </Typography>
-        </View>
-        <View style={{ height: 40 }} />
-      </ScrollView>
+
+          {/* Support Section */}
+          <View style={styles.section}>
+            <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>SUPPORT & PREFERENCES</Typography>
+            <View style={styles.elegantGroup}>
+              <ElegantMenuItem 
+                icon={<Shield size={20} color="#1B3C35" />}
+                title="Privacy & Data"
+                onPress={() => {}}
+              />
+              <ElegantMenuItem 
+                icon={<HelpCircle size={20} color="#1B3C35" />}
+                title="Clinical Help Center"
+                onPress={() => {}}
+              />
+              <ElegantMenuItem 
+                icon={<LogOut size={20} color="#f44336" />}
+                title="Reset All Clinical Data"
+                color="#f44336"
+                onPress={handleReset}
+                hideChevron
+                isLast
+              />
+            </View>
+          </View>
+
+          <View style={styles.footer}>
+            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.0</Typography>
+            <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>High-Fidelity Pediatric Tracking</Typography>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </View>
+  );
+}
+
+function ElegantMenuItem({ icon, title, detail, onPress, color, hideChevron, isLast }: any) {
+  return (
+    <TouchableOpacity 
+      style={[styles.menuItem, !isLast && styles.menuBorder]}
+      onPress={onPress}
+      activeOpacity={0.6}
+    >
+      <View style={styles.menuLeft}>
+        <View style={styles.menuIconContainer}>{icon}</View>
+        <View>
+          <Typography variant="body" weight="700" color={color || "#1B3C35"}>{title}</Typography>
+          {detail && <Typography variant="label" color="#90A4AE" weight="600">{detail}</Typography>}
+        </View>
+      </View>
+      {!hideChevron && <ChevronRight size={18} color="#CFD8DC" />}
+    </TouchableOpacity>
   );
 }
 
@@ -210,104 +198,111 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#1B3C35',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowRadius: 10,
     elevation: 2,
   },
   content: {
-    padding: 20,
+    padding: 24,
+    paddingTop: 8,
   },
-  profileCard: {
-    padding: 20,
-    borderRadius: 24,
-    marginBottom: 24,
+  mainTitle: {
+    fontSize: 40,
+    color: '#1B3C35',
   },
-  profileInfo: {
+  subtitle: {
+    marginTop: 4,
+    marginBottom: 32,
+  },
+  luxuryCard: {
+    padding: 24,
+    borderRadius: 32,
+    shadowColor: '#1B3C35',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 8,
+    marginBottom: 40,
+  },
+  cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
   },
-  avatarContainer: {
-    width: 60,
-    height: 60,
-    position: 'relative',
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-  },
-  avatarPlaceholder: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#E8F1E9',
+  iconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cameraIconBadge: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#4A5D4C',
+  statusRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#fff',
+    marginTop: 4,
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 32,
   },
-  sectionTitle: {
+  sectionLabel: {
     letterSpacing: 1.5,
-    marginLeft: 8,
     marginBottom: 12,
+    marginLeft: 4,
+    fontSize: 11,
   },
-  sectionCard: {
-    borderRadius: 24,
+  elegantGroup: {
+    backgroundColor: '#fff',
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
     overflow: 'hidden',
-    padding: 8,
+    shadowColor: '#1B3C35',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.03,
+    shadowRadius: 16,
+    elevation: 4,
   },
-  settingItem: {
+  menuItem: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 16,
-    borderRadius: 16,
+    alignItems: 'center',
+    padding: 20,
   },
-  itemLeft: {
+  menuBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#F8FAFB',
+  },
+  menuLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
   },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+  menuIconContainer: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    backgroundColor: '#FDFCFB',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
   },
   footer: {
     alignItems: 'center',
-    marginTop: 32,
-    paddingBottom: 20,
+    marginTop: 8,
+    marginBottom: 40,
   }
 });
