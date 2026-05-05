@@ -166,12 +166,12 @@ export default function DashboardScreen() {
               </View>
             </View>
           </View>
-          <TouchableOpacity 
+          <Pressable 
             style={styles.notificationButton}
             onPress={() => router.push('/premium')}
           >
             <Star size={24} color={isPro ? '#1B3C35' : '#CFD8DC'} fill={isPro ? '#1B3C35' : 'transparent'} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Active Session Integration */}
