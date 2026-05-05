@@ -287,7 +287,6 @@ export default function MedicalLogScreen() {
                       style={styles.addBtnSmall}
                       onPress={() => {
                         const medCount = babyActivities.filter(a => a.type === 'medicine').length;
-                        const medCount = babyActivities.filter(a => a.type === 'medicine').length;
                         if (!isFeatureUnlocked && medCount >= 2) {
                           Alert.alert(
                             "Unlock Clinical Records",
