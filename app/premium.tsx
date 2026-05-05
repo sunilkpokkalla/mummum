@@ -249,7 +249,7 @@ export default function PremiumPaywallScreen() {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                  {selectedPlan === 'mmlifetime' ? 'Unlock Lifetime Access' : 'Start 7-Day Trial'}
+                  {selectedPlan === 'mmlifetime' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
                 </Typography>
               )}
             </TouchableOpacity>

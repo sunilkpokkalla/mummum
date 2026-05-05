@@ -47,7 +47,7 @@ export default function RootLayout() {
   // Trial Expiry Logic (7 Days)
   useEffect(() => {
     if (isTrial && trialStartedAt) {
-      const trialDuration = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+      const trialDuration = 3 * 24 * 60 * 60 * 1000; // 3 days in ms
       const now = Date.now();
       if (now - trialStartedAt > trialDuration) {
         setPro(false, false); // Expire trial
