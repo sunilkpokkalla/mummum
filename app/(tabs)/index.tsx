@@ -151,31 +151,39 @@ export default function DashboardScreen() {
               />
             </Pressable>
             <View style={styles.headerInfo}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
-                {isPro ? (
-                  <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
-                    <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
-                  </View>
-                ) : isTrialActive ? (
-                  <View style={[styles.statusBadge, { backgroundColor: '#C69C82' }]}>
-                    <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>TRIAL</Typography>
-                  </View>
-                ) : null}
-              </View>
+              <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
               <Typography variant="label" color={themeColors.icon} style={{ marginTop: -2 }}>
                 {getBabyAge(currentBaby?.birthDate)}
               </Typography>
             </View>
           </View>
-          {!isPro && (
-            <Pressable 
-              style={styles.goProButton}
-              onPress={() => router.push('/premium')}
-            >
-              <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 10 }}>GO PRO</Typography>
-            </Pressable>
-          )}
+
+          <View style={styles.headerRight}>
+            {isPro ? (
+              <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
+                <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
+              </View>
+            ) : isTrialActive ? (
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <View style={[styles.statusBadge, { backgroundColor: '#C69C82' }]}>
+                  <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>TRIAL</Typography>
+                </View>
+                <Pressable 
+                  style={styles.goProButtonSmall}
+                  onPress={() => router.push('/premium')}
+                >
+                  <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 8 }}>GO PRO</Typography>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable 
+                style={styles.goProButton}
+                onPress={() => router.push('/premium')}
+              >
+                <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 10 }}>GO PRO</Typography>
+              </Pressable>
+            )}
+          </View>
         </View>
 
         {/* Active Session Integration */}
@@ -584,6 +592,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  headerRight: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
   goProButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -596,6 +608,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
+  },
+  goProButtonSmall: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: '#1B3C35',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   proBadge: {
     paddingHorizontal: 12,
