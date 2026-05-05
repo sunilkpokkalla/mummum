@@ -41,11 +41,8 @@ export default function OnboardingOfferScreen() {
     if (!NativeModules.RNPurchases) {
       Alert.alert(
         "Simulator Mode",
-        "Apple Pay is not available on the simulator. In a production build, the payment sheet would appear.",
-        [
-          { text: "Simulate Purchase", onPress: () => { setPro(true, true); completeOnboarding(); router.push('/onboarding/complete'); } },
-          { text: "Cancel", style: "cancel" }
-        ]
+        "In-App Purchases are not available in the iOS Simulator. Please test on a physical device.",
+        [{ text: "OK" }]
       );
       return;
     }
@@ -53,8 +50,8 @@ export default function OnboardingOfferScreen() {
       (p: any) => p.product.identifier === 'mmlifetime'
     );
     if (!pkg) {
-      setPro(true); completeOnboarding();
-      router.push('/onboarding/complete'); return;
+      Alert.alert("Store Error", "Launch special is currently unavailable. Please check back later.");
+      return;
     }
     setLoading(true);
     try {
@@ -72,7 +69,6 @@ export default function OnboardingOfferScreen() {
   };
 
   const handleSkip = () => {
-    setPro(true, true); // Auto-activate trial on skip
     completeOnboarding();
     router.push('/onboarding/complete');
   };

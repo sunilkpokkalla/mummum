@@ -19,6 +19,7 @@ import Typography from '@/components/Typography';
 import Card from '@/components/Card';
 import { useRouter } from 'expo-router';
 import { useBabyStore } from '@/store/useBabyStore';
+import { usePremium } from '@/hooks/usePremium';
 import { 
   format, 
   isSameDay, 
@@ -37,7 +38,8 @@ export default function LogsScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { activities, babies, currentBabyId, isPro } = useBabyStore();
+  const { activities, babies, currentBabyId } = useBabyStore();
+  const { isFeatureUnlocked } = usePremium();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -147,7 +149,7 @@ export default function LogsScreen() {
             </View>
           </View>
 
-          {!isPro ? (
+          {!isFeatureUnlocked ? (
             <View style={{ gap: 12 }}>
               <Typography variant="label" color="#607D8B" style={{ lineHeight: 16 }}>
                 Generate professional PDF reports, track medical history, and unlock advanced clinical insights with Mummum Pro.

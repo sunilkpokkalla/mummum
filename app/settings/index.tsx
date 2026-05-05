@@ -27,6 +27,7 @@ import {
 } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { usePremium } from '@/hooks/usePremium';
 
 const { width } = Dimensions.get('window');
 
@@ -34,22 +35,16 @@ export default function SettingsScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { babies, currentBabyId, isPro, trialStartedAt, resetStore } = useBabyStore();
+  const { babies, currentBabyId, resetStore } = useBabyStore();
+  const { isPro, trialStatus } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const getTrialStatus = () => {
     if (isPro) return "Pro Lifetime Active";
-    if (!trialStartedAt) return "Trial Not Started";
-    
-    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-    const elapsed = Date.now() - trialStartedAt;
-    const remaining = sevenDaysInMs - elapsed;
-    
-    if (remaining <= 0) return "Trial Expired";
-    
-    const days = Math.ceil(remaining / (1000 * 60 * 60 * 24));
-    return `${days} Days Left in Trial`;
+    if (trialStatus.expired) return "Trial Expired";
+    if (trialStatus.active) return `${trialStatus.remainingDays} Days Left in Trial`;
+    return "Trial Not Started";
   };
 
   const handleReset = () => {
@@ -99,7 +94,7 @@ export default function SettingsScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Typography variant="bodyLg" weight="800" color="#fff">
-                    {isPro ? "Mummum Clinical Pro" : "Unlock GoPro Trial"}
+                    {isPro ? "Mummum Clinical Pro" : (trialStatus.active ? "Trial Mode Active" : "Unlock Clinical Pro")}
                   </Typography>
                   <View style={styles.statusRow}>
                     <Clock size={12} color="rgba(255,255,255,0.7)" />

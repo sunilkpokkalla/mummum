@@ -8,7 +8,8 @@ import {
   Dimensions,
   SafeAreaView,
   Alert,
-  NativeModules
+  NativeModules,
+  Linking
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -59,13 +60,16 @@ export default function PremiumPaywallScreen() {
     if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
       Alert.alert(
         "Simulator Mode", 
-        "Apple Pay is not available on the simulator. In a real build, the App Store payment sheet would appear now.",
-        [{ text: "Simulate Success", onPress: () => { setPro(true); router.back(); } }, { text: "Cancel", style: "cancel" }]
+        "In-App Purchases are not available in the iOS Simulator. To test the payment flow, please use a physical device with a Sandbox Apple ID.",
+        [{ text: "OK" }]
       );
       return;
     }
     const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === selectedPlan);
-    if (!pkg) { setPro(true); router.back(); return; }
+    if (!pkg) { 
+      Alert.alert("Store Error", "Could not fetch product details from the App Store. Please check your internet connection.");
+      return; 
+    }
     setLoading(true);
     try {
       const { default: Purchases } = await import('react-native-purchases');
@@ -191,9 +195,9 @@ export default function PremiumPaywallScreen() {
             </TouchableOpacity>
 
             <View style={styles.legalLinks}>
-              <TouchableOpacity><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Terms</Typography></TouchableOpacity>
+              <TouchableOpacity onPress={() => Linking.openURL('https://mummum-app.com/terms')}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Terms</Typography></TouchableOpacity>
               <View style={styles.dot} />
-              <TouchableOpacity><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Privacy</Typography></TouchableOpacity>
+              <TouchableOpacity onPress={() => Linking.openURL('https://mummum-app.com/privacy')}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Privacy</Typography></TouchableOpacity>
               <View style={styles.dot} />
               <TouchableOpacity onPress={handleRestore}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Restore</Typography></TouchableOpacity>
             </View>

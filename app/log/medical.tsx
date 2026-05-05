@@ -43,6 +43,7 @@ import {
 import { useBabyStore } from '@/store/useBabyStore';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
+import { usePremium } from '@/hooks/usePremium';
 
 const WHO_VACCINATIONS = [
   { id: 'v1', title: 'BCG (Tuberculosis)', period: 'At Birth' },
@@ -71,9 +72,9 @@ export default function MedicalLogScreen() {
     currentBabyId, 
     addActivity, 
     updateActivity,
-    deleteActivity,
-    isPro
+    deleteActivity
   } = useBabyStore();
+  const { isFeatureUnlocked } = usePremium();
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const babyActivities = activities.filter(a => a.babyId === currentBabyId);
 
@@ -286,10 +287,11 @@ export default function MedicalLogScreen() {
                       style={styles.addBtnSmall}
                       onPress={() => {
                         const medCount = babyActivities.filter(a => a.type === 'medicine').length;
-                        if (!isPro && medCount >= 2) {
+                        const medCount = babyActivities.filter(a => a.type === 'medicine').length;
+                        if (!isFeatureUnlocked && medCount >= 2) {
                           Alert.alert(
                             "Unlock Clinical Records",
-                            "Tracking more than 2 medications is a Pro feature. Unlock Mummum Clinical for lifetime access and professional history.",
+                            "Tracking more than 2 medications is a Clinical feature. Unlock Mummum for lifetime access and professional history.",
                             [
                               { text: "Later", style: "cancel" },
                               { text: "Upgrade Now", onPress: () => router.push('/premium') }

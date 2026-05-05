@@ -243,7 +243,7 @@ export const useBabyStore = create<BabyState>()(
       })),
       
       setPro: (val, isTrial = false) => set({ 
-        isPro: val, 
+        isPro: isTrial ? false : val, 
         isTrial: isTrial,
         trialStartedAt: isTrial ? Date.now() : null 
       }),

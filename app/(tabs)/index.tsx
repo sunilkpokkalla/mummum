@@ -28,6 +28,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
 import { formatDistanceToNow, isToday, format, intervalToDuration } from 'date-fns';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { usePremium } from '@/hooks/usePremium';
 
 import { saveImagePermanently } from '@/utils/imagePersistor';
 
@@ -38,7 +39,8 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, isPro, isTrial } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
+  const { isPro, isTrialActive, trialStatus } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const dateKey = format(new Date(), 'yyyy-MM-dd');
@@ -149,10 +151,27 @@ export default function DashboardScreen() {
             </Pressable>
             <View style={styles.headerInfo}>
               <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
-              <Typography variant="label" color={themeColors.icon}>{getBabyAge(currentBaby?.birthDate)}</Typography>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Typography variant="label" color={themeColors.icon}>{getBabyAge(currentBaby?.birthDate)}</Typography>
+                {isPro && (
+                  <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
+                    <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
+                  </View>
+                )}
+                {isTrialActive && (
+                  <View style={[styles.statusBadge, { backgroundColor: '#C69C82' }]}>
+                    <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>TRIAL</Typography>
+                  </View>
+                )}
+              </View>
             </View>
           </View>
-        </View>
+          <TouchableOpacity 
+            style={styles.notificationButton}
+            onPress={() => router.push('/premium')}
+          >
+            <Star size={24} color={isPro ? '#1B3C35' : '#CFD8DC'} fill={isPro ? '#1B3C35' : 'transparent'} />
+          </TouchableOpacity>
 
         {/* Active Session Integration */}
         {activeSession && (
@@ -552,6 +571,13 @@ const styles = StyleSheet.create({
   },
   headerInfo: {
     gap: 2,
+  },
+  statusBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   proBadge: {
     paddingHorizontal: 12,
