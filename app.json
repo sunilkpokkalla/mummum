@@ -61,7 +61,15 @@
         }
       ],
       "@react-native-firebase/app",
-      "@react-native-firebase/auth"
+      "@react-native-firebase/auth",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you save baby milestones and clinical memories.",
+          "cameraPermission": "The app uses your camera to capture clinical snapshots and milestones for your baby's medical history."
+        }
+      ],
+      "expo-media-library"
     ],
     "experiments": {
       "typedRoutes": true

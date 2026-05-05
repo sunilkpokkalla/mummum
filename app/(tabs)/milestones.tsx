@@ -7,7 +7,7 @@ import Typography from '@/components/Typography';
 import Card from '@/components/Card';
 import { Award, Camera, CheckCircle, Circle, Bell, ChevronRight, Star, Lock, Unlock } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
-import { saveImagePermanently } from '@/utils/imagePersistor';
+import { saveImagePermanently, saveToAlbum } from '@/utils/imagePersistor';
 import * as Haptics from 'expo-haptics';
 import { format } from 'date-fns';
 
@@ -65,33 +65,75 @@ export default function MilestonesScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
   const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone } = useBabyStore();
+  const [loading, setLoading] = useState(false);
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const completedIds = (completedMilestones as any)[currentBabyId || ''] || [];
   const babyMemories = memories.filter(m => m.babyId === currentBabyId);
 
   const handleAddMemory = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    Alert.alert(
+      "Add Milestone Memory",
+      "Capture a new moment or choose from your library.",
+      [
+        {
+          text: "Take Photo",
+          onPress: () => processImage(true)
+        },
+        {
+          text: "Choose from Library",
+          onPress: () => processImage(false)
+        },
+        {
+          text: "Cancel",
+          style: "cancel"
+        }
+      ]
+    );
+  };
+
+  const processImage = async (useCamera: boolean) => {
+    let status;
+    if (useCamera) {
+      const cameraPerm = await ImagePicker.requestCameraPermissionsAsync();
+      status = cameraPerm.status;
+    } else {
+      const libraryPerm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      status = libraryPerm.status;
+    }
+
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'We need access to your photos to save memories.');
+      Alert.alert('Permission needed', `We need ${useCamera ? 'camera' : 'photo library'} access to save memories.`);
       return;
     }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.IMAGES,
-      allowsEditing: true,
-      aspect: [4, 5],
-      quality: 0.8,
-    });
+    const result = useCamera 
+      ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [4, 5], quality: 0.8 })
+      : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [4, 5], quality: 0.8 });
 
     if (!result.canceled) {
-      const permanentUri = await saveImagePermanently(result.assets[0].uri);
-      const newMemory = {
-        id: Date.now().toString(),
-        uri: permanentUri,
-        title: `Memory - ${format(new Date(), 'MMM d')}`,
-        timestamp: new Date()
-      };
-      addMemory(newMemory);
+      setLoading(true);
+      try {
+        const tempUri = result.assets[0].uri;
+        const permanentUri = await saveImagePermanently(tempUri);
+        
+        // Auto-save to phone album if it's a new camera photo
+        if (useCamera) {
+          await saveToAlbum(tempUri);
+        }
+
+        const newMemory = {
+          id: Date.now().toString(),
+          uri: permanentUri,
+          title: `Memory - ${format(new Date(), 'MMM d')}`,
+          timestamp: new Date()
+        };
+        addMemory(newMemory);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } catch (e) {
+        Alert.alert("Error", "Could not save photo. Please try again.");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

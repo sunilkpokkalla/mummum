@@ -1,5 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
+import * as MediaLibrary from 'expo-media-library';
+
 export const saveImagePermanently = async (tempUri: string): Promise<string> => {
   try {
     if (!tempUri) return '';
@@ -18,5 +20,19 @@ export const saveImagePermanently = async (tempUri: string): Promise<string> => 
   } catch (error) {
     console.error('Error persisting image:', error);
     return tempUri; // Fallback to temp if copy fails
+  }
+};
+
+export const saveToAlbum = async (uri: string) => {
+  try {
+    const { status } = await MediaLibrary.requestPermissionsAsync(true);
+    if (status === 'granted') {
+      await MediaLibrary.saveToLibraryAsync(uri);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error saving to album:', error);
+    return false;
   }
 };
