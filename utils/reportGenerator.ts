@@ -63,9 +63,16 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
   // Growth Chart Data (All Time)
   const growthChartData = growthHistory.slice().reverse().map(a => ({
     date: format(new Date(a.timestamp), 'MMM d'),
-    weight: parseFloat(a.details?.weight || a.details?.value || 0),
-    height: parseFloat(a.details?.height || a.details?.value || 0)
+    weight: a.details?.metric === 'Weight' ? parseFloat(a.details?.value || 0) : 0,
+    height: a.details?.metric === 'Height' ? parseFloat(a.details?.value || 0) : 0,
+    head: a.details?.metric === 'Head Circ' ? parseFloat(a.details?.value || 0) : 0
   }));
+
+  // Find latest head circumference specifically
+  const headEntries = growthHistory.filter(a => a.details?.metric === 'Head Circ');
+  const latestHead = headEntries.length > 0 ? parseFloat(headEntries[0].details?.value || 0) : 0;
+  const prevHead = headEntries.length > 1 ? parseFloat(headEntries[1].details?.value || 0) : 0;
+  const headDiff = latestHead && prevHead ? (latestHead - prevHead).toFixed(1) : '0.0';
 
   const html = `
     <html>
@@ -92,9 +99,11 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
           
           .date-day-header { background: #1B3C35; color: #fff; padding: 6px 12px; border-radius: 4px; margin: 15px 0 10px 0; font-size: 11px; font-weight: 800; }
           
-          .med-name { font-weight: 700; color: #1B3C35; font-size: 12px; }
-          .vaccine-badge { background: #E8F5E9; color: #2E7D32; padding: 2px 6px; border-radius: 10px; font-weight: 800; font-size: 8px; }
-          .old-badge { background: #ECEFF1; color: #546E7A; }
+          .cranial-card { background: #FDFCFB; border: 2px solid #E0E0E0; border-radius: 12px; padding: 15px; margin: 15px 0; display: flex; align-items: center; gap: 20px; }
+          .head-shape { width: 45px; height: 55px; background: #C69C82; border-radius: 50% 50% 45% 45%; display: flex; align-items: center; justify-content: center; position: relative; }
+          .head-shape::after { content: ''; position: absolute; width: 100%; height: 2px; background: rgba(255,255,255,0.4); top: 40%; }
+          .cranial-value { font-size: 28px; font-weight: 900; color: #1B3C35; line-height: 1; }
+          .cranial-label { font-size: 9px; color: #90A4AE; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
           
           .footer { margin-top: 40px; border-top: 1px solid #EEE; padding-top: 12px; text-align: center; font-size: 9px; color: #90A4AE; }
           @media print { .page-break { page-break-before: always; } }
@@ -125,6 +134,29 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
           <div class="stat-card"><b>${growthHistory[0]?.details?.height || growthHistory[0]?.details?.value || '--'}cm</b><span>Current Height</span></div>
           <div class="stat-card"><b>${growthHistory.length}</b><span>Total Entries</span></div>
           <div class="stat-card"><b>${growthHistory.length > 1 ? (parseFloat(growthHistory[0]?.details?.weight || growthHistory[0]?.details?.value) - parseFloat(growthHistory[growthHistory.length-1]?.details?.weight || growthHistory[growthHistory.length-1]?.details?.value)).toFixed(2) : '0.0'}kg</b><span>Total Gain</span></div>
+        </div>
+
+        <div class="section-header">1.1 Cranial Development</div>
+        <div class="cranial-card">
+          <div class="head-shape">
+            <div style="font-size: 10px; color: #fff; font-weight: 900;">HC</div>
+          </div>
+          <div style="flex: 1">
+            <div class="cranial-label">Current Head Circumference</div>
+            <div class="cranial-value">${latestHead ? latestHead + ' cm' : '--'}</div>
+            <div style="font-size: 10px; color: ${parseFloat(headDiff) >= 0 ? '#2E7D32' : '#C62828'}; font-weight: 700; margin-top: 4px;">
+              ${latestHead ? (parseFloat(headDiff) >= 0 ? '+' : '') + headDiff + ' cm growth since last measurement' : 'Waiting for more data'}
+            </div>
+          </div>
+          <div style="width: 120px; border-left: 1px solid #EEE; padding-left: 15px;">
+            <div class="cranial-label">Recent History</div>
+            ${growthChartData.slice(-3).reverse().map(d => `
+              <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 4px;">
+                <span style="color: #90A4AE">${d.date}</span>
+                <b style="color: #1B3C35">${d.head}cm</b>
+              </div>
+            `).join('')}
+          </div>
         </div>
 
         <div class="section-header">2. Medication & Dosage Log</div>
@@ -228,40 +260,74 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
         </div>
 
         <script>
-          const ctx = document.getElementById('growthProgressionChart').getContext('2d');
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: ${JSON.stringify(growthChartData.map(d => d.date))},
-              datasets: [{
-                label: 'Weight (kg)',
-                data: ${JSON.stringify(growthChartData.map(d => d.weight))},
-                borderColor: '#C69C82',
-                backgroundColor: 'rgba(198, 156, 130, 0.1)',
-                yAxisID: 'yWeight',
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4
-              }, {
-                label: 'Height (cm)',
-                data: ${JSON.stringify(growthChartData.map(d => d.height))},
-                borderColor: '#1B3C35',
-                borderDash: [5, 5],
-                yAxisID: 'yHeight',
-                tension: 0.4,
-                fill: false,
-                pointRadius: 4
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: {
-                yWeight: { type: 'linear', position: 'left', title: { display: true, text: 'Wt (kg)', font: { size: 9 } } },
-                yHeight: { type: 'linear', position: 'right', title: { display: true, text: 'Ht (cm)', font: { size: 9 } }, grid: { drawOnChartArea: false } }
+          window.onload = function() {
+            const ctx = document.getElementById('growthProgressionChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: ${JSON.stringify(growthChartData.map(d => d.date))},
+                datasets: [{
+                  label: 'Weight (kg)',
+                  data: ${JSON.stringify(growthChartData.map(d => d.weight))},
+                  borderColor: '#C69C82',
+                  backgroundColor: 'rgba(198, 156, 130, 0.1)',
+                  yAxisID: 'yWeight',
+                  tension: 0.4,
+                  fill: true,
+                  pointRadius: 4
+                }, {
+                  label: 'Height (cm)',
+                  data: ${JSON.stringify(growthChartData.map(d => d.height))},
+                  borderColor: '#1B3C35',
+                  borderDash: [5, 5],
+                  yAxisID: 'yHeight',
+                  tension: 0.4,
+                  fill: false,
+                  pointRadius: 4
+                }]
               },
-              plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 9 } } } }
-            }
-          });
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false, // Disable animation for PDF print stability
+                plugins: {
+                  legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'end',
+                    labels: { boxWidth: 12, padding: 15, font: { size: 10, weight: 'bold' } }
+                  }
+                },
+                scales: {
+                  yWeight: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'left',
+                    ticks: { color: '#C69C82' },
+                    title: { 
+                      display: true, 
+                      text: 'Weight (kg)', 
+                      color: '#C69C82',
+                      font: { size: 10, weight: 'bold' } 
+                    }
+                  },
+                  yHeight: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'right',
+                    grid: { drawOnChartArea: false },
+                    ticks: { color: '#1B3C35' },
+                    title: { 
+                      display: true, 
+                      text: 'Height (cm)', 
+                      color: '#1B3C35',
+                      font: { size: 10, weight: 'bold' } 
+                    }
+                  }
+                }
+              }
+            });
+          };
         </script>
       </body>
     </html>

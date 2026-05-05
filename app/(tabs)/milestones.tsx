@@ -5,7 +5,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { Award, Camera, CheckCircle, Circle, Bell, ChevronRight, Star } from 'lucide-react-native';
+import { Award, Camera, CheckCircle, Circle, Bell, ChevronRight, Star, Lock, Unlock } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import { saveImagePermanently } from '@/utils/imagePersistor';
 import * as Haptics from 'expo-haptics';
@@ -135,10 +135,12 @@ export default function MilestonesScreen() {
               key={milestone.id} 
               style={[styles.milestoneCard, completedIds.includes(milestone.id) && styles.milestoneCardCompleted]}
               onPress={() => {
-                toggleMilestone(milestone.id);
-                if (!completedIds.includes(milestone.id)) {
-                  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                if (completedIds.includes(milestone.id)) {
+                  // If completed, clicking the card does nothing unless unlocked via the icon
+                  return;
                 }
+                toggleMilestone(milestone.id);
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
               }}
             >
               <View style={[styles.categoryBadge, { backgroundColor: getCategoryColor(milestone.category) }]}>
@@ -148,12 +150,26 @@ export default function MilestonesScreen() {
                 <Typography weight="700" color="#455A64">{milestone.title}</Typography>
                 <Typography variant="label" color="#90A4AE">{milestone.age} • {milestone.description}</Typography>
               </View>
-              <View style={styles.checkContainer}>
-                {completedIds.includes(milestone.id) ? (
-                  <CheckCircle size={26} color="#4CAF50" />
-                ) : (
-                  <Circle size={26} color="#CFD8DC" />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                {completedIds.includes(milestone.id) && (
+                  <TouchableOpacity 
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                      toggleMilestone(milestone.id);
+                    }}
+                    hitSlop={12}
+                    style={{ padding: 4 }}
+                  >
+                    <Lock size={16} color="#90A4AE" />
+                  </TouchableOpacity>
                 )}
+                <View style={styles.checkContainer}>
+                  {completedIds.includes(milestone.id) ? (
+                    <CheckCircle size={26} color="#4CAF50" />
+                  ) : (
+                    <Circle size={26} color="#CFD8DC" />
+                  )}
+                </View>
               </View>
             </Pressable>
           ))}

@@ -152,19 +152,6 @@ export default function DashboardScreen() {
               <Typography variant="label" color={themeColors.icon}>{getBabyAge(currentBaby?.birthDate)}</Typography>
             </View>
           </View>
-          <View style={styles.headerRight}>
-            <Pressable 
-              style={({ pressed }) => [
-                styles.proBadge, 
-                { backgroundColor: isPro ? '#1B3C35' : '#C69C82', opacity: pressed ? 0.8 : 1 }
-              ]}
-              onPress={() => router.push('/settings')}
-            >
-              <Typography variant="label" weight="800" style={{ color: '#fff', fontSize: 9 }}>
-                {isTrial ? 'TRIAL ACTIVE' : (isPro ? 'PRO' : 'GoPro')}
-              </Typography>
-            </Pressable>
-          </View>
         </View>
 
         {/* Active Session Integration */}
