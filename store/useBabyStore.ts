@@ -62,6 +62,7 @@ interface BabyState {
   userName: string;
   tempBaby: Partial<Baby>;
   isPro: boolean;
+  isTrial: boolean;
   trialStartedAt: number | null;
   
   // Actions
@@ -86,7 +87,7 @@ interface BabyState {
   updateStandardTaskSetting: (id: string, setting: { time: string; enabled: boolean; notificationId?: string }) => void;
   completeOnboarding: () => void;
   updateTempBaby: (data: Partial<Baby>) => void;
-  setPro: (val: boolean) => void;
+  setPro: (val: boolean, isTrial?: boolean) => void;
   resetStore: () => void;
   toggleReminder: (id: string) => void;
 }
@@ -109,6 +110,7 @@ export const useBabyStore = create<BabyState>()(
       userName: 'MumMum Parent',
       tempBaby: {},
       isPro: false,
+      isTrial: false,
       trialStartedAt: null,
 
       addBaby: (baby) => set((state) => ({ 
@@ -240,7 +242,11 @@ export const useBabyStore = create<BabyState>()(
         tempBaby: { ...state.tempBaby, ...data }
       })),
       
-      setPro: (val) => set({ isPro: val }),
+      setPro: (val, isTrial = false) => set({ 
+        isPro: val, 
+        isTrial: isTrial,
+        trialStartedAt: isTrial ? Date.now() : null 
+      }),
 
       resetStore: () => set({
         babies: [],

@@ -3,11 +3,12 @@ import {
   StyleSheet, 
   View, 
   TouchableOpacity, 
-  Image, 
   ScrollView,
   Platform,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
+  Alert,
+  NativeModules
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -28,21 +29,81 @@ import { useBabyStore } from '@/store/useBabyStore';
 
 const { width } = Dimensions.get('window');
 
+
+
 export default function PremiumPaywallScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const [selectedPlan, setSelectedPlan] = React.useState('lifetime');
+  const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
+  const currentBaby = babies.find(b => b.id === currentBabyId);
+  const [selectedPlan, setSelectedPlan] = React.useState('mmlifetime');
+  const [offerings, setOfferings] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(false);
 
-  const handlePurchase = () => {
-    setPro(true);
-    router.back();
+  React.useEffect(() => {
+    const fetchOfferings = async () => {
+      if (!NativeModules.RNPurchases || Platform.OS !== 'ios') return;
+      try {
+        const { default: Purchases } = await import('react-native-purchases');
+        const currentOfferings = await Purchases.getOfferings();
+        if (currentOfferings.current) setOfferings(currentOfferings.current);
+      } catch (e) {
+        console.log('Offerings fetch failed', e);
+      }
+    };
+    fetchOfferings();
+  }, []);
+
+  const handlePurchase = async () => {
+    if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
+      Alert.alert(
+        "Simulator Mode", 
+        "Apple Pay is not available on the simulator. In a real build, the App Store payment sheet would appear now.",
+        [{ text: "Simulate Success", onPress: () => { setPro(true); router.back(); } }, { text: "Cancel", style: "cancel" }]
+      );
+      return;
+    }
+    const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === selectedPlan);
+    if (!pkg) { setPro(true); router.back(); return; }
+    setLoading(true);
+    try {
+      const { default: Purchases } = await import('react-native-purchases');
+      const { customerInfo } = await Purchases.purchasePackage(pkg);
+      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
+    } catch (e: any) {
+      if (!e.userCancelled) console.error('Purchase Error', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
+      Alert.alert("Simulator Mode", "Restore functionality requires a physical device and a real Apple ID.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { default: Purchases } = await import('react-native-purchases');
+      const customerInfo = await Purchases.restorePurchases();
+      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
+    } catch (e) {
+      console.error('Restore Error', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPrice = (id: string, defaultPrice: string) => {
+    const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === id);
+    return pkg?.product?.priceString || defaultPrice;
   };
 
   const plans = [
-    { id: 'monthly', title: 'Monthly', price: '$4.99', desc: '7-Day Free Trial', sub: 'GoPro' },
-    { id: 'yearly', title: 'Yearly', price: '$19.99', desc: '7-Day Free Trial', sub: 'GoPro • 60% OFF' },
-    { id: 'lifetime', title: 'Lifetime', price: '$29.99', oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
+    { id: 'monthly', title: 'Monthly', price: getPrice('monthly', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
+    { id: 'yearly', title: 'Yearly', price: getPrice('yearly', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
+    { id: 'mmlifetime', title: 'Lifetime', price: getPrice('mmlifetime', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
   ];
 
   const features = [
@@ -80,7 +141,7 @@ export default function PremiumPaywallScreen() {
             </Animated.View>
             <Typography variant="display" style={styles.title}>Unlock Clinical Pro</Typography>
             <Typography variant="body" color={themeColors.icon} style={styles.subtitle}>
-              Professional clinical tools for Shriyukth's care.
+              Professional clinical tools for {currentBaby?.name || tempBaby.name || 'your baby'}'s care.
             </Typography>
           </Animated.View>
 
@@ -134,7 +195,7 @@ export default function PremiumPaywallScreen() {
               <View style={styles.dot} />
               <TouchableOpacity><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Privacy</Typography></TouchableOpacity>
               <View style={styles.dot} />
-              <TouchableOpacity><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Restore</Typography></TouchableOpacity>
+              <TouchableOpacity onPress={handleRestore}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Restore</Typography></TouchableOpacity>
             </View>
           </Animated.View>
         </View>

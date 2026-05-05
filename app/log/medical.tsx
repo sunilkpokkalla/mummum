@@ -42,6 +42,7 @@ import {
 } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
+import DateTimePicker from '@/components/DateTimePicker';
 
 const WHO_VACCINATIONS = [
   { id: 'v1', title: 'BCG (Tuberculosis)', period: 'At Birth' },
@@ -57,142 +58,7 @@ const WHO_VACCINATIONS = [
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-function DateTimePickerModal({ onClose, onSelect, initialDate }: any) {
-  const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
-  const [selectedDate, setSelectedDate] = useState<Date>(initialDate || new Date());
-  const [currentMonth, setCurrentMonth] = useState<Date>(initialDate || new Date());
-  
-  const [hours, setHours] = useState(format(selectedDate, 'hh'));
-  const [minutes, setMinutes] = useState(format(selectedDate, 'mm'));
-  const [ampm, setAmpm] = useState(format(selectedDate, 'a'));
 
-  const moveMonth = (amount: number) => {
-    const next = new Date(currentMonth);
-    next.setMonth(next.getMonth() + amount);
-    setCurrentMonth(next);
-  };
-
-  const moveYear = (amount: number) => {
-    const next = new Date(currentMonth);
-    next.setFullYear(next.getFullYear() + amount);
-    setCurrentMonth(next);
-  };
-
-  const days = eachDayOfInterval({
-    start: startOfMonth(currentMonth),
-    end: endOfMonth(currentMonth),
-  });
-
-  const startDay = startOfMonth(currentMonth).getDay();
-  const emptyDays = Array(startDay).fill(null);
-
-  const handleConfirm = () => {
-    const finalDate = new Date(selectedDate);
-    let h = parseInt(hours);
-    if (ampm === 'PM' && h < 12) h += 12;
-    if (ampm === 'AM' && h === 12) h = 0;
-    finalDate.setHours(h);
-    finalDate.setMinutes(parseInt(minutes));
-    onSelect(finalDate);
-  };
-
-  return (
-    <View style={StyleSheet.absoluteFill}>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View style={[styles.calendarModal, { backgroundColor: '#fff' }]}>
-              <View style={styles.calendarHeader}>
-                <TouchableOpacity onPress={() => moveYear(-1)} style={styles.navBtnSmall}>
-                  <ChevronsLeft size={20} color="#4A5D4C" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => moveMonth(-1)} style={styles.navBtnSmall}>
-                  <ChevronLeft size={20} color="#4A5D4C" />
-                </TouchableOpacity>
-                
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Typography variant="bodyLg" weight="800" color="#1B3C35">{format(currentMonth, 'MMMM yyyy')}</Typography>
-                </View>
-
-                <TouchableOpacity onPress={() => moveMonth(1)} style={styles.navBtnSmall}>
-                  <ChevronRight size={20} color="#4A5D4C" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => moveYear(1)} style={styles.navBtnSmall}>
-                  <ChevronsRight size={20} color="#4A5D4C" />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.daysGrid}>
-                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                  <Typography key={i} variant="label" weight="800" style={styles.dayLabel}>{day}</Typography>
-                ))}
-                {emptyDays.map((_, i) => <View key={i} style={styles.dayCell} />)}
-                {days.map((day) => (
-                  <TouchableOpacity 
-                    key={day.toISOString()} 
-                    style={[
-                      styles.dayCell, 
-                      isSameDay(day, selectedDate) && { backgroundColor: '#4A5D4C', shadowColor: '#4A5D4C', shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
-                    ]}
-                    onPress={() => setSelectedDate(day)}
-                  >
-                    <Typography variant="bodyMd" weight="800" color={isSameDay(day, selectedDate) ? '#fff' : '#455A64'}>
-                      {format(day, 'd')}
-                    </Typography>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              <View style={styles.timePickerContainer}>
-                <Typography variant="label" weight="800" color="#90A4AE" style={{ marginBottom: 12 }}>SELECT TIME</Typography>
-                <View style={styles.timeRow}>
-                  <View style={styles.timeInputGroup}>
-                    <TextInput 
-                      style={styles.timeInput}
-                      value={hours}
-                      onChangeText={setHours}
-                      keyboardType="numeric"
-                      maxLength={2}
-                    />
-                    <Typography variant="body" weight="700">:</Typography>
-                    <TextInput 
-                      style={styles.timeInput}
-                      value={minutes}
-                      onChangeText={setMinutes}
-                      keyboardType="numeric"
-                      maxLength={2}
-                    />
-                  </View>
-                  <View style={styles.ampmGroup}>
-                    {['AM', 'PM'].map((p) => (
-                      <TouchableOpacity 
-                        key={p} 
-                        style={[styles.ampmBtn, ampm === p && { backgroundColor: themeColors.primary }]}
-                        onPress={() => setAmpm(p)}
-                      >
-                        <Typography variant="label" weight="700" color={ampm === p ? '#fff' : '#607D8B'}>{p}</Typography>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-              </View>
-              
-              <View style={styles.modalFooter}>
-                <TouchableOpacity style={styles.cancelModalBtn} onPress={onClose}>
-                  <Typography variant="label" weight="700" color="#90A4AE">Cancel</Typography>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.confirmModalBtn} onPress={handleConfirm}>
-                  <Typography variant="label" weight="700" color="#fff">Set Date & Time</Typography>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
-  );
-}
 
 export default function MedicalLogScreen() {
   const router = useRouter();
@@ -538,13 +404,15 @@ export default function MedicalLogScreen() {
                             </TouchableOpacity>
                           </View>
                         </View>
-                        {isDatePickerVisible && dateTarget === 'MEDICINE' && (
-                          <DateTimePickerModal 
-                            onClose={() => setIsDatePickerVisible(false)}
-                            onSelect={handleDateSelect}
-                            initialDate={medicineDate}
-                          />
-                        )}
+                        <DateTimePicker 
+                          visible={isDatePickerVisible && dateTarget === 'MEDICINE'}
+                          onClose={() => setIsDatePickerVisible(false)}
+                          onSelect={(date) => {
+                            setMedicineDate(date);
+                            setIsDatePickerVisible(false);
+                          }}
+                          initialDate={medicineDate}
+                        />
                       </Card>
                     </KeyboardAvoidingView>
                   </View>
@@ -621,13 +489,15 @@ export default function MedicalLogScreen() {
                       </TouchableOpacity>
                     </View>
 
-                    {isDatePickerVisible && dateTarget === 'VACCINE' && (
-                      <DateTimePickerModal 
+                      <DateTimePicker 
+                        visible={isDatePickerVisible && dateTarget === 'VACCINE'}
                         onClose={() => setIsDatePickerVisible(false)}
-                        onSelect={handleDateSelect}
+                        onSelect={(date) => {
+                          setVaccineDate(date);
+                          setIsDatePickerVisible(false);
+                        }}
                         initialDate={vaccineDate}
                       />
-                    )}
                   </View>
                 </Card>
               </KeyboardAvoidingView>

@@ -29,10 +29,21 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
   const startDate = subDays(endDate, days);
   
   // Categorized Data Filtering
-  const medicineLogs = activities.filter(a => a.type === 'medicine').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  const vaccineHistory = activities.filter(a => a.type === 'vaccination' || a.type === 'vaccine').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  // Categorized Data Filtering (Period Specific)
+  const medicineLogs = activities.filter(a => {
+    const activityDate = new Date(a.timestamp);
+    return a.type === 'medicine' && isWithinInterval(activityDate, { start: startDate, end: endDate });
+  }).sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+  const vaccineHistory = activities.filter(a => {
+    const activityDate = new Date(a.timestamp);
+    return (a.type === 'vaccination' || a.type === 'vaccine') && isWithinInterval(activityDate, { start: startDate, end: endDate });
+  }).sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
   const growthHistory = activities.filter(a => a.type === 'growth').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   
+  const periodLabel = days === 1 ? 'Daily' : (days === 7 ? 'Weekly Summary' : 'Monthly Clinical');
+
   const weeklyCare = activities.filter(a => {
     const activityDate = new Date(a.timestamp);
     const isCare = ['feed', 'sleep', 'diaper'].includes(a.type);
@@ -93,8 +104,8 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
         <!-- PAGE 1: MUMMUM ANALYTICS -->
         <div class="report-header">
           <div>
-            <span class="clinical-tag">MUMMUM OFFICIAL REPORT</span>
-            <div class="main-title">${baby?.name || 'Baby'}'s Daily Report</div>
+            <span class="clinical-tag">${periodLabel.toUpperCase()} CLINICAL REPORT</span>
+            <div class="main-title">${baby?.name || 'Baby'}'s ${periodLabel}</div>
             <div style="color: #607D8B; font-size: 12px; margin-top: 4px;">
               Born: ${baby?.birthDate ? format(new Date(baby.birthDate), 'PPP') : 'Not Recorded'} • Report: ${format(new Date(), 'PPP')}
             </div>

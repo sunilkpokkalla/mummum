@@ -38,7 +38,7 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, isPro } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, isPro, isTrial } = useBabyStore();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const dateKey = format(new Date(), 'yyyy-MM-dd');
@@ -160,8 +160,8 @@ export default function DashboardScreen() {
               ]}
               onPress={() => router.push('/settings')}
             >
-              <Typography variant="label" weight="800" style={{ color: '#fff' }}>
-                {isPro ? 'PRO' : 'GoPro'}
+              <Typography variant="label" weight="800" style={{ color: '#fff', fontSize: 9 }}>
+                {isTrial ? 'TRIAL ACTIVE' : (isPro ? 'PRO' : 'GoPro')}
               </Typography>
             </Pressable>
           </View>

@@ -76,7 +76,7 @@ export default function WishesScreen() {
   const { tempBaby } = useBabyStore();
 
   const handleNext = () => {
-    router.push('/onboarding/auth');
+    router.push('/onboarding/offer');
   };
 
   return (

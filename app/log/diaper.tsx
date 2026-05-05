@@ -16,8 +16,10 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { Bell, Droplet, AlertCircle, FileText } from 'lucide-react-native';
+import { Bell, Droplet, AlertCircle, FileText, Calendar } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
+import { format } from 'date-fns';
+import DateTimePicker from '@/components/DateTimePicker';
 
 export default function DiaperLogScreen() {
   const router = useRouter();
@@ -181,6 +183,24 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  manualEntryRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: -10, // Pull it closer to the title
+  },
+  manualEntryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
   },
   gridContainer: {
     flexDirection: 'row',

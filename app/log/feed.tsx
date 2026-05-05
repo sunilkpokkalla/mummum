@@ -6,8 +6,10 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import Card from '@/components/Card';
-import { ArrowLeft, ChevronRight, Minus, Plus } from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Minus, Plus, Calendar } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
+import { format } from 'date-fns';
+import DateTimePicker from '@/components/DateTimePicker';
 
 const { width } = Dimensions.get('window');
 const SLIDER_WIDTH = width - 80;
@@ -123,7 +125,7 @@ export default function FeedLogScreen() {
         <View style={[styles.header, { justifyContent: 'center' }]}>
           <View style={{ alignItems: 'center' }}>
             <Typography variant="headline" weight="700" style={{ color: '#4A5D4C' }}>Log Feed</Typography>
-            <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Noah'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
+            <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
           </View>
           <Image 
             source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
@@ -361,6 +363,24 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 24,
     alignItems: 'center',
+  },
+  manualEntryRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 8,
+  },
+  manualEntryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
   },
   sectionCard: {
     padding: 24,

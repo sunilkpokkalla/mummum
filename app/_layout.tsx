@@ -3,7 +3,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { Platform, NativeModules } from 'react-native';
 import 'react-native-reanimated';
+
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -40,6 +42,54 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  const { setPro, isOnboarded, babies, tempBaby, addBaby, isTrial, trialStartedAt } = useBabyStore();
+
+  // Trial Expiry Logic (7 Days)
+  useEffect(() => {
+    if (isTrial && trialStartedAt) {
+      const trialDuration = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+      const now = Date.now();
+      if (now - trialStartedAt > trialDuration) {
+        setPro(false, false); // Expire trial
+      }
+    }
+  }, [isTrial, trialStartedAt]);
+
+  // Self-healing for onboarding data leak
+  useEffect(() => {
+    if (isOnboarded && babies.length === 0 && tempBaby.name) {
+      addBaby({
+        id: Math.random().toString(36).substring(7),
+        name: tempBaby.name,
+        birthDate: tempBaby.birthDate || new Date(),
+        photoUri: tempBaby.photoUri,
+      });
+    }
+  }, [isOnboarded, babies.length, tempBaby.name]);
+
+  // RevenueCat Initialization
+  useEffect(() => {
+    const initPurchases = async () => {
+      // Check the actual native bridge — not the JS proxy wrapper
+      if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
+        console.log('RevenueCat: Skipped — native module unavailable on this target.');
+        return;
+      }
+      try {
+        const { default: Purchases, LOG_LEVEL } = await import('react-native-purchases');
+        Purchases.setLogLevel(LOG_LEVEL.DEBUG);
+        Purchases.configure({ apiKey: "appfe2e1e04a6" });
+        const customerInfo = await Purchases.getCustomerInfo();
+        const activePro = !!customerInfo.entitlements.active['pro'];
+        setPro(activePro);
+      } catch (e) {
+        console.log('RevenueCat Init error:', e);
+      }
+    };
+
+    initPurchases();
+  }, []);
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -50,9 +100,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
-
-  // We still render even if fonts aren't loaded to avoid blank screen if fonts fail
-  // but we can check error if needed.
 
   return <RootLayoutNav />;
 }
@@ -90,7 +137,7 @@ function RootLayoutNav() {
           <Stack.Screen name="onboarding/name" />
           <Stack.Screen name="onboarding/birthdate" />
           <Stack.Screen name="onboarding/wishes" />
-          <Stack.Screen name="onboarding/auth" />
+          <Stack.Screen name="onboarding/offer" />
           <Stack.Screen name="onboarding/welcome" />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="log/feed" options={{ presentation: 'modal', headerShown: false }} />

@@ -55,7 +55,7 @@ export default function SettingsScreen() {
   const handleReset = () => {
     Alert.alert(
       "Reset All Data",
-      "This will permanently delete all logs for Shriyukth. This action cannot be undone.",
+      "This will permanently delete all logs for your baby. This action cannot be undone.",
       [
         { text: "Cancel", style: "cancel" },
         { text: "Reset", style: "destructive", onPress: () => {
@@ -82,7 +82,7 @@ export default function SettingsScreen() {
           <Animated.View entering={FadeInDown.duration(600)}>
             <Typography variant="display" weight="800" style={styles.mainTitle}>Settings</Typography>
             <Typography variant="bodyMd" color="#607D8B" style={styles.subtitle}>
-              Configure Shriyukth's clinical experience
+              Configure your baby's clinical experience
             </Typography>
           </Animated.View>
 
@@ -121,13 +121,13 @@ export default function SettingsScreen() {
                 icon={<Baby size={20} color="#1B3C35" />}
                 title="Baby Profile"
                 detail={currentBaby?.name || "Configure Profile"}
-                onPress={() => {}}
+                onPress={() => router.push('/settings/profile')}
               />
               <ElegantMenuItem 
                 icon={<Bell size={20} color="#1B3C35" />}
                 title="Notifications"
                 detail="Custom clinical alerts"
-                onPress={() => {}}
+                onPress={() => router.push('/settings/notifications')}
               />
               <ElegantMenuItem 
                 icon={<CreditCard size={20} color="#1B3C35" />}
@@ -146,7 +146,7 @@ export default function SettingsScreen() {
               <ElegantMenuItem 
                 icon={<Shield size={20} color="#1B3C35" />}
                 title="Privacy & Data"
-                onPress={() => {}}
+                onPress={() => router.push('/settings/privacy')}
               />
               <ElegantMenuItem 
                 icon={<HelpCircle size={20} color="#1B3C35" />}
