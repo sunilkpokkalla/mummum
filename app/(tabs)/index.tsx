@@ -151,20 +151,21 @@ export default function DashboardScreen() {
               />
             </Pressable>
             <View style={styles.headerInfo}>
-              <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Typography variant="label" color={themeColors.icon}>{getBabyAge(currentBaby?.birthDate)}</Typography>
-                {isPro && (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>
+                {isPro ? (
                   <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
                     <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
                   </View>
-                )}
-                {isTrialActive && (
+                ) : isTrialActive ? (
                   <View style={[styles.statusBadge, { backgroundColor: '#C69C82' }]}>
                     <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>TRIAL</Typography>
                   </View>
-                )}
+                ) : null}
               </View>
+              <Typography variant="label" color={themeColors.icon} style={{ marginTop: -2 }}>
+                {getBabyAge(currentBaby?.birthDate)}
+              </Typography>
             </View>
           </View>
           {!isPro && (
