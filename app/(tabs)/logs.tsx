@@ -137,56 +137,52 @@ export default function LogsScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Clinical Reporting Hub - Now on History Board */}
         <Card style={styles.clinicalBoardCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+          <View style={styles.boardHeader}>
             <Image 
               source={require('../../assets/images/MUMMUM_FINAL.png')} 
-              style={{ width: 40, height: 40 }}
+              style={{ width: 32, height: 32 }}
               resizeMode="contain"
             />
             <View>
-              <Typography variant="label" weight="800" color="#1B3C35">MUMMUM CLINICAL HUB</Typography>
-              <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>PROFESSIONAL PEDIATRIC REPORTING</Typography>
+              <Typography variant="label" weight="800" color="#1B3C35">CLINICAL REPORTING</Typography>
+              <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>90-DAY PEDIATRIC HISTORY</Typography>
             </View>
           </View>
 
-          {!isFeatureUnlocked ? (
-            <View style={{ gap: 12 }}>
-              <Typography variant="label" color="#607D8B" style={{ lineHeight: 16 }}>
-                Generate professional PDF reports, track medical history, and unlock advanced clinical insights with Mummum Pro.
-              </Typography>
+          <View style={styles.boardTabContainer}>
+            {['daily', 'weekly', 'monthly'].map((tab) => (
               <TouchableOpacity 
-                style={[styles.boardPdfBtn, { backgroundColor: '#1B3C35' }]} 
-                onPress={() => router.push('/premium')}
+                key={tab} 
+                style={[styles.boardTabPill, activeView === tab && { backgroundColor: '#1B3C35', borderColor: '#1B3C35' }]}
+                onPress={() => setActiveView(tab)}
               >
-                <Star size={18} color="#fff" fill="#fff" />
-                <Typography variant="body" weight="800" color="#fff">Unlock Clinical Pro</Typography>
+                <Typography variant="label" weight="800" color={activeView === tab ? '#fff' : '#90A4AE'}>
+                  {tab.toUpperCase()}
+                </Typography>
               </TouchableOpacity>
-            </View>
-          ) : (
-            <>
-              <View style={styles.boardTabContainer}>
-                {['daily', 'weekly', 'monthly'].map((tab) => (
-                  <TouchableOpacity 
-                    key={tab} 
-                    style={[styles.boardTabPill, activeView === tab && { backgroundColor: '#1B3C35', borderColor: '#1B3C35' }]}
-                    onPress={() => setActiveView(tab)}
-                  >
-                    <Typography variant="label" weight="800" color={activeView === tab ? '#fff' : '#90A4AE'}>
-                      {tab.toUpperCase()}
-                    </Typography>
-                  </TouchableOpacity>
-                ))}
-              </View>
+            ))}
+          </View>
 
-              <TouchableOpacity 
-                style={styles.boardPdfBtn} 
-                onPress={() => generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), useBabyStore.getState().memories)}
-              >
-                <FileText size={18} color="#fff" />
-                <Typography variant="body" weight="800" color="#fff">Generate {activeView.charAt(0).toUpperCase() + activeView.slice(1)} PDF</Typography>
-              </TouchableOpacity>
-            </>
-          )}
+          <TouchableOpacity 
+            style={styles.boardPdfBtn} 
+            onPress={() => {
+              if (!isFeatureUnlocked && (activeView === 'weekly' || activeView === 'monthly')) {
+                Alert.alert(
+                  "Unlock Clinical Reports",
+                  "Generating 7-day and 30-day clinical PDFs is a Pro feature. Unlock lifetime access to provide your pediatrician with complete history.",
+                  [
+                    { text: "Later", style: "cancel" },
+                    { text: "Upgrade", onPress: () => router.push('/premium') }
+                  ]
+                );
+                return;
+              }
+              generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), useBabyStore.getState().memories);
+            }}
+          >
+            <FileText size={18} color="#fff" />
+            <Typography variant="body" weight="800" color="#fff">Generate {activeView.charAt(0).toUpperCase() + activeView.slice(1)} PDF</Typography>
+          </TouchableOpacity>
         </Card>
 
         {/* Calendar Strip - Only in Daily View */}
@@ -832,6 +828,12 @@ const styles = StyleSheet.create({
     borderColor: '#F1F5F9',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  boardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 20,
   },
   boardPdfBtn: {
     backgroundColor: '#4A5D4C',

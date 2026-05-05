@@ -81,32 +81,7 @@ export default function SettingsScreen() {
             </Typography>
           </Animated.View>
 
-          {/* Luxury Subscription Card */}
-          <Animated.View entering={FadeInDown.delay(200).duration(800)}>
-            <TouchableOpacity 
-              activeOpacity={0.9}
-              onPress={() => router.push('/premium')}
-              style={[styles.luxuryCard, { backgroundColor: isPro ? '#1B3C35' : '#C69C82' }]}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.iconCircle}>
-                  <Star size={24} color={isPro ? '#C69C82' : '#fff'} fill={isPro ? '#C69C82' : '#fff'} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Typography variant="bodyLg" weight="800" color="#fff">
-                    {isPro ? "Mummum Clinical Pro" : (trialStatus.active ? "Trial Mode Active" : "Unlock Clinical Pro")}
-                  </Typography>
-                  <View style={styles.statusRow}>
-                    <Clock size={12} color="rgba(255,255,255,0.7)" />
-                    <Typography variant="label" weight="700" color="rgba(255,255,255,0.7)" style={{ marginLeft: 4 }}>
-                      {getTrialStatus()}
-                    </Typography>
-                  </View>
-                </View>
-                <ChevronRight size={20} color="rgba(255,255,255,0.5)" />
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
+          {/* Settings Section */}
 
           {/* Account Section */}
           <View style={styles.section}>
