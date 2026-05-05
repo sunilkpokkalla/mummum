@@ -143,11 +143,7 @@ export default function SettingsScreen() {
                 icon={<Shield size={20} color="#1B3C35" />}
                 title="Privacy & Data"
                 onPress={() => router.push('/settings/privacy')}
-              />
-              <ElegantMenuItem 
-                icon={<HelpCircle size={20} color="#1B3C35" />}
-                title="Clinical Help Center"
-                onPress={() => Linking.openURL('https://mummum.app/support')}
+                isLast
               />
               <ElegantMenuItem 
                 icon={<LogOut size={20} color="#f44336" />}
