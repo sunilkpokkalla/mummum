@@ -167,6 +167,14 @@ export default function DashboardScreen() {
               </View>
             </View>
           </View>
+          {!isPro && (
+            <Pressable 
+              style={styles.goProButton}
+              onPress={() => router.push('/premium')}
+            >
+              <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 10 }}>GO PRO</Typography>
+            </Pressable>
+          )}
         </View>
 
         {/* Active Session Integration */}
@@ -574,6 +582,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  goProButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    backgroundColor: '#1B3C35',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#1B3C35',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   proBadge: {
     paddingHorizontal: 12,
