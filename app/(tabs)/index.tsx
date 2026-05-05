@@ -22,7 +22,8 @@ import {
   CheckSquare,
   Syringe,
   Scale,
-  X
+  X,
+  Star
 } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
