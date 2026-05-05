@@ -39,21 +39,32 @@ export default function PremiumPaywallScreen() {
   const themeColors = Colors[colorScheme];
   const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [selectedPlan, setSelectedPlan] = React.useState('mmlifetime');
-  const [offerings, setOfferings] = React.useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState('lifetime');
+  const [offerings, setOfferings] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [loading, setLoading] = React.useState(false);
 
-  React.useEffect(() => {
-    const fetchOfferings = async () => {
-      if (!NativeModules.RNPurchases || Platform.OS !== 'ios') return;
-      try {
-        const { default: Purchases } = await import('react-native-purchases');
-        const currentOfferings = await Purchases.getOfferings();
-        if (currentOfferings.current) setOfferings(currentOfferings.current);
-      } catch (e) {
-        console.log('Offerings fetch failed', e);
+  const fetchOfferings = async () => {
+    setIsRefreshing(true);
+    setError(null);
+    try {
+      const { default: Purchases } = await import('react-native-purchases');
+      const fetchedOfferings = await Purchases.getOfferings();
+      if (fetchedOfferings.current !== null) {
+        setOfferings(fetchedOfferings.current);
+      } else {
+        setError("No active offerings found in RevenueCat.");
       }
-    };
+    } catch (e: any) {
+      console.log('Error fetching offerings:', e);
+      setError(e.message || "Could not connect to App Store.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchOfferings();
   }, []);
 
@@ -160,10 +171,23 @@ export default function PremiumPaywallScreen() {
           </View>
 
           <View style={styles.plansContainer}>
-            {!offerings ? (
+            {error ? (
+              <View style={styles.loadingStore}>
+                <Typography variant="label" color="#f44336" style={{ marginBottom: 12, textAlign: 'center', paddingHorizontal: 20 }}>
+                  {error}
+                </Typography>
+                <TouchableOpacity 
+                  style={[styles.planCard, { borderColor: '#C69C82', backgroundColor: '#FFF9F6' }]}
+                  onPress={fetchOfferings}
+                >
+                  <Typography variant="body" weight="800" color="#C69C82">Retry Connection</Typography>
+                </TouchableOpacity>
+              </View>
+            ) : !offerings ? (
               <View style={styles.loadingStore}>
                 <ActivityIndicator size="large" color="#C69C82" />
                 <Typography variant="label" color="#90A4AE" style={{ marginTop: 12 }}>Connecting to App Store...</Typography>
+                {isRefreshing && <Typography variant="label" color="#CFD8DC" style={{ fontSize: 9, marginTop: 4 }}>Checking clinical offers...</Typography>}
               </View>
             ) : (
               plans.map((plan) => (
