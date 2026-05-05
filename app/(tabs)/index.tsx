@@ -172,6 +172,7 @@ export default function DashboardScreen() {
           >
             <Star size={24} color={isPro ? '#1B3C35' : '#CFD8DC'} fill={isPro ? '#1B3C35' : 'transparent'} />
           </TouchableOpacity>
+        </View>
 
         {/* Active Session Integration */}
         {activeSession && (
