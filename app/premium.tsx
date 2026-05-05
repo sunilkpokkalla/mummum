@@ -39,7 +39,7 @@ export default function PremiumPaywallScreen() {
   const themeColors = Colors[colorScheme];
   const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [selectedPlan, setSelectedPlan] = useState('lifetime');
+  const [selectedPlan, setSelectedPlan] = useState('mmlifetime');
   const [offerings, setOfferings] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -86,9 +86,20 @@ export default function PremiumPaywallScreen() {
     try {
       const { default: Purchases } = await import('react-native-purchases');
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
+      
+      // Check for 'pro' OR any active entitlement to be safe
+      const hasPro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
+      
+      if (hasPro) { 
+        setPro(true); 
+        Alert.alert("Welcome to Pro", "Your Mummum Clinical Pro access is now active!");
+        router.back(); 
+      }
     } catch (e: any) {
-      if (!e.userCancelled) console.error('Purchase Error', e);
+      if (!e.userCancelled) {
+        Alert.alert("Purchase Error", e.message || "An error occurred during purchase.");
+        console.error('Purchase Error', e);
+      }
     } finally {
       setLoading(false);
     }
@@ -103,8 +114,17 @@ export default function PremiumPaywallScreen() {
     try {
       const { default: Purchases } = await import('react-native-purchases');
       const customerInfo = await Purchases.restorePurchases();
-      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
-    } catch (e) {
+      const hasPro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
+      
+      if (hasPro) { 
+        setPro(true); 
+        Alert.alert("Restored", "Your previous purchases have been successfully restored.");
+        router.back(); 
+      } else {
+        Alert.alert("No Purchase Found", "We couldn't find any active Pro subscriptions for this Apple ID.");
+      }
+    } catch (e: any) {
+      Alert.alert("Restore Error", e.message || "An error occurred while restoring purchases.");
       console.error('Restore Error', e);
     } finally {
       setLoading(false);

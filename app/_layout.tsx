@@ -80,7 +80,7 @@ export default function RootLayout() {
         Purchases.setLogLevel(LOG_LEVEL.DEBUG);
         Purchases.configure({ apiKey: "appl_JYLndmcdSjoNMbEIPlPydtdGLtf" });
         const customerInfo = await Purchases.getCustomerInfo();
-        const activePro = !!customerInfo.entitlements.active['pro'];
+        const activePro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
         setPro(activePro);
       } catch (e) {
         console.log('RevenueCat Init error:', e);
