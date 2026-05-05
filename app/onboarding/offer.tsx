@@ -148,13 +148,13 @@ export default function OnboardingOfferScreen() {
             </TouchableOpacity>
 
             <Typography style={styles.legalText}>
-              NO SUBSCRIPTION REQUIRED • 7-DAY TRIAL IF SKIPPED
+              NO SUBSCRIPTION REQUIRED • PRO FEATURES LOCKED
             </Typography>
           </Animated.View>
 
           {/* SKIP */}
           <TouchableOpacity onPress={handleSkip} style={styles.skipBtn}>
-            <Typography weight="800" style={styles.skipText}>CONTINUE WITH 7-DAY TRIAL</Typography>
+            <Typography weight="800" style={styles.skipText}>CONTINUE WITH BASIC ACCESS</Typography>
           </TouchableOpacity>
 
         </View>

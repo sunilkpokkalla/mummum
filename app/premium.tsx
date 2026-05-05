@@ -240,18 +240,37 @@ export default function PremiumPaywallScreen() {
           </View>
 
           <Animated.View entering={FadeInUp.delay(1000).duration(800)} style={styles.footer}>
-            <TouchableOpacity style={styles.purchaseBtn} onPress={handlePurchase}>
-              <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                {selectedPlan === 'lifetime' ? 'Unlock Lifetime' : 'Start 7-Day Trial'}
-              </Typography>
+            <TouchableOpacity 
+              style={[styles.purchaseBtn, loading && { opacity: 0.7 }]} 
+              onPress={handlePurchase}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
+                  {selectedPlan === 'mmlifetime' ? 'Unlock Lifetime Access' : 'Start 7-Day Trial'}
+                </Typography>
+              )}
             </TouchableOpacity>
 
-            <View style={styles.legalLinks}>
-              <TouchableOpacity onPress={() => Linking.openURL('https://mummum-app.com/terms')}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Terms</Typography></TouchableOpacity>
-              <View style={styles.dot} />
-              <TouchableOpacity onPress={() => Linking.openURL('https://mummum-app.com/privacy')}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Privacy</Typography></TouchableOpacity>
-              <View style={styles.dot} />
-              <TouchableOpacity onPress={handleRestore}><Typography variant="label" color={themeColors.icon} style={{ fontSize: 10 }}>Restore</Typography></TouchableOpacity>
+            <View style={styles.legalInfoBlock}>
+              <Typography variant="label" color="#B0BEC5" style={styles.disclosureText}>
+                Payment will be charged to your iTunes Account at confirmation of purchase. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period. Account will be charged for renewal within 24-hours prior to the end of the current period.
+              </Typography>
+              <View style={styles.legalLinks}>
+                <TouchableOpacity onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
+                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Terms</Typography>
+                </TouchableOpacity>
+                <View style={styles.dot} />
+                <TouchableOpacity onPress={() => Linking.openURL('https://mummum.app/privacy')}>
+                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Privacy</Typography>
+                </TouchableOpacity>
+                <View style={styles.dot} />
+                <TouchableOpacity onPress={handleRestore}>
+                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Restore</Typography>
+                </TouchableOpacity>
+              </View>
             </View>
           </Animated.View>
         </View>
@@ -392,12 +411,23 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     elevation: 6,
   },
+  legalInfoBlock: {
+    marginTop: 14,
+    gap: 8,
+  },
+  disclosureText: {
+    fontSize: 8,
+    textAlign: 'center',
+    lineHeight: 12,
+    color: '#B0BEC5',
+    paddingHorizontal: 10,
+  },
   legalLinks: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    marginTop: 8,
+    marginTop: 4,
   },
   dot: {
     width: 3,
