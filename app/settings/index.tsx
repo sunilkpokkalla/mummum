@@ -6,7 +6,8 @@ import {
   ScrollView, 
   SafeAreaView,
   Dimensions,
-  Alert
+  Alert,
+  Linking
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -146,7 +147,7 @@ export default function SettingsScreen() {
               <ElegantMenuItem 
                 icon={<HelpCircle size={20} color="#1B3C35" />}
                 title="Clinical Help Center"
-                onPress={() => {}}
+                onPress={() => Linking.openURL('https://mummum.app/support')}
               />
               <ElegantMenuItem 
                 icon={<LogOut size={20} color="#f44336" />}
@@ -160,7 +161,7 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.0</Typography>
+            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.1</Typography>
             <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>High-Fidelity Pediatric Tracking</Typography>
           </View>
         </ScrollView>
