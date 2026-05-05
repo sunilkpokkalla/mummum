@@ -9,7 +9,8 @@ import {
   SafeAreaView,
   Alert,
   NativeModules,
-  Linking
+  Linking,
+  ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -159,32 +160,39 @@ export default function PremiumPaywallScreen() {
           </View>
 
           <View style={styles.plansContainer}>
-            {plans.map((plan) => (
-              <TouchableOpacity 
-                key={plan.id}
-                style={[
-                  styles.planCard, 
-                  selectedPlan === plan.id && { borderColor: '#1B3C35', backgroundColor: '#F1F8E9' }
-                ]}
-                onPress={() => setSelectedPlan(plan.id)}
-              >
-                <View style={styles.planInfo}>
-                  <Typography variant="body" weight="800">{plan.title}</Typography>
-                  <Typography variant="label" color="#607D8B">{plan.sub}</Typography>
-                </View>
-                <View style={{ alignItems: 'flex-end' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {plan.oldPrice && (
-                      <Typography variant="label" color="#B0BEC5" style={{ textDecorationLine: 'line-through', marginRight: 4 }}>
-                        {plan.oldPrice}
-                      </Typography>
-                    )}
-                    <Typography variant="bodyLg" weight="800" color="#1B3C35">{plan.price}</Typography>
+            {!offerings ? (
+              <View style={styles.loadingStore}>
+                <ActivityIndicator size="large" color="#C69C82" />
+                <Typography variant="label" color="#90A4AE" style={{ marginTop: 12 }}>Connecting to App Store...</Typography>
+              </View>
+            ) : (
+              plans.map((plan) => (
+                <TouchableOpacity 
+                  key={plan.id}
+                  style={[
+                    styles.planCard, 
+                    selectedPlan === plan.id && { borderColor: '#1B3C35', backgroundColor: '#F1F8E9' }
+                  ]}
+                  onPress={() => setSelectedPlan(plan.id)}
+                >
+                  <View style={styles.planInfo}>
+                    <Typography variant="body" weight="800">{plan.title}</Typography>
+                    <Typography variant="label" color="#607D8B">{plan.sub}</Typography>
                   </View>
-                  <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>{plan.desc}</Typography>
-                </View>
-              </TouchableOpacity>
-            ))}
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      {plan.oldPrice && (
+                        <Typography variant="label" color="#B0BEC5" style={{ textDecorationLine: 'line-through', marginRight: 4 }}>
+                          {plan.oldPrice}
+                        </Typography>
+                      )}
+                      <Typography variant="bodyLg" weight="800" color="#1B3C35">{plan.price}</Typography>
+                    </View>
+                    <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>{plan.desc}</Typography>
+                  </View>
+                </TouchableOpacity>
+              ))
+            )}
           </View>
 
           <Animated.View entering={FadeInUp.delay(1000).duration(800)} style={styles.footer}>
@@ -292,6 +300,16 @@ const styles = StyleSheet.create({
   },
   planInfo: {
     gap: 2,
+  },
+  loadingStore: {
+    height: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
+    marginBottom: 10,
   },
   featureIconContainer: {
     width: 44,
