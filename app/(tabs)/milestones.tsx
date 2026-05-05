@@ -77,7 +77,7 @@ export default function MilestonesScreen() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ImagePicker.MediaType.IMAGES,
       allowsEditing: true,
       aspect: [4, 5],
       quality: 0.8,

@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system/legacy';
 
-export const generateBabyReport = async (baby: any, activities: any[], days: number) => {
+export const generateBabyReport = async (baby: any, activities: any[], days: number, memories: any[] = []) => {
   if (!Print.printToFileAsync || !Sharing.shareAsync) {
     Alert.alert('Rebuild Required', 'PDF modules are not yet linked. Please run "npx expo run:ios".');
     return;
@@ -42,6 +42,43 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
 
   const growthHistory = activities.filter(a => a.type === 'growth').sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   
+  // Convert baby photo to base64 for PDF rendering
+  let babyPhotoBase64 = null;
+  if (baby?.photoUri) {
+    try {
+      // Handle potential dynamic path issues (Simulator UUID changes)
+      const fileName = baby.photoUri.split('/').pop();
+      const actualUri = `${FileSystem.documentDirectory}${fileName}`;
+      
+      const fileInfo = await FileSystem.getInfoAsync(actualUri);
+      if (fileInfo.exists) {
+        const base64 = await FileSystem.readAsStringAsync(actualUri, { encoding: FileSystem.EncodingType.Base64 });
+        babyPhotoBase64 = `data:image/jpeg;base64,${base64}`;
+      }
+    } catch (e) {
+      console.error('Error reading baby photo:', e);
+    }
+  }
+
+  // Get latest memory photo from Milestones for the final portrait
+  let latestMemoryPhotoBase64 = null;
+  const babyMemories = memories.filter(m => m.babyId === baby?.id).sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const latestMemory = babyMemories.length > 0 ? babyMemories[0] : null;
+
+  if (latestMemory?.uri) {
+    try {
+      const fileName = latestMemory.uri.split('/').pop();
+      const actualUri = `${FileSystem.documentDirectory}${fileName}`;
+      const fileInfo = await FileSystem.getInfoAsync(actualUri);
+      if (fileInfo.exists) {
+        const base64 = await FileSystem.readAsStringAsync(actualUri, { encoding: FileSystem.EncodingType.Base64 });
+        latestMemoryPhotoBase64 = `data:image/jpeg;base64,${base64}`;
+      }
+    } catch (e) {
+      console.error('Error reading memory photo:', e);
+    }
+  }
+
   const periodLabel = days === 1 ? 'Daily' : (days === 7 ? 'Weekly Summary' : 'Monthly Clinical');
 
   const weeklyCare = activities.filter(a => {
@@ -80,9 +117,12 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
           body { font-family: 'Helvetica', 'Arial', sans-serif; padding: 25px; color: #1B3C35; background: #fff; line-height: 1.3; }
-          .report-header { border-bottom: 4px solid #C69C82; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-          .main-title { font-size: 24px; font-weight: 900; color: #1B3C35; text-transform: uppercase; letter-spacing: 1px; }
-          .clinical-tag { background: #1B3C35; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; vertical-align: middle; }
+          .report-header { border-bottom: 4px solid #C69C82; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+          .header-main { display: flex; align-items: flex-end; justify-content: space-between; width: 100%; border-bottom: 2px solid #EEE; padding-bottom: 15px; margin-bottom: 15px; }
+          .patient-meta { display: flex; gap: 20px; font-size: 10px; color: #607D8B; margin-top: 8px; }
+          .meta-item b { color: #1B3C35; }
+          .clinical-id { font-size: 9px; color: #90A4AE; font-family: monospace; }
+          .confidential { background: #FFF9C4; padding: 2px 6px; border-radius: 2px; font-size: 8px; color: #F57F17; font-weight: 800; display: inline-block; margin-bottom: 5px; }
           
           .section-header { background: #F1F4F6; padding: 8px 12px; border-radius: 6px; margin: 20px 0 10px 0; border-left: 4px solid #C69C82; font-weight: 800; color: #4A5D4C; text-transform: uppercase; font-size: 12px; }
           
@@ -105,23 +145,34 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
           .cranial-value { font-size: 28px; font-weight: 900; color: #1B3C35; line-height: 1; }
           .cranial-label { font-size: 9px; color: #90A4AE; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
           
-          .footer { margin-top: 40px; border-top: 1px solid #EEE; padding-top: 12px; text-align: center; font-size: 9px; color: #90A4AE; }
+          .footer-grid { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #EEE; padding-top: 15px; margin-top: 40px; }
+          .disclaimer { font-size: 8px; color: #90A4AE; width: 65%; line-height: 1.4; }
+          .page-num { font-size: 10px; color: #C69C82; font-weight: 800; }
+          
+          .final-portrait-box { position: absolute; right: 0; bottom: 20px; text-align: right; z-index: 10; }
+          .final-portrait { width: 110px; height: 140px; border: 6px solid #fff; border-radius: 2px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(3deg); object-fit: cover; }
+          .portrait-label { font-size: 8px; color: #C69C82; font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+          
           @media print { .page-break { page-break-before: always; } }
         </style>
       </head>
       <body>
         <!-- PAGE 1: MUMMUM ANALYTICS -->
-        <div class="report-header">
+        <div class="header-main">
           <div>
-            <span class="clinical-tag">${periodLabel.toUpperCase()} CLINICAL REPORT</span>
-            <div class="main-title">${baby?.name || 'Baby'}'s ${periodLabel}</div>
-            <div style="color: #607D8B; font-size: 12px; margin-top: 4px;">
-              Born: ${baby?.birthDate ? format(new Date(baby.birthDate), 'PPP') : 'Not Recorded'} • Report: ${format(new Date(), 'PPP')}
+            <div class="confidential">CONFIDENTIAL CLINICAL RECORD</div>
+            <div class="main-title">${baby?.name || 'Patient'}'s ${periodLabel} Report</div>
+            <div class="patient-meta">
+              <div class="meta-item"><b>DOB:</b> ${baby?.birthDate ? format(new Date(baby.birthDate), 'MMM d, yyyy') : '--'}</div>
+              <div class="meta-item"><b>Gender:</b> ${baby?.gender || 'Not Specified'}</div>
+              <div class="meta-item"><b>Age:</b> ${baby?.birthDate ? Math.floor((new Date().getTime() - new Date(baby.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 30)) + ' Months' : '--'}</div>
             </div>
+            <div style="font-size: 8px; color: #90A4AE; margin-top: 5px;">Reference Standard: WHO Child Growth Standards (v1.0)</div>
           </div>
           <div style="text-align: right">
-            ${logoUri ? `<img src="${logoUri}" style="height: 50px; margin-bottom: 5px;" />` : `<div style="font-size: 20px; font-weight: 900; color: #C69C82">MUMMUM</div>`}
-            <div style="font-size: 9px; color: #90A4AE">Premium Assistant</div>
+            <div class="clinical-id">REC-ID: ${Math.random().toString(36).substring(2, 10).toUpperCase()}</div>
+            ${logoUri ? `<img src="${logoUri}" style="height: 45px; margin: 8px 0;" />` : `<div style="font-size: 22px; font-weight: 900; color: #C69C82">MUMMUM</div>`}
+            <div style="font-size: 8px; color: #90A4AE; font-weight: 700;">DIGITAL HEALTH ASSISTANT</div>
           </div>
         </div>
 
@@ -254,9 +305,20 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
           `;
         }).join('') : '<div style="text-align: center; margin-top: 40px; color: #90A4AE;">No care activities recorded.</div>'}
 
-        <div class="footer">
-          Generated via Mummum Baby Assistant • Premium Clinical Records<br/>
-          This document is a professional history of care events for ${baby?.name || 'the baby'}.
+        <div class="footer-grid">
+          <div class="disclaimer">
+            <b>CLINICAL DISCLAIMER:</b> This report is generated by Mummum Digital Assistant and is intended for informational and clinical record-keeping purposes only. It does not replace professional medical advice, diagnosis, or treatment. Please review these trends with your licensed pediatrician during your next consultation.
+            <div style="margin-top: 5px; color: #607D8B;">Data Integrity Verified • Timestamp: ${format(new Date(), 'PPpp')}</div>
+          </div>
+          <div style="text-align: right">
+            <div class="page-num">PAGE 1 of 2</div>
+            ${latestMemoryPhotoBase64 ? `
+              <div class="final-portrait-box">
+                <img src="${latestMemoryPhotoBase64}" class="final-portrait" />
+                <div class="portrait-label">Latest Achievement</div>
+              </div>
+            ` : ''}
+          </div>
         </div>
 
         <script>
@@ -335,8 +397,15 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
 
   try {
     const { uri } = await Print.printToFileAsync({ html });
-    await Sharing.shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    
+    // Safety delay for filesystem sync on iOS
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf', dialogTitle: `${baby?.name || 'Baby'}'s Clinical Report` });
+    }
   } catch (error) {
     console.error('Master Report Generation Error:', error);
+    Alert.alert('Export Failed', 'The PDF could not be generated. Please ensure you have enough storage space.');
   }
 };

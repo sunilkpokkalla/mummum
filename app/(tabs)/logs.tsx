@@ -178,7 +178,7 @@ export default function LogsScreen() {
 
               <TouchableOpacity 
                 style={styles.boardPdfBtn} 
-                onPress={() => generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30))}
+                onPress={() => generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), useBabyStore.getState().memories)}
               >
                 <FileText size={18} color="#fff" />
                 <Typography variant="body" weight="800" color="#fff">Generate {activeView.charAt(0).toUpperCase() + activeView.slice(1)} PDF</Typography>
