@@ -29,7 +29,7 @@ export default function OnboardingOfferScreen() {
       try {
         const { default: Purchases } = await import('react-native-purchases');
         const allOfferings = await Purchases.getOfferings();
-        const target = allOfferings.all['ofrngfab3ca7684'] || allOfferings.current;
+        const target = allOfferings.all['ofrngb4e7b317ff'] || allOfferings.current;
         if (target) setOfferings(target);
       } catch (e) {
         console.log('Offerings fetch failed', e);
