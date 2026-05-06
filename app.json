@@ -7,12 +7,12 @@
     "icon": "./assets/images/MUMMUM_FINAL.png",
     "scheme": "mummum",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ambright.mummum",
       "useFrameworks": "static",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/images/MUMMUM_FINAL.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ambright.mummum"
+      "package": "com.ambright.mummum",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
