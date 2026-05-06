@@ -39,7 +39,7 @@ export default function PremiumPaywallScreen() {
   const themeColors = Colors[colorScheme];
   const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [selectedPlan, setSelectedPlan] = useState('mummum_lifetime');
+  const [selectedPlan, setSelectedPlan] = useState('mummum_lifetime_pro');
   const [offerings, setOfferings] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -252,7 +252,7 @@ export default function PremiumPaywallScreen() {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                  {selectedPlan === 'mummum_lifetime' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
+                  {selectedPlan === 'mummum_lifetime_pro' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
                 </Typography>
               )}
             </TouchableOpacity>
