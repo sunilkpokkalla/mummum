@@ -94,7 +94,7 @@ export default function ChecklistsScreen() {
       return await Notifications.scheduleNotificationAsync({
         content: {
           title: `Mummum: ${title}`,
-          body: `It's time for ${currentBaby?.name || 'baby'}'s ${title.toLowerCase()}!`,
+          body: `It's time for ${currentBaby?.name ? currentBaby.name : 'your baby'}'s ${title.toLowerCase()}!`,
           sound: true,
         },
         trigger: {

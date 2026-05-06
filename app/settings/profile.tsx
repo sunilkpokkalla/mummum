@@ -28,13 +28,23 @@ export default function BabyProfileScreen() {
   const [showPicker, setShowPicker] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert('Required', "Please enter the baby's name.");
       return;
     }
     setIsSaving(true);
+    
+    // Clear all pending notifications to prevent "sticky" names from old setups
+    try {
+      const { cancelAllScheduledNotificationsAsync } = await import('expo-notifications');
+      await cancelAllScheduledNotificationsAsync();
+    } catch (e) {
+      console.log('Notification cleanup failed', e);
+    }
+
     updateBaby(currentBabyId, { name: name.trim(), birthDate: selectedDate.toISOString() });
+    
     setTimeout(() => {
       setIsSaving(false);
       router.back();
