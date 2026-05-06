@@ -2,7 +2,7 @@
   "expo": {
     "name": "Mummum: Baby Tracker",
     "slug": "mummum",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/MUMMUM_FINAL.png",
     "scheme": "mummum",
@@ -17,7 +17,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ambright.mummum",
       "useFrameworks": "static",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",

@@ -157,7 +157,7 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.1</Typography>
+            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.2</Typography>
             <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>High-Fidelity Pediatric Tracking</Typography>
           </View>
         </ScrollView>
