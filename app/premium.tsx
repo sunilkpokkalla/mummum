@@ -51,10 +51,13 @@ export default function PremiumPaywallScreen() {
     try {
       const { default: Purchases } = await import('react-native-purchases');
       const fetchedOfferings = await Purchases.getOfferings();
-      if (fetchedOfferings.current !== null) {
-        setOfferings(fetchedOfferings.current);
+      // Target specific offering or fallback to current
+      const target = fetchedOfferings.all['ofrngfab3ca7684'] || fetchedOfferings.current;
+      
+      if (target) {
+        setOfferings(target);
       } else {
-        setError("No active offerings found in RevenueCat.");
+        setError("Clinical offers are currently being updated. Please try again in a moment.");
       }
     } catch (e: any) {
       console.log('Error fetching offerings:', e);
