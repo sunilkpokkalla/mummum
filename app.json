@@ -6,13 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/images/MUMMUM_FINAL.png",
     "scheme": "mummum",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/MUMMUM_FINAL.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ambright.mummum",
@@ -21,9 +16,8 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
-        "NSPhotoLibraryAddUsageDescription": "Mummum needs permission to save daily clinical reports to your photo gallery.",
-        "NSCameraUsageDescription": "Mummum needs camera access to capture new milestone photos of your baby.",
-        "NSMicrophoneUsageDescription": "Mummum needs microphone access for video milestones."
+        "NSCameraUsageDescription": "Mummum needs camera access to capture milestone photos for your baby's growth hub.",
+        "NSPhotoLibraryAddUsageDescription": "Mummum needs permission to save milestone photos directly to your device gallery."
       }
     },
     "android": {
@@ -31,10 +25,7 @@
         "foregroundImage": "./assets/images/MUMMUM_FINAL.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.ambright.mummum",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.ambright.mummum"
     },
     "web": {
       "bundler": "metro",
@@ -43,33 +34,30 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static",
-            "deploymentTarget": "16.0",
-            "enableUserScriptSandboxing": false,
-            "forceStaticLinking": [
-              "RNFBApp",
-              "RNFBAuth",
-              "RNFBFirestore",
-              "RNFBSharedUtils",
-              "RNFBUtilsModule"
-            ]
-          }
-        }
-      ],
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you save baby milestones and clinical memories.",
-          "cameraPermission": "The app uses your camera to capture clinical snapshots and milestones for your baby's medical history."
+          "photosPermission": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
+          "cameraPermission": "Mummum needs camera access to capture milestone photos for your baby's growth hub."
         }
       ],
-      "expo-media-library"
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
+          "savePhotosPermission": "Mummum needs permission to save milestone photos directly to your phone's gallery."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
