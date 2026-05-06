@@ -48,7 +48,7 @@ export default function OnboardingOfferScreen() {
       return;
     }
     const pkg = offerings?.availablePackages?.find(
-      (p: any) => p.product.identifier === 'mmlifetime'
+      (p: any) => p.product.identifier === 'mummum_lifetime'
     );
     if (!pkg) {
       Alert.alert("Store Error", "Launch special is currently unavailable. Please check back later.");
