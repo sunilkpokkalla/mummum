@@ -52,7 +52,7 @@ export default function PremiumPaywallScreen() {
       const { default: Purchases } = await import('react-native-purchases');
       const fetchedOfferings = await Purchases.getOfferings();
       // Target specific offering or fallback to current
-      const target = fetchedOfferings.all['ofrng8f6aab4fec'] || fetchedOfferings.current;
+      const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
       
       if (target) {
         setOfferings(target);
