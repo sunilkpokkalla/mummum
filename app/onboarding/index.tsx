@@ -14,10 +14,11 @@ export default function LogoSlideScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies } = useBabyStore();
+  const { babies, completeOnboarding } = useBabyStore();
 
   const handleStart = () => {
     if (babies.length > 0) {
+      completeOnboarding();
       router.replace('/(tabs)');
     } else {
       router.push('/onboarding/name');
