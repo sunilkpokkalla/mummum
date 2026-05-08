@@ -15,6 +15,8 @@ LogBox.ignoreLogs([
 ]);
 
 import 'react-native-reanimated';
+import '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 
 
 import { useColorScheme } from '@/hooks/useColorScheme';

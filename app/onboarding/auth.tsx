@@ -111,7 +111,7 @@ export default function OnboardingAuthScreen() {
       setCurrentBaby(babyId);
 
       setLoading(false);
-      
+
       // If they are a returning user with babies, mark as onboarded immediately
       if (babies.length > 0) {
         completeOnboarding();
@@ -123,30 +123,24 @@ export default function OnboardingAuthScreen() {
       setLoading(false);
 
       // SILENTLY ignore user cancellations
-      const isCancel = e.code === 'auth/user-cancelled' || 
-                       e.code === 'auth/cancelled' || 
-                       e.code === '1001' || 
-                       e.code === 'SIGN_IN_CANCELLED' ||
-                       e.message?.includes('authorization attempt failed');
-      
+      const isCancel = e.code === 'auth/user-cancelled' ||
+        e.code === 'auth/cancelled' ||
+        e.code === '1001' ||
+        e.code === 'SIGN_IN_CANCELLED' ||
+        e.message?.includes('authorization attempt failed');
+
       if (isCancel) {
         console.log('[Auth Silent]: User cancelled sign-in flow.');
         return;
       }
 
-      // TECHNICAL DIAGNOSTIC: Show full error for "internal-error"
-      const technicalDetails = e.nativeStackAndroid || e.nativeStackIOS || e.stack || 'No stack trace';
-      console.log('--- AUTH ERROR DIAGNOSTIC ---');
-      console.log('Code:', e.code);
-      console.log('Message:', e.message);
-      console.log('Details:', technicalDetails);
-      console.log('-----------------------------');
+      console.error('Sign-In Error:', e);
 
       Alert.alert(
         "Authentication Issue",
-        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nPlease ensure your Firebase project has an iOS app registered with ID 'com.ambright.mummumbaby'.`,
+        `We couldn't sync with your account: ${e.message || 'Unknown error'}. You can try again or continue with local storage.`,
         [
-          { text: "Try Again", onPress: () => {} },
+          { text: "Try Again", onPress: () => { } },
           { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
         ]
       );
