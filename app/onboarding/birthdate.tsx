@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/Colors';
@@ -53,109 +53,115 @@ export default function BirthDateScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background, paddingTop: insets.top }]}>
-      <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
-          <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
-            <CalendarIcon size={32} color={themeColors.secondary} />
-          </View>
-        </Animated.View>
-
-        <Animated.View entering={FadeInDown.delay(200).duration(800)}>
-          <Typography variant="display" style={styles.title}>When was {tempBaby.name || 'your baby'} born?</Typography>
-          <Typography variant="bodyLg" color={themeColors.icon} style={styles.subtitle}>
-            Select the date to continue.
-          </Typography>
-        </Animated.View>
-
-        <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface }]}>
-          <View style={styles.calendarHeader}>
-            <View style={styles.navGroup}>
-              <TouchableOpacity 
-                onPressIn={() => moveYear(-1)} 
-                style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                activeOpacity={0.4}
-              >
-                <ChevronsLeft size={20} color={themeColors.primary} />
-              </TouchableOpacity>
-              <TouchableOpacity 
-                onPressIn={() => moveMonth(-1)} 
-                style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                activeOpacity={0.4}
-              >
-                <ChevronLeft size={20} color={themeColors.primary} />
-              </TouchableOpacity>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+      >
+        <View style={styles.content}>
+          <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
+            <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
+              <CalendarIcon size={32} color={themeColors.secondary} />
             </View>
-            
-            <View style={styles.monthDisplay}>
-              <Typography variant="bodyLg" weight="800" style={styles.monthLabel}>
-                {format(currentMonth, 'MMMM')}
-              </Typography>
-              <Typography variant="label" weight="600" color={themeColors.icon}>
-                {format(currentMonth, 'yyyy')}
-              </Typography>
-            </View>
-            
-            <View style={styles.navGroup}>
-              <TouchableOpacity 
-                onPressIn={() => moveMonth(1)} 
-                style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                activeOpacity={0.4}
-              >
-                <ChevronRight size={20} color={themeColors.primary} />
-              </TouchableOpacity>
-              <TouchableOpacity 
-                onPressIn={() => moveYear(1)} 
-                style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                activeOpacity={0.4}
-              >
-                <ChevronsRight size={20} color={themeColors.primary} />
-              </TouchableOpacity>
-            </View>
-          </View>
+          </Animated.View>
 
-          <View key={`grid-${refreshKey}`} style={styles.daysGrid}>
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-              <Typography key={`label-${i}`} variant="label" weight="700" style={styles.dayLabel} color={themeColors.icon}>{day}</Typography>
-            ))}
-            {emptyDays.map((_, i) => (
-              <View key={`empty-${i}`} style={styles.dayCell} />
-            ))}
-            {days.map((day) => {
-              const isSelected = isSameDay(day, selectedDate);
-              return (
+          <Animated.View entering={FadeInDown.delay(200).duration(800)}>
+            <Typography variant="display" style={styles.title}>When was {tempBaby.name || 'your baby'} born?</Typography>
+            <Typography variant="bodyLg" color={themeColors.icon} style={styles.subtitle}>
+              Select the date to continue.
+            </Typography>
+          </Animated.View>
+
+          <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface }]}>
+            <View style={styles.calendarHeader}>
+              <View style={styles.navGroup}>
                 <TouchableOpacity 
-                  key={day.toISOString()} 
-                  style={[
-                    styles.dayCell,
-                    isSelected && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
-                  ]}
-                  onPress={() => setSelectedDate(day)}
-                  activeOpacity={0.8}
+                  onPressIn={() => moveYear(-1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
                 >
-                  <Typography 
-                    variant="body"
-                    weight={isSelected ? "800" : "600"}
-                    style={{ color: isSelected ? '#fff' : themeColors.text }}
-                  >
-                    {format(day, 'd')}
-                  </Typography>
+                  <ChevronsLeft size={20} color={themeColors.primary} />
                 </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
+                <TouchableOpacity 
+                  onPressIn={() => moveMonth(-1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronLeft size={20} color={themeColors.primary} />
+                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.monthDisplay}>
+                <Typography variant="bodyLg" weight="800" style={styles.monthLabel}>
+                  {format(currentMonth, 'MMMM')}
+                </Typography>
+                <Typography variant="label" weight="600" color={themeColors.icon}>
+                  {format(currentMonth, 'yyyy')}
+                </Typography>
+              </View>
+              
+              <View style={styles.navGroup}>
+                <TouchableOpacity 
+                  onPressIn={() => moveMonth(1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronRight size={20} color={themeColors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  onPressIn={() => moveYear(1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronsRight size={20} color={themeColors.primary} />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-        <Animated.View entering={FadeInUp.delay(400).duration(800)} style={styles.footer}>
-          <TouchableOpacity 
-            style={[styles.button, { backgroundColor: themeColors.primary }]}
-            onPress={handleNext}
-            activeOpacity={0.8}
-          >
-            <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
-            <ArrowRight size={20} color="#fff" />
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
+            <View key={`grid-${refreshKey}`} style={styles.daysGrid}>
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                <Typography key={`label-${i}`} variant="label" weight="700" style={styles.dayLabel} color={themeColors.icon}>{day}</Typography>
+              ))}
+              {emptyDays.map((_, i) => (
+                <View key={`empty-${i}`} style={styles.dayCell} />
+              ))}
+              {days.map((day) => {
+                const isSelected = isSameDay(day, selectedDate);
+                return (
+                  <TouchableOpacity 
+                    key={day.toISOString()} 
+                    style={[
+                      styles.dayCell,
+                      isSelected && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
+                    ]}
+                    onPress={() => setSelectedDate(day)}
+                    activeOpacity={0.8}
+                  >
+                    <Typography 
+                      variant="body"
+                      weight={isSelected ? "800" : "600"}
+                      style={{ color: isSelected ? '#fff' : themeColors.text }}
+                    >
+                      {format(day, 'd')}
+                    </Typography>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+
+          <Animated.View entering={FadeInUp.delay(400).duration(800)} style={styles.footer}>
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: themeColors.primary }]}
+              onPress={handleNext}
+              activeOpacity={0.8}
+            >
+              <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
+              <ArrowRight size={20} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -164,9 +170,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   content: {
     padding: 24,
     paddingTop: 10,
+    paddingBottom: 40,
   },
   iconContainer: {
     marginBottom: 16,
