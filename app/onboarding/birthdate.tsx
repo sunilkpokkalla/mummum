@@ -10,10 +10,8 @@ import { ArrowRight, Calendar as CalendarIcon, ChevronLeft, ChevronRight, Chevro
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IS_TABLET = SCREEN_WIDTH > 600;
-const MAX_CONTENT_WIDTH = 500;
-const ACTUAL_CONTENT_WIDTH = Math.min(SCREEN_WIDTH - 48, MAX_CONTENT_WIDTH);
 
 export default function BirthDateScreen() {
   const router = useRouter();
@@ -26,6 +24,10 @@ export default function BirthDateScreen() {
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
   const [currentMonth, setCurrentMonth] = useState<Date>(initialDate);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // Constants for fixed sizing to prevent overflow
+  const CONTENT_WIDTH = IS_TABLET ? 450 : SCREEN_WIDTH - 48;
+  const CELL_SIZE = (CONTENT_WIDTH - 40) / 7;
 
   const moveMonth = (amount: number) => {
     const next = new Date(currentMonth);
@@ -56,14 +58,13 @@ export default function BirthDateScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
-      {/* 1. SCROLLABLE CALENDAR AREA */}
       <View style={{ flex: 1 }}>
         <ScrollView 
           style={{ flex: 1 }}
-          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 10 }]}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 20 }]}
           showsVerticalScrollIndicator={false}
         >
-          <View style={[styles.content, IS_TABLET && styles.tabletContent]}>
+          <View style={[styles.content, { width: CONTENT_WIDTH, alignSelf: 'center' }]}>
             <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
               <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
                 <CalendarIcon size={32} color={themeColors.secondary} />
@@ -77,7 +78,7 @@ export default function BirthDateScreen() {
               </Typography>
             </Animated.View>
 
-            <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface }]}>
+            <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface, width: CONTENT_WIDTH }]}>
               <View style={styles.calendarHeader}>
                 <View style={styles.navGroup}>
                   <TouchableOpacity onPressIn={() => moveYear(-1)} style={[styles.navButton, { borderColor: themeColors.primary + '20' }]}>
@@ -105,17 +106,17 @@ export default function BirthDateScreen() {
 
               <View key={`grid-${refreshKey}`} style={styles.daysGrid}>
                 {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                  <Typography key={`label-${i}`} variant="label" weight="700" style={styles.dayLabel} color={themeColors.icon}>{day}</Typography>
+                  <Typography key={`label-${i}`} variant="label" weight="700" style={[styles.dayLabel, { width: CELL_SIZE }]} color={themeColors.icon}>{day}</Typography>
                 ))}
                 {emptyDays.map((_, i) => (
-                  <View key={`empty-${i}`} style={styles.dayCell} />
+                  <View key={`empty-${i}`} style={[styles.dayCell, { width: CELL_SIZE }]} />
                 ))}
                 {days.map((day) => {
                   const isSame = isSameDay(day, selectedDate);
                   return (
                     <TouchableOpacity 
                       key={day.toISOString()} 
-                      style={[styles.dayCell, isSame && { backgroundColor: themeColors.primary }]}
+                      style={[styles.dayCell, { width: CELL_SIZE }, isSame && { backgroundColor: themeColors.primary }]}
                       onPress={() => setSelectedDate(day)}
                     >
                       <Typography variant="body" weight={isSame ? "800" : "600"} style={{ color: isSame ? '#fff' : themeColors.text }}>
@@ -126,13 +127,14 @@ export default function BirthDateScreen() {
                 })}
               </View>
             </View>
+            {/* Massive spacer to ensure we can scroll past the fixed footer */}
+            <View style={{ height: 150 }} />
           </View>
         </ScrollView>
       </View>
 
-      {/* 2. PERMANENT NON-SCROLLABLE FOOTER */}
-      <View style={[styles.fixedFooter, { paddingBottom: Math.max(insets.bottom, 24), backgroundColor: themeColors.background }]}>
-        <View style={[styles.footerContent, IS_TABLET && styles.tabletContent]}>
+      <View style={[styles.fixedFooter, { paddingBottom: Math.max(insets.bottom, 32), backgroundColor: themeColors.background }]}>
+        <View style={{ width: CONTENT_WIDTH, alignSelf: 'center' }}>
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: themeColors.primary }]}
             onPress={handleNext}
@@ -150,18 +152,12 @@ export default function BirthDateScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column', // Stack vertically
   },
   scrollContent: {
     flexGrow: 1,
   },
   content: {
-    padding: 24,
-  },
-  tabletContent: {
-    maxWidth: MAX_CONTENT_WIDTH,
-    alignSelf: 'center',
-    width: '100%',
+    paddingHorizontal: 24,
   },
   iconContainer: {
     marginBottom: 16,
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
   calendarContainer: {
     borderRadius: 32,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.08,
@@ -225,14 +221,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   dayLabel: {
-    width: (ACTUAL_CONTENT_WIDTH - 40) / 7,
     textAlign: 'center',
     marginBottom: 20,
     fontSize: 11,
     letterSpacing: 1,
   },
   dayCell: {
-    width: (ACTUAL_CONTENT_WIDTH - 40) / 7,
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -240,14 +234,10 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   fixedFooter: {
-    width: '100%',
     paddingHorizontal: 24,
     paddingTop: 16,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
-  },
-  footerContent: {
-    width: '100%',
   },
   button: {
     width: '100%',
