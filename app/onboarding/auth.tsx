@@ -134,13 +134,19 @@ export default function OnboardingAuthScreen() {
         return;
       }
 
-      console.error('Sign-In Error:', e);
+      // TECHNICAL DIAGNOSTIC: Show full error for "internal-error"
+      const technicalDetails = e.nativeStackAndroid || e.nativeStackIOS || e.stack || 'No stack trace';
+      console.log('--- AUTH ERROR DIAGNOSTIC ---');
+      console.log('Code:', e.code);
+      console.log('Message:', e.message);
+      console.log('Details:', technicalDetails);
+      console.log('-----------------------------');
 
       Alert.alert(
         "Authentication Issue",
-        `We couldn't sync with your account: ${e.message || 'Unknown error'}. You can try again or continue with local storage.`,
+        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nPlease ensure your Firebase project has an iOS app registered with ID 'com.ambright.mummumbaby'.`,
         [
-          { text: "Try Again", onPress: () => { } },
+          { text: "Try Again", onPress: () => {} },
           { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
         ]
       );
