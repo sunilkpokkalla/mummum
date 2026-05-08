@@ -60,7 +60,12 @@ export default function RootLayout() {
       const originalConsoleError = console.error;
       console.error = (...args: any[]) => {
         const message = args.join(' ');
-        if (message.includes('Purchase was cancelled') || message.includes('LogBox')) {
+        if (
+          message.includes('Purchase was cancelled') || 
+          message.includes('authorization attempt failed') ||
+          message.includes('SIGN_IN_CANCELLED') ||
+          message.includes('LogBox')
+        ) {
           return; // Skip red boxes for these
         }
         originalConsoleError(...args);

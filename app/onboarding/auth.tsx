@@ -113,10 +113,21 @@ export default function OnboardingAuthScreen() {
       setLoading(false);
       router.push('/onboarding/welcome');
     } catch (e: any) {
-      console.error('Sign-In Error:', e);
       setLoading(false);
 
-      if (e.code === 'auth/user-cancelled' || e.code === 'auth/cancelled' || e.code === '1001' || e.code === 'SIGN_IN_CANCELLED') return;
+      // SILENTLY ignore user cancellations
+      const isCancel = e.code === 'auth/user-cancelled' || 
+                       e.code === 'auth/cancelled' || 
+                       e.code === '1001' || 
+                       e.code === 'SIGN_IN_CANCELLED' ||
+                       e.message?.includes('authorization attempt failed');
+      
+      if (isCancel) {
+        console.log('[Auth Silent]: User cancelled sign-in flow.');
+        return;
+      }
+
+      console.error('Sign-In Error:', e);
 
       Alert.alert(
         "Authentication Issue",
