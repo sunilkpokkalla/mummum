@@ -150,7 +150,7 @@ export default function BirthDateScreen() {
             </View>
           </View>
 
-          <Animated.View entering={FadeInUp.delay(400).duration(800)} style={styles.footer}>
+          <View style={styles.footer}>
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: themeColors.primary }]}
               onPress={handleNext}
@@ -159,7 +159,7 @@ export default function BirthDateScreen() {
               <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
               <ArrowRight size={20} color="#fff" />
             </TouchableOpacity>
-          </Animated.View>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 24,
     paddingTop: 10,
-    paddingBottom: 40,
+    paddingBottom: 100,
   },
   iconContainer: {
     marginBottom: 16,
