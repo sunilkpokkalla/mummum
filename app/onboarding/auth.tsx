@@ -24,7 +24,7 @@ const GOOGLE_WEB_CLIENT_ID = '944867470720-h7d30nai7d1ktod685pk3jk0fl1qm8cv.apps
 
 export default function OnboardingAuthScreen() {
   const router = useRouter();
-  const { tempBaby, addBaby, setCurrentBaby, resetStore, babies, completeOnboarding } = useBabyStore();
+  const { tempBaby, addBaby, setCurrentBaby, resetStore, babies, completeOnboarding, pullFromCloud } = useBabyStore();
   const [loading, setLoading] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState('');
@@ -55,7 +55,9 @@ export default function OnboardingAuthScreen() {
       }
 
       // Success
-      const babyId = addBaby(tempBaby);
+      await pullFromCloud(); // DOWNLOAD CLOUD DATA
+      
+      const babyId = babies[0]?.id || addBaby(tempBaby);
       setCurrentBaby(babyId);
       setLoading(false);
       
@@ -146,23 +148,20 @@ export default function OnboardingAuthScreen() {
         }
       }
 
-      // Sync with Baby Store
-      const babyId = firebaseUser?.uid || Math.random().toString(36).substring(7);
-      addBaby({
-        id: babyId,
-        name: tempBaby.name || 'Baby',
-        birthDate: tempBaby.birthDate || new Date(),
-      });
-      setCurrentBaby(babyId);
+      if (firebaseUser) {
+        await pullFromCloud(); // DOWNLOAD CLOUD DATA
+        
+        // If they already have babies from cloud, use those, otherwise create the one they just set up
+        const babyId = babies[0]?.id || addBaby(tempBaby);
+        setCurrentBaby(babyId);
+        setLoading(false);
 
-      setLoading(false);
-
-      // If they are a returning user with babies, mark as onboarded immediately
-      if (babies.length > 0) {
-        completeOnboarding();
-        router.replace('/(tabs)');
-      } else {
-        router.push('/onboarding/welcome');
+        if (babies.length > 0) {
+          completeOnboarding();
+          router.replace('/(tabs)');
+        } else {
+          router.push('/onboarding/welcome');
+        }
       }
     } catch (e: any) {
       setLoading(false);

@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { SafeStorage } from '@/lib/storage';
 import { format } from 'date-fns';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export type ActivityType = 'feed' | 'sleep' | 'diaper' | 'growth' | 'milestone' | 'vaccination' | 'medicine';
 
@@ -90,11 +92,36 @@ interface BabyState {
   setPro: (val: boolean, isTrial?: boolean) => void;
   resetStore: () => void;
   toggleReminder: (id: string) => void;
+  syncToCloud: () => Promise<void>;
+  pullFromCloud: () => Promise<void>;
 }
+
+// Utility to push data to Firestore
+const pushToFirestore = async (state: Partial<BabyState>) => {
+  const user = auth().currentUser;
+  if (!user) return;
+
+  try {
+    await firestore().collection('users').doc(user.uid).set({
+      babies: state.babies,
+      currentBabyId: state.currentBabyId,
+      activities: state.activities,
+      memories: state.memories,
+      completedChecklistItems: state.completedChecklistItems,
+      completedMilestones: state.completedMilestones,
+      userName: state.userName,
+      userPhotoUri: state.userPhotoUri,
+      updatedAt: firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    console.log('[Cloud Sync]: Data pushed successfully.');
+  } catch (e) {
+    console.error('[Cloud Sync]: Push failed:', e);
+  }
+};
 
 export const useBabyStore = create<BabyState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       babies: [],
       currentBabyId: null,
       activities: [],
@@ -113,40 +140,94 @@ export const useBabyStore = create<BabyState>()(
       isTrial: false,
       trialStartedAt: null,
 
-      addBaby: (baby) => set((state) => ({ 
-        babies: [...state.babies, baby],
-        currentBabyId: state.currentBabyId || baby.id,
-        tempBaby: {}
-      })),
+      syncToCloud: async () => {
+        const state = get();
+        await pushToFirestore(state);
+      },
 
-      updateBaby: (id, data) => set((state) => ({
-        babies: state.babies.map((b) => b.id === id ? { ...b, ...data } : b)
-      })),
+      pullFromCloud: async () => {
+        const user = auth().currentUser;
+        if (!user) return;
 
-      updateUserPhoto: (uri) => set({ userPhotoUri: uri }),
+        try {
+          const doc = await firestore().collection('users').doc(user.uid).get();
+          if (doc.exists) {
+            const data = doc.data();
+            set({
+              babies: data?.babies || get().babies,
+              activities: data?.activities || get().activities,
+              memories: data?.memories || get().memories,
+              completedChecklistItems: data?.completedChecklistItems || get().completedChecklistItems,
+              completedMilestones: data?.completedMilestones || get().completedMilestones,
+              userName: data?.userName || get().userName,
+              userPhotoUri: data?.userPhotoUri || get().userPhotoUri,
+              currentBabyId: data?.currentBabyId || get().currentBabyId,
+            });
+            console.log('[Cloud Sync]: Data pulled successfully.');
+          }
+        } catch (e) {
+          console.error('[Cloud Sync]: Pull failed:', e);
+        }
+      },
+
+      addBaby: (baby) => {
+        set((state) => ({ 
+          babies: [...state.babies, baby],
+          currentBabyId: state.currentBabyId || baby.id,
+          tempBaby: {}
+        }));
+        get().syncToCloud();
+      },
+
+      updateBaby: (id, data) => {
+        set((state) => ({
+          babies: state.babies.map((b) => b.id === id ? { ...b, ...data } : b)
+        }));
+        get().syncToCloud();
+      },
+
+      updateUserPhoto: (uri) => {
+        set({ userPhotoUri: uri });
+        get().syncToCloud();
+      },
       
-      updateUserName: (name) => set({ userName: name }),
+      updateUserName: (name) => {
+        set({ userName: name });
+        get().syncToCloud();
+      },
 
-      setCurrentBaby: (id) => set({ currentBabyId: id }),
+      setCurrentBaby: (id) => {
+        set({ currentBabyId: id });
+        get().syncToCloud();
+      },
 
-      addActivity: (activity) => set((state) => ({
-        activities: [
-          { 
-            ...activity, 
-            id: Math.random().toString(36).substring(7),
-            babyId: state.currentBabyId || '' 
-          },
-          ...state.activities
-        ]
-      })),
+      addActivity: (activity) => {
+        set((state) => ({
+          activities: [
+            { 
+              ...activity, 
+              id: Math.random().toString(36).substring(7),
+              babyId: state.currentBabyId || '' 
+            },
+            ...state.activities
+          ]
+        }));
+        get().syncToCloud();
+      },
 
-      updateActivity: (id, data) => set((state) => ({
-        activities: state.activities.map(a => a.id === id ? { ...a, ...data } : a)
-      })),
+      updateActivity: (id, data) => {
+        set((state) => ({
+          activities: state.activities.map(a => a.id === id ? { ...a, ...data } : a)
+        }));
+        get().syncToCloud();
+      },
 
-      deleteActivity: (id) => set((state) => ({
-        activities: state.activities.filter((a) => a.id !== id)
-      })),
+      deleteActivity: (id) => {
+        set((state) => ({
+          activities: state.activities.filter((a) => a.id !== id)
+        }));
+        get().syncToCloud();
+      },
 
       startSession: (session) => set((state) => ({
         activeSessions: [
@@ -159,48 +240,57 @@ export const useBabyStore = create<BabyState>()(
         activeSessions: state.activeSessions.filter(s => !(s.type === type && s.babyId === state.currentBabyId))
       })),
       
-      addMemory: (memory) => set((state) => ({
-        memories: [
-          { ...memory, babyId: state.currentBabyId || '' },
-          ...state.memories
-        ]
-      })),
+      addMemory: (memory) => {
+        set((state) => ({
+          memories: [
+            { ...memory, babyId: state.currentBabyId || '' },
+            ...state.memories
+          ]
+        }));
+        get().syncToCloud();
+      },
 
-      toggleChecklistItem: (id) => set((state) => {
-        if (!state.currentBabyId) return state;
-        const dateKey = format(new Date(), 'yyyy-MM-dd');
-        const babyChecklists = state.completedChecklistItems[state.currentBabyId] || {};
-        const currentItems = babyChecklists[dateKey] || [];
-        
-        const newItems = currentItems.includes(id)
-          ? currentItems.filter(i => i !== id)
-          : [...currentItems, id];
-        
-        return {
-          completedChecklistItems: {
-            ...state.completedChecklistItems,
-            [state.currentBabyId]: {
-              ...babyChecklists,
-              [dateKey]: newItems
+      toggleChecklistItem: (id) => {
+        set((state) => {
+          if (!state.currentBabyId) return state;
+          const dateKey = format(new Date(), 'yyyy-MM-dd');
+          const babyChecklists = state.completedChecklistItems[state.currentBabyId] || {};
+          const currentItems = babyChecklists[dateKey] || [];
+          
+          const newItems = currentItems.includes(id)
+            ? currentItems.filter(i => i !== id)
+            : [...currentItems, id];
+          
+          return {
+            completedChecklistItems: {
+              ...state.completedChecklistItems,
+              [state.currentBabyId]: {
+                ...babyChecklists,
+                [dateKey]: newItems
+              }
             }
-          }
-        };
-      }),
+          };
+        });
+        get().syncToCloud();
+      },
 
-      toggleMilestone: (id) => set((state) => {
-        if (!state.currentBabyId) return state;
-        const currentMilestones = state.completedMilestones[state.currentBabyId] || [];
-        const newMilestones = currentMilestones.includes(id)
-          ? currentMilestones.filter(m => m !== id)
-          : [...currentMilestones, id];
-        
-        return {
-          completedMilestones: {
-            ...state.completedMilestones,
-            [state.currentBabyId]: newMilestones
-          }
-        };
-      }),
+      toggleMilestone: (id) => {
+        set((state) => {
+          if (!state.currentBabyId) return state;
+          const currentMilestones = state.completedMilestones[state.currentBabyId] || [];
+          const newMilestones = currentMilestones.includes(id)
+            ? currentMilestones.filter(m => m !== id)
+            : [...currentMilestones, id];
+          
+          return {
+            completedMilestones: {
+              ...state.completedMilestones,
+              [state.currentBabyId]: newMilestones
+            }
+          };
+        });
+        get().syncToCloud();
+      },
 
       addReminder: (reminder) => set((state) => ({
         customReminders: [...state.customReminders, reminder]
