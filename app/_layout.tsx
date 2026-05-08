@@ -78,10 +78,21 @@ export default function RootLayout() {
       try {
         const { default: Purchases, LOG_LEVEL } = await import('react-native-purchases');
         if (Purchases && typeof Purchases.configure === 'function') {
-          // Prevent multiple initialization attempts
           const isConfigured = await Purchases.isConfigured();
           if (!isConfigured) {
             Purchases.setLogLevel(LOG_LEVEL.INFO);
+            
+            // Custom Log Handler to silence "Purchase was cancelled" red boxes
+            Purchases.setLogHandler((logOut: any) => {
+              if (logOut.message && logOut.message.includes('Purchase was cancelled')) {
+                // Silently log to console instead of triggering console.error/LogBox
+                console.log('[RevenueCat Silent]: User cancelled purchase flow.');
+                return;
+              }
+              // Pass through all other logs normally
+              console.log(`[RevenueCat]: ${logOut.message}`);
+            });
+
             Purchases.configure({ apiKey: "appl_gWsdCGHELkQjkHmjNeeTGKwgvnd" });
           }
           
