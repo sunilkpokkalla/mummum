@@ -100,7 +100,7 @@ export default function PremiumPaywallScreen() {
       }
     } catch (e: any) {
       if (!e.userCancelled) {
-        Alert.alert("Purchase Error", e.message || "An error occurred during purchase.");
+        Alert.alert("Store Notice", e.message || "The store is temporarily unavailable. Please ensure you are signed into a Sandbox Apple ID.");
         console.error('Purchase Error', e);
       }
     } finally {
@@ -252,7 +252,7 @@ export default function PremiumPaywallScreen() {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                  {selectedPlan === 'mummum_lifetime_pro' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
+                  {selectedPlan === 'lifetimem' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
                 </Typography>
               )}
             </TouchableOpacity>
