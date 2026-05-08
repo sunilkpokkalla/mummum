@@ -147,6 +147,19 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
+    // IMMEDIATE FIREBASE CONNECTIVITY TEST
+    console.log('[Firebase Test]: Pinging native bridge...');
+    auth()
+      .signInAnonymously()
+      .then(user => {
+        console.log('[Firebase Test]: SUCCESS! Bridge is alive. UID:', user.user.uid);
+      })
+      .catch(error => {
+        console.error('[Firebase Test]: BRIDGE FAILED!', error);
+      });
+  }, []);
+
+  useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
