@@ -153,7 +153,15 @@ export default function BirthDateScreen() {
       </ScrollView>
 
       {/* FIXED FOOTER */}
-      <View style={[styles.fixedFooter, { paddingBottom: Math.max(insets.bottom, 24), backgroundColor: themeColors.background }]}>
+      <View style={[
+        styles.fixedFooter, 
+        { 
+          paddingBottom: Math.max(insets.bottom, 24), 
+          backgroundColor: themeColors.background,
+          zIndex: 999, // Force to front
+          elevation: 10,
+        }
+      ]}>
         <View style={[styles.footerContent, IS_TABLET && styles.tabletContent]}>
           <TouchableOpacity 
             style={[styles.button, { backgroundColor: themeColors.primary }]}
