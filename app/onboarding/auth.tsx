@@ -134,11 +134,16 @@ export default function OnboardingAuthScreen() {
         return;
       }
 
-      console.error('Sign-In Error:', e);
+      // TECHNICAL DIAGNOSTIC
+      console.log('--- AUTH ERROR ---');
+      console.log('Code:', e.code);
+      console.log('Message:', e.message);
+      console.log('Stack:', e.stack);
+      console.log('------------------');
 
       Alert.alert(
         "Authentication Issue",
-        `We couldn't sync with your account: ${e.message || 'Unknown error'}. You can try again or continue with local storage.`,
+        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nPlease check your Firebase project settings.`,
         [
           { text: "Try Again", onPress: () => { } },
           { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
