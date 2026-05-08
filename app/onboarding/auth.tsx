@@ -54,9 +54,8 @@ export default function OnboardingAuthScreen() {
         }
       }
 
-      // Success
-      await pullFromCloud(); // DOWNLOAD CLOUD DATA
-      
+      // Success: All data is synced and ready
+      await pullFromCloud();
       const babyId = babies[0]?.id || addBaby(tempBaby);
       setCurrentBaby(babyId);
       setLoading(false);
