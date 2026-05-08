@@ -66,7 +66,9 @@ export default function RootLayout() {
           message.includes('Purchase was cancelled') || 
           message.includes('authorization attempt failed') ||
           message.includes('SIGN_IN_CANCELLED') ||
-          message.includes('LogBox')
+          message.includes('LogBox') ||
+          message.includes('headerHeight') ||
+          message.includes('onboarding')
         ) {
           return; // Skip red boxes for these
         }
