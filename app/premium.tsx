@@ -139,19 +139,24 @@ export default function PremiumPaywallScreen() {
     }
   };
 
+  const planConfigs = [
+    { id: 'monthlymm', rcId: 'prodacf07deaca', title: 'Monthly', defaultPrice: '$4.99', desc: 'Full Access', sub: 'GoPro' },
+    { id: 'yearlymm', rcId: 'prod488bc18430', title: 'Yearly', defaultPrice: '$19.99', desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
+    { id: 'lifetimemm', rcId: 'prodeb4f0692c5', title: 'Lifetime', defaultPrice: '$29.99', oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
+  ];
+
   const getPrice = (id: string, defaultPrice: string) => {
-    const planData = plans.find(p => p.id === id);
+    const config = planConfigs.find(p => p.id === id);
     const pkg = offerings?.availablePackages?.find((p: any) => 
-      p.identifier === planData?.rcId || p.product.identifier === id
+      p.identifier === config?.rcId || p.product.identifier === id
     );
     return pkg?.product?.priceString || defaultPrice;
   };
 
-  const plans = [
-    { id: 'monthlymm', rcId: 'prodacf07deaca', title: 'Monthly', price: getPrice('monthlymm', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
-    { id: 'yearlymm', rcId: 'prod488bc18430', title: 'Yearly', price: getPrice('yearlymm', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
-    { id: 'lifetimemm', rcId: 'prodeb4f0692c5', title: 'Lifetime', price: getPrice('lifetimemm', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
-  ];
+  const plans = planConfigs.map(p => ({
+    ...p,
+    price: getPrice(p.id, p.defaultPrice)
+  }));
 
   const features = [
     { 

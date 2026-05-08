@@ -69,7 +69,7 @@ export default function OnboardingAuthScreen() {
       if (provider === 'google') {
         if (!GoogleSignin) {
           Alert.alert(
-            "Configuration Notice", 
+            "Configuration Notice",
             "Google Sign-In is not currently available in this version. Please use Apple Sign-In or Continue as Guest.",
             [{ text: "OK" }]
           );
@@ -122,7 +122,7 @@ export default function OnboardingAuthScreen() {
         "Authentication Issue",
         `We couldn't sync with your account: ${e.message || 'Unknown error'}. You can try again or continue with local storage.`,
         [
-          { text: "Try Again", onPress: () => {} },
+          { text: "Try Again", onPress: () => { } },
           { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
         ]
       );
