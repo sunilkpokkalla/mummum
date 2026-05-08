@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Dimensions, ActivityIndicator, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Shield, Cloud, Mail, ArrowRight, ChevronRight, Apple } from 'lucide-react-native';
 import Typography from '@/components/Typography';
 import { useBabyStore } from '@/store/useBabyStore';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { NativeModules } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, NativeModules, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 // Safe Native Module Discovery
 let GoogleSignin: any = null;
@@ -42,14 +40,25 @@ export default function OnboardingAuthScreen() {
   }, []);
 
   const handleGuestAccess = () => {
-    const id = Math.random().toString(36).substring(7);
-    addBaby({
-      id,
-      name: tempBaby.name || 'Baby',
-      birthDate: tempBaby.birthDate || new Date(),
-    });
-    setCurrentBaby(id);
-    router.push('/onboarding/welcome');
+    Alert.alert(
+      "Guest Access",
+      "You can skip registration for now, but creating an account later is recommended to ensure your clinical data and Pro purchases can be restored if you change devices.",
+      [
+        {
+          text: "Continue as Guest",
+          onPress: () => {
+            const id = Math.random().toString(36).substring(7);
+            addBaby({
+              id,
+              name: tempBaby.name || 'Baby',
+              birthDate: tempBaby.birthDate || new Date(),
+            });
+            setCurrentBaby(id);
+            router.push('/onboarding/welcome');
+          }
+        }
+      ]
+    );
   };
 
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
@@ -59,7 +68,13 @@ export default function OnboardingAuthScreen() {
 
       if (provider === 'google') {
         if (!GoogleSignin) {
-          throw new Error('GoogleSignin native module not project-wide registered.');
+          Alert.alert(
+            "Configuration Notice", 
+            "Google Sign-In is not currently available in this version. Please use Apple Sign-In or Continue as Guest.",
+            [{ text: "OK" }]
+          );
+          setLoading(false);
+          return;
         }
         await GoogleSignin.hasPlayServices();
         const { idToken } = await GoogleSignin.signIn();
@@ -98,22 +113,23 @@ export default function OnboardingAuthScreen() {
       setLoading(false);
       router.push('/onboarding/welcome');
     } catch (error: any) {
-      console.error('Auth Flow Error:', error);
+      // Use log instead of error to avoid the red LogBox in development
+      console.log('Auth Flow Error:', error);
       setLoading(false);
-      
-      // If native module is missing or user canceled, we offer local persistence
-      if (error.code === '-1' || error.message?.includes('GoogleSignin')) {
-        Alert.alert(
-          "Cloud Sync Unavailable", 
-          "Native auth modules are not fully configured. Continue with local secure storage?",
-          [
-            { text: "Cancel", style: "cancel" },
-            { text: "Continue Locally", onPress: handleGuestAccess }
-          ]
-        );
-      } else {
-        Alert.alert("Auth Error", "Please try again or continue as guest.");
+
+      // Ignore user cancellations (Apple: 1001, Google: SIGN_IN_CANCELLED)
+      if (error.code === '1001' || error.code === 'SIGN_IN_CANCELLED') {
+        return;
       }
+
+      Alert.alert(
+        "Authentication Issue",
+        "We couldn't sync with your account right now. You can try again or continue with local storage.",
+        [
+          { text: "Try Again", style: "default" },
+          { text: "Continue Locally", onPress: handleGuestAccess }
+        ]
+      );
     }
   };
 
@@ -149,7 +165,7 @@ export default function OnboardingAuthScreen() {
             <ActivityIndicator size="large" color="#4A5D4C" style={{ marginVertical: 40 }} />
           ) : (
             <>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.authButton, styles.appleButton]}
                 onPress={() => handleSocialLogin('apple')}
               >
@@ -157,7 +173,7 @@ export default function OnboardingAuthScreen() {
                 <Typography variant="body" weight="700" color="#fff">Continue with Apple</Typography>
               </TouchableOpacity>
 
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.authButton, styles.googleButton]}
                 onPress={() => handleSocialLogin('google')}
               >
@@ -167,9 +183,9 @@ export default function OnboardingAuthScreen() {
                 <Typography variant="body" weight="700" color="#455A64">Continue with Google</Typography>
               </TouchableOpacity>
 
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.authButton, styles.emailButton]}
-                onPress={() => {}}
+                onPress={() => { }}
               >
                 <Mail size={22} color="#4A5D4C" />
                 <Typography variant="body" weight="700" color="#4A5D4C">Continue with Email</Typography>
@@ -180,11 +196,11 @@ export default function OnboardingAuthScreen() {
 
         <View style={styles.footer}>
           {babies.length > 0 && (
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => {
                 resetStore();
                 router.push('/onboarding/name');
-              }} 
+              }}
               style={styles.switchButton}
             >
               <Typography variant="body" weight="600" color="#E57373">Not {tempBaby.name || 'Your'} Baby? Switch Account</Typography>
@@ -247,10 +263,10 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   featureList: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 24,
-    marginVertical: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 12,
+    marginVertical: 24,
   },
   featureItem: {
     flexDirection: 'row',

@@ -114,6 +114,12 @@ export default function SettingsScreen() {
             <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>ACCOUNT MANAGEMENT</Typography>
             <View style={styles.elegantGroup}>
               <ElegantMenuItem 
+                icon={<Shield size={20} color="#1B3C35" />}
+                title="Sync & Secure Account"
+                detail="Enable cross-device restore"
+                onPress={() => router.push('/onboarding/auth')}
+              />
+              <ElegantMenuItem 
                 icon={<Baby size={20} color="#1B3C35" />}
                 title="Baby Profile"
                 detail={currentBaby?.name || "Configure Profile"}

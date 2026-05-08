@@ -77,13 +77,15 @@ export default function RootLayout() {
       }
       try {
         const { default: Purchases, LOG_LEVEL } = await import('react-native-purchases');
-        Purchases.setLogLevel(LOG_LEVEL.DEBUG);
-        Purchases.configure({ apiKey: "appl_GLgtGgxlmNZCvxqgrTsJFQUGdpa" });
-        const customerInfo = await Purchases.getCustomerInfo();
-        const activePro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
-        setPro(activePro);
+        if (Purchases && typeof Purchases.configure === 'function') {
+          Purchases.setLogLevel(LOG_LEVEL.INFO);
+          Purchases.configure({ apiKey: "appl_HmFVbtXTcxXPzArdQkKryTFdddt" });
+          const customerInfo = await Purchases.getCustomerInfo();
+          const activePro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
+          setPro(activePro);
+        }
       } catch (e) {
-        console.log('RevenueCat Init error:', e);
+        console.log('RevenueCat Init error (resilient):', e);
       }
     };
 

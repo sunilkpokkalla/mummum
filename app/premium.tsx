@@ -39,7 +39,7 @@ export default function PremiumPaywallScreen() {
   const themeColors = Colors[colorScheme];
   const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [selectedPlan, setSelectedPlan] = useState('mummum_lifetime_pro');
+  const [selectedPlan, setSelectedPlan] = useState('yearlym');
   const [offerings, setOfferings] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -52,7 +52,7 @@ export default function PremiumPaywallScreen() {
       const { default: Purchases } = await import('react-native-purchases');
       const fetchedOfferings = await Purchases.getOfferings();
       // Target specific offering or fallback to current
-      const target = fetchedOfferings.all['ofrngb4e7b317ff'] || fetchedOfferings.current;
+      const target = fetchedOfferings.all['ofrng8f6aab4fec'] || fetchedOfferings.current;
       
       if (target) {
         setOfferings(target);
@@ -140,9 +140,9 @@ export default function PremiumPaywallScreen() {
   };
 
   const plans = [
-    { id: 'monthly', title: 'Monthly', price: getPrice('monthly', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
-    { id: 'yearly', title: 'Yearly', price: getPrice('yearly', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
-    { id: 'mmlifetime', title: 'Lifetime', price: getPrice('mmlifetime', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
+    { id: 'monthlym', title: 'Monthly', price: getPrice('monthlym', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
+    { id: 'yearlym', title: 'Yearly', price: getPrice('yearlym', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
+    { id: 'lifetimem', title: 'Lifetime', price: getPrice('lifetimem', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
   ];
 
   const features = [
@@ -258,6 +258,9 @@ export default function PremiumPaywallScreen() {
             </TouchableOpacity>
 
             <View style={styles.legalInfoBlock}>
+              <Typography variant="label" color="#B0BEC5" style={[styles.disclosureText, { marginBottom: 4, fontWeight: '700' }]}>
+                Account registration is recommended to restore and sync Pro access across all your devices.
+              </Typography>
               <Typography variant="label" color="#B0BEC5" style={styles.disclosureText}>
                 Payment will be charged to your iTunes Account at confirmation of purchase. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period. Account will be charged for renewal within 24-hours prior to the end of the current period.
               </Typography>
