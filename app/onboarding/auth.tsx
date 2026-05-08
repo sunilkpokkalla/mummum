@@ -23,7 +23,7 @@ const GOOGLE_WEB_CLIENT_ID = '944867470720-h7d30nai7d1ktod685pk3jk0fl1qm8cv.apps
 
 export default function OnboardingAuthScreen() {
   const router = useRouter();
-  const { tempBaby, addBaby, setCurrentBaby, resetStore, babies } = useBabyStore();
+  const { tempBaby, addBaby, setCurrentBaby, resetStore, babies, completeOnboarding } = useBabyStore();
   const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
@@ -111,7 +111,14 @@ export default function OnboardingAuthScreen() {
       setCurrentBaby(babyId);
 
       setLoading(false);
-      router.push('/onboarding/welcome');
+      
+      // If they are a returning user with babies, mark as onboarded immediately
+      if (babies.length > 0) {
+        completeOnboarding();
+        router.replace('/(tabs)');
+      } else {
+        router.push('/onboarding/welcome');
+      }
     } catch (e: any) {
       setLoading(false);
 
