@@ -39,7 +39,7 @@ export default function PremiumPaywallScreen() {
   const themeColors = Colors[colorScheme];
   const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
-  const [selectedPlan, setSelectedPlan] = useState('yearlym');
+  const [selectedPlan, setSelectedPlan] = useState('yearlymm');
   const [offerings, setOfferings] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -140,9 +140,9 @@ export default function PremiumPaywallScreen() {
   };
 
   const plans = [
-    { id: 'monthlym', title: 'Monthly', price: getPrice('monthlym', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
-    { id: 'yearlym', title: 'Yearly', price: getPrice('yearlym', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
-    { id: 'lifetimem', title: 'Lifetime', price: getPrice('lifetimem', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
+    { id: 'monthlymm', title: 'Monthly', price: getPrice('monthlymm', '$4.99'), desc: 'Full Access', sub: 'GoPro' },
+    { id: 'yearlymm', title: 'Yearly', price: getPrice('yearlymm', '$19.99'), desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
+    { id: 'lifetimemm', title: 'Lifetime', price: getPrice('lifetimemm', '$29.99'), oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
   ];
 
   const features = [
@@ -252,7 +252,7 @@ export default function PremiumPaywallScreen() {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                  {selectedPlan === 'lifetimem' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
+                  {selectedPlan === 'lifetimemm' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
                 </Typography>
               )}
             </TouchableOpacity>
