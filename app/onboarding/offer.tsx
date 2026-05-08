@@ -63,7 +63,9 @@ export default function OnboardingOfferScreen() {
         router.push('/onboarding/complete');
       }
     } catch (e: any) {
-      if (!e.userCancelled) console.error('Purchase Error', e);
+      if (!e.userCancelled) {
+        console.log('Purchase Error (Onboarding):', e.message);
+      }
     } finally {
       setLoading(false);
     }

@@ -103,10 +103,11 @@ export default function PremiumPaywallScreen() {
         router.back(); 
       }
     } catch (e: any) {
-      if (!e.userCancelled) {
-        Alert.alert("Store Notice", e.message || "The store is temporarily unavailable. Please ensure you are signed into a Sandbox Apple ID.");
-        console.error('Purchase Error', e);
-      }
+      // Ignore if user cancelled
+      if (e.userCancelled) return;
+      
+      Alert.alert("Store Notice", e.message || "The store is temporarily unavailable. Please ensure you are signed into a Sandbox Apple ID.");
+      console.log('Purchase Error (Non-Critical):', e.message);
     } finally {
       setLoading(false);
     }
