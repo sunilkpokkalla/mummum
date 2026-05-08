@@ -11,6 +11,9 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const IS_TABLET = SCREEN_WIDTH > 600;
+const MAX_CONTENT_WIDTH = 500;
+const ACTUAL_CONTENT_WIDTH = Math.min(SCREEN_WIDTH - 48, MAX_CONTENT_WIDTH);
 
 export default function BirthDateScreen() {
   const router = useRouter();
@@ -54,11 +57,12 @@ export default function BirthDateScreen() {
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background, paddingTop: insets.top }]}>
       <ScrollView 
+        style={{ flex: 1 }}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         bounces={true}
       >
-        <View style={styles.content}>
+        <View style={[styles.content, IS_TABLET && styles.tabletContent]}>
           <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
             <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
               <CalendarIcon size={32} color={themeColors.secondary} />
@@ -126,21 +130,21 @@ export default function BirthDateScreen() {
                 <View key={`empty-${i}`} style={styles.dayCell} />
               ))}
               {days.map((day) => {
-                const isSelected = isSameDay(day, selectedDate);
+                const isSame = isSameDay(day, selectedDate);
                 return (
                   <TouchableOpacity 
                     key={day.toISOString()} 
                     style={[
                       styles.dayCell,
-                      isSelected && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
+                      isSame && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
                     ]}
                     onPress={() => setSelectedDate(day)}
                     activeOpacity={0.8}
                   >
                     <Typography 
                       variant="body"
-                      weight={isSelected ? "800" : "600"}
-                      style={{ color: isSelected ? '#fff' : themeColors.text }}
+                      weight={isSame ? "800" : "600"}
+                      style={{ color: isSame ? '#fff' : themeColors.text }}
                     >
                       {format(day, 'd')}
                     </Typography>
@@ -176,7 +180,12 @@ const styles = StyleSheet.create({
   content: {
     padding: 24,
     paddingTop: 10,
-    paddingBottom: 100,
+    paddingBottom: 60,
+  },
+  tabletContent: {
+    maxWidth: MAX_CONTENT_WIDTH,
+    alignSelf: 'center',
+    width: '100%',
   },
   iconContainer: {
     marginBottom: 16,
@@ -241,14 +250,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   dayLabel: {
-    width: (SCREEN_WIDTH - 48 - 40) / 7,
+    width: (ACTUAL_CONTENT_WIDTH - 40) / 7,
     textAlign: 'center',
     marginBottom: 20,
     fontSize: 11,
     letterSpacing: 1,
   },
   dayCell: {
-    width: (SCREEN_WIDTH - 48 - 40) / 7,
+    width: (ACTUAL_CONTENT_WIDTH - 40) / 7,
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
