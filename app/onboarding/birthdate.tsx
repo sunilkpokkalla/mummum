@@ -7,12 +7,12 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import { useBabyStore } from '@/store/useBabyStore';
 import { ArrowRight, Calendar as CalendarIcon, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IS_TABLET = SCREEN_WIDTH > 600;
-const MAX_CONTENT_WIDTH = 500;
+const MAX_CONTENT_WIDTH = IS_TABLET ? 800 : 500;
 const ACTUAL_CONTENT_WIDTH = Math.min(SCREEN_WIDTH - 48, MAX_CONTENT_WIDTH);
 
 export default function BirthDateScreen() {
@@ -54,103 +54,120 @@ export default function BirthDateScreen() {
   const startDay = startOfMonth(currentMonth).getDay();
   const emptyDays = Array(startDay).fill(null);
 
-  const CELL_SIZE = (ACTUAL_CONTENT_WIDTH - 40) / 7;
-
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
-      {/* 1. SCROLLABLE CALENDAR AREA */}
-      <View style={{ flex: 1 }}>
-        <ScrollView 
-          style={{ flex: 1 }}
-          contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 10 }]}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={[styles.content, IS_TABLET && styles.tabletContent]}>
-            <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
-              <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
-                <CalendarIcon size={32} color={themeColors.secondary} />
+    <View style={[styles.container, { backgroundColor: themeColors.background, paddingTop: insets.top }]}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        bounces={true}
+      >
+        <View style={[styles.content, IS_TABLET && styles.tabletContent]}>
+          <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
+            <View style={[styles.iconCircle, { backgroundColor: themeColors.secondary + '15' }]}>
+              <CalendarIcon size={IS_TABLET ? 40 : 32} color={themeColors.secondary} />
+            </View>
+          </Animated.View>
+
+          <Animated.View entering={FadeInDown.delay(200).duration(800)}>
+            <Typography variant="display" style={[styles.title, IS_TABLET && { fontSize: 42, lineHeight: 50 }]}>
+              When was {tempBaby.name || 'your baby'} born?
+            </Typography>
+            <Typography variant="bodyLg" color={themeColors.icon} style={styles.subtitle}>
+              Select the date to continue.
+            </Typography>
+          </Animated.View>
+
+          <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface }]}>
+            <View style={styles.calendarHeader}>
+              <View style={styles.navGroup}>
+                <TouchableOpacity 
+                  onPressIn={() => moveYear(-1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronsLeft size={IS_TABLET ? 24 : 20} color={themeColors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  onPressIn={() => moveMonth(-1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronLeft size={IS_TABLET ? 24 : 20} color={themeColors.primary} />
+                </TouchableOpacity>
               </View>
-            </Animated.View>
-
-            <Animated.View entering={FadeInDown.delay(200).duration(800)}>
-              <Typography variant="display" style={styles.title}>When was {tempBaby.name || 'your baby'} born?</Typography>
-              <Typography variant="bodyLg" color={themeColors.icon} style={styles.subtitle}>
-                Select the date to continue.
-              </Typography>
-            </Animated.View>
-
-            <View style={[styles.calendarContainer, { backgroundColor: themeColors.surface }]}>
-              <View style={styles.calendarHeader}>
-                <View style={styles.navGroup}>
-                  <TouchableOpacity onPressIn={() => moveYear(-1)} style={[styles.navButton, { borderColor: themeColors.primary + '20' }]}>
-                    <ChevronsLeft size={20} color={themeColors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPressIn={() => moveMonth(-1)} style={[styles.navButton, { borderColor: themeColors.primary + '20' }]}>
-                    <ChevronLeft size={20} color={themeColors.primary} />
-                  </TouchableOpacity>
-                </View>
-                
-                <View style={styles.monthDisplay}>
-                  <Typography variant="bodyLg" weight="800" style={styles.monthLabel}>{format(currentMonth, 'MMMM')}</Typography>
-                  <Typography variant="label" weight="600" color={themeColors.icon}>{format(currentMonth, 'yyyy')}</Typography>
-                </View>
-                
-                <View style={styles.navGroup}>
-                  <TouchableOpacity onPressIn={() => moveMonth(1)} style={[styles.navButton, { borderColor: themeColors.primary + '20' }]}>
-                    <ChevronRight size={20} color={themeColors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPressIn={() => moveYear(1)} style={[styles.navButton, { borderColor: themeColors.primary + '20' }]}>
-                    <ChevronsRight size={20} color={themeColors.primary} />
-                  </TouchableOpacity>
-                </View>
+              
+              <View style={styles.monthDisplay}>
+                <Typography variant="display" weight="800" style={[styles.monthLabel, IS_TABLET && { fontSize: 24 }]}>
+                  {format(currentMonth, 'MMMM')}
+                </Typography>
+                <Typography variant="bodyLg" weight="600" color={themeColors.icon}>
+                  {format(currentMonth, 'yyyy')}
+                </Typography>
               </View>
-
-              <View key={`grid-${refreshKey}`} style={styles.daysGrid}>
-                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                  <Typography key={`label-${i}`} variant="label" weight="700" style={[styles.dayLabel, { width: CELL_SIZE }]} color={themeColors.icon}>{day}</Typography>
-                ))}
-                {emptyDays.map((_, i) => (
-                  <View key={`empty-${i}`} style={[styles.dayCell, { width: CELL_SIZE }]} />
-                ))}
-                {days.map((day) => {
-                  const isSame = isSameDay(day, selectedDate);
-                  return (
-                    <TouchableOpacity 
-                      key={day.toISOString()} 
-                      style={[
-                        styles.dayCell, 
-                        { width: CELL_SIZE }, 
-                        isSame && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
-                      ]}
-                      onPress={() => setSelectedDate(day)}
-                    >
-                      <Typography variant="body" weight={isSame ? "800" : "600"} style={{ color: isSame ? '#fff' : themeColors.text }}>
-                        {format(day, 'd')}
-                      </Typography>
-                    </TouchableOpacity>
-                  );
-                })}
+              
+              <View style={styles.navGroup}>
+                <TouchableOpacity 
+                  onPressIn={() => moveMonth(1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronRight size={IS_TABLET ? 24 : 20} color={themeColors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  onPressIn={() => moveYear(1)} 
+                  style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
+                  activeOpacity={0.4}
+                >
+                  <ChevronsRight size={IS_TABLET ? 24 : 20} color={themeColors.primary} />
+                </TouchableOpacity>
               </View>
             </View>
-            {/* Spacing to ensure we can scroll past footer */}
-            <View style={{ height: 40 }} />
-          </View>
-        </ScrollView>
-      </View>
 
-      {/* 2. FIXED FOOTER */}
-      <View style={[styles.fixedFooter, { paddingBottom: Math.max(insets.bottom, 24), backgroundColor: themeColors.background }]}>
-        <View style={[styles.footerContent, IS_TABLET && styles.tabletContent]}>
-          <TouchableOpacity 
-            style={[styles.button, { backgroundColor: themeColors.primary }]}
-            onPress={handleNext}
-            activeOpacity={0.8}
-          >
-            <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
-            <ArrowRight size={20} color="#fff" />
-          </TouchableOpacity>
+            <View key={`grid-${refreshKey}`} style={styles.daysGrid}>
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                <Typography key={`label-${i}`} variant="label" weight="700" style={styles.dayLabel} color={themeColors.icon}>{day}</Typography>
+              ))}
+              {emptyDays.map((_, i) => (
+                <View key={`empty-${i}`} style={styles.dayCell} />
+              ))}
+              {days.map((day) => {
+                const isSame = isSameDay(day, selectedDate);
+                return (
+                  <TouchableOpacity 
+                    key={day.toISOString()} 
+                    style={[
+                      styles.dayCell,
+                      isSame && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
+                    ]}
+                    onPress={() => setSelectedDate(day)}
+                    activeOpacity={0.8}
+                  >
+                    <Typography 
+                      variant={IS_TABLET ? "bodyLg" : "body"}
+                      weight={isSame ? "800" : "600"}
+                      style={{ color: isSame ? '#fff' : themeColors.text }}
+                    >
+                      {format(day, 'd')}
+                    </Typography>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+
+          <View style={styles.footer}>
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: themeColors.primary }]}
+              onPress={handleNext}
+              activeOpacity={0.8}
+            >
+              <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
+              <ArrowRight size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -164,6 +181,8 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
+    paddingTop: 10,
+    paddingBottom: 80,
   },
   tabletContent: {
     maxWidth: MAX_CONTENT_WIDTH,
@@ -171,34 +190,35 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   iconContainer: {
-    marginBottom: 16,
+    marginBottom: 24,
   },
   iconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 20,
+    width: IS_TABLET ? 80 : 64,
+    height: IS_TABLET ? 80 : 64,
+    borderRadius: IS_TABLET ? 24 : 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     fontSize: 28,
     lineHeight: 36,
-    marginBottom: 8,
+    marginBottom: 12,
     letterSpacing: -0.5,
   },
   subtitle: {
-    marginBottom: 24,
+    marginBottom: 32,
     opacity: 0.8,
   },
   calendarContainer: {
     borderRadius: 32,
-    padding: 20,
-    marginBottom: 20,
+    padding: IS_TABLET ? 32 : 20,
+    marginBottom: 40,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.08,
     shadowRadius: 24,
     elevation: 8,
+    minHeight: 340,
   },
   calendarHeader: {
     flexDirection: 'row',
@@ -209,14 +229,14 @@ const styles = StyleSheet.create({
   navGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
   },
   navButton: {
-    width: 44,
-    height: 44,
+    width: IS_TABLET ? 54 : 44,
+    height: IS_TABLET ? 54 : 44,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 22,
+    borderRadius: 27,
     borderWidth: 1,
   },
   monthDisplay: {
@@ -224,7 +244,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   monthLabel: {
-    fontSize: 18,
+    fontSize: 20,
     letterSpacing: -0.5,
   },
   daysGrid: {
@@ -232,34 +252,29 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   dayLabel: {
+    width: (ACTUAL_CONTENT_WIDTH - (IS_TABLET ? 64 : 40)) / 7,
     textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 11,
+    marginBottom: IS_TABLET ? 24 : 20,
+    fontSize: IS_TABLET ? 14 : 11,
     letterSpacing: 1,
   },
   dayCell: {
+    width: (ACTUAL_CONTENT_WIDTH - (IS_TABLET ? 64 : 40)) / 7,
     aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 18,
-    marginBottom: 6,
+    borderRadius: IS_TABLET ? 24 : 18,
+    marginBottom: 8,
   },
-  fixedFooter: {
-    width: '100%',
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-  },
-  footerContent: {
-    width: '100%',
+  footer: {
+    marginTop: 8,
   },
   button: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
+    paddingVertical: 20,
     borderRadius: 24,
     gap: 12,
     shadowColor: '#000',
