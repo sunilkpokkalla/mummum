@@ -19,7 +19,7 @@ try {
 }
 
 // Note: Replace with your actual Web Client ID from Firebase Console
-const GOOGLE_WEB_CLIENT_ID = '339373048707-t5nolvem79op2legd6k13m29tbp53s8q.apps.googleusercontent.com';
+const GOOGLE_WEB_CLIENT_ID = '339373048707-u0ks34hvfk0omr6e6vk8im8guvqfvnse.apps.googleusercontent.com';
 
 export default function OnboardingAuthScreen() {
   const router = useRouter();
