@@ -79,7 +79,7 @@ export default function RootLayout() {
         const { default: Purchases, LOG_LEVEL } = await import('react-native-purchases');
         if (Purchases && typeof Purchases.configure === 'function') {
           Purchases.setLogLevel(LOG_LEVEL.INFO);
-          Purchases.configure({ apiKey: "appl_HmFVbtXTcxXPzArdQkKryTFdddt" });
+          Purchases.configure({ apiKey: "appl_gWsdCGHELkQjkHmjNeeTGKwgvnd" });
           const customerInfo = await Purchases.getCustomerInfo();
           const activePro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
           setPro(activePro);
