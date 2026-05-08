@@ -7,7 +7,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import { useBabyStore } from '@/store/useBabyStore';
 import { ArrowRight, Calendar as CalendarIcon, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -55,12 +55,11 @@ export default function BirthDateScreen() {
   const emptyDays = Array(startDay).fill(null);
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background, paddingTop: insets.top }]}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <ScrollView 
         style={{ flex: 1 }}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 10 }]}
         showsVerticalScrollIndicator={false}
-        bounces={true}
       >
         <View style={[styles.content, IS_TABLET && styles.tabletContent]}>
           <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.iconContainer}>
@@ -82,14 +81,12 @@ export default function BirthDateScreen() {
                 <TouchableOpacity 
                   onPressIn={() => moveYear(-1)} 
                   style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                  activeOpacity={0.4}
                 >
                   <ChevronsLeft size={20} color={themeColors.primary} />
                 </TouchableOpacity>
                 <TouchableOpacity 
                   onPressIn={() => moveMonth(-1)} 
                   style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                  activeOpacity={0.4}
                 >
                   <ChevronLeft size={20} color={themeColors.primary} />
                 </TouchableOpacity>
@@ -108,14 +105,12 @@ export default function BirthDateScreen() {
                 <TouchableOpacity 
                   onPressIn={() => moveMonth(1)} 
                   style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                  activeOpacity={0.4}
                 >
                   <ChevronRight size={20} color={themeColors.primary} />
                 </TouchableOpacity>
                 <TouchableOpacity 
                   onPressIn={() => moveYear(1)} 
                   style={[styles.navButton, { backgroundColor: themeColors.primary + '10', borderColor: themeColors.primary + '20' }]} 
-                  activeOpacity={0.4}
                 >
                   <ChevronsRight size={20} color={themeColors.primary} />
                 </TouchableOpacity>
@@ -136,10 +131,9 @@ export default function BirthDateScreen() {
                     key={day.toISOString()} 
                     style={[
                       styles.dayCell,
-                      isSame && { backgroundColor: themeColors.primary, shadowColor: themeColors.primary, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 }
+                      isSame && { backgroundColor: themeColors.primary }
                     ]}
                     onPress={() => setSelectedDate(day)}
-                    activeOpacity={0.8}
                   >
                     <Typography 
                       variant="body"
@@ -153,19 +147,24 @@ export default function BirthDateScreen() {
               })}
             </View>
           </View>
-
-          <View style={styles.footer}>
-            <TouchableOpacity 
-              style={[styles.button, { backgroundColor: themeColors.primary }]}
-              onPress={handleNext}
-              activeOpacity={0.8}
-            >
-              <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
-              <ArrowRight size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
+          {/* Spacing for fixed footer */}
+          <View style={{ height: 100 }} />
         </View>
       </ScrollView>
+
+      {/* FIXED FOOTER */}
+      <View style={[styles.fixedFooter, { paddingBottom: Math.max(insets.bottom, 24), backgroundColor: themeColors.background }]}>
+        <View style={[styles.footerContent, IS_TABLET && styles.tabletContent]}>
+          <TouchableOpacity 
+            style={[styles.button, { backgroundColor: themeColors.primary }]}
+            onPress={handleNext}
+            activeOpacity={0.8}
+          >
+            <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Confirm Date</Typography>
+            <ArrowRight size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -179,8 +178,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
-    paddingTop: 10,
-    paddingBottom: 60,
   },
   tabletContent: {
     maxWidth: MAX_CONTENT_WIDTH,
@@ -210,7 +207,7 @@ const styles = StyleSheet.create({
   calendarContainer: {
     borderRadius: 32,
     padding: 20,
-    marginBottom: 32,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.08,
@@ -264,8 +261,18 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginBottom: 6,
   },
-  footer: {
-    marginTop: 8,
+  fixedFooter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  footerContent: {
+    width: '100%',
   },
   button: {
     width: '100%',
