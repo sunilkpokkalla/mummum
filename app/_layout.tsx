@@ -3,7 +3,17 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Platform, NativeModules } from 'react-native';
+import { Platform, NativeModules, LogBox } from 'react-native';
+
+// Ignore non-critical logs that cause unnecessary Red Boxes
+LogBox.ignoreLogs([
+  'Purchase was cancelled',
+  'Non-serializable values',
+  'Setting a timer',
+  'AsyncStorage has been extracted',
+  'LogBox',
+]);
+
 import 'react-native-reanimated';
 
 
@@ -43,6 +53,20 @@ export default function RootLayout() {
   });
 
   const { setPro, isOnboarded, babies, tempBaby, addBaby, isTrial, trialStartedAt } = useBabyStore();
+
+  // Global Error Handler for cleaner logs
+  useEffect(() => {
+    if (__DEV__) {
+      const originalConsoleError = console.error;
+      console.error = (...args: any[]) => {
+        const message = args.join(' ');
+        if (message.includes('Purchase was cancelled') || message.includes('LogBox')) {
+          return; // Skip red boxes for these
+        }
+        originalConsoleError(...args);
+      };
+    }
+  }, []);
 
   // Trial Expiry Logic (7 Days)
   useEffect(() => {
