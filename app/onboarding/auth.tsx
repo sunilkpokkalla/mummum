@@ -5,7 +5,8 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, NativeModules, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, NativeModules, StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 // Safe Native Module Discovery
 let GoogleSignin: any = null;
@@ -25,6 +26,45 @@ export default function OnboardingAuthScreen() {
   const router = useRouter();
   const { tempBaby, addBaby, setCurrentBaby, resetStore, babies, completeOnboarding } = useBabyStore();
   const [loading, setLoading] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleEmailAuth = async () => {
+    if (!email || !password) {
+      Alert.alert("Missing Information", "Please enter both email and password.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Try to sign in, if fails, try to sign up
+      try {
+        await auth().signInWithEmailAndPassword(email, password);
+      } catch (signInError: any) {
+        if (signInError.code === 'auth/user-not-found') {
+          await auth().createUserWithEmailAndPassword(email, password);
+        } else {
+          throw signInError;
+        }
+      }
+
+      // Success
+      const babyId = addBaby(tempBaby);
+      setCurrentBaby(babyId);
+      setLoading(false);
+      
+      if (babies.length > 0) {
+        completeOnboarding();
+        router.replace('/(tabs)');
+      } else {
+        router.push('/onboarding/welcome');
+      }
+    } catch (e: any) {
+      setLoading(false);
+      Alert.alert("Authentication Issue", e.message);
+    }
+  };
 
   React.useEffect(() => {
     if (GoogleSignin) {
@@ -202,13 +242,45 @@ export default function OnboardingAuthScreen() {
                 <Typography variant="body" weight="700" color="#455A64">Continue with Google</Typography>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.authButton, styles.emailButton]}
-                onPress={() => { }}
-              >
-                <Mail size={22} color="#4A5D4C" />
-                <Typography variant="body" weight="700" color="#4A5D4C">Continue with Email</Typography>
-              </TouchableOpacity>
+              {showEmailInput ? (
+                <Animated.View entering={FadeInDown} style={styles.emailInputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                  />
+                  <TouchableOpacity
+                    style={[styles.authButton, styles.emailSubmitButton]}
+                    onPress={handleEmailAuth}
+                  >
+                    <Typography variant="body" weight="700" color="#fff">Login / Sign Up</Typography>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setShowEmailInput(false)}
+                    style={styles.cancelButton}
+                  >
+                    <Typography variant="label" color="#607D8B">Cancel</Typography>
+                  </TouchableOpacity>
+                </Animated.View>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.authButton, styles.emailButton]}
+                  onPress={() => setShowEmailInput(true)}
+                >
+                  <Mail size={22} color="#4A5D4C" />
+                  <Typography variant="body" weight="700" color="#4A5D4C">Continue with Email</Typography>
+                </TouchableOpacity>
+              )}
             </>
           )}
         </View>
@@ -325,6 +397,25 @@ const styles = StyleSheet.create({
   emailButton: {
     backgroundColor: '#F8FAFB',
     borderStyle: 'dashed',
+  },
+  emailInputContainer: {
+    gap: 12,
+  },
+  input: {
+    height: 60,
+    backgroundColor: '#F5F7F8',
+    borderRadius: 16,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    color: '#1B3C35',
+  },
+  emailSubmitButton: {
+    backgroundColor: '#4A5D4C',
+    borderColor: '#4A5D4C',
+  },
+  cancelButton: {
+    alignItems: 'center',
+    paddingVertical: 8,
   },
   footer: {
     alignItems: 'center',
