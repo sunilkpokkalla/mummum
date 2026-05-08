@@ -29,7 +29,7 @@ export default function OnboardingOfferScreen() {
       try {
         const { default: Purchases } = await import('react-native-purchases');
         const allOfferings = await Purchases.getOfferings();
-        const target = allOfferings.all['ofrngb4e7b317ff'] || allOfferings.current;
+        const target = allOfferings.all['ofrng8f6aab4fec'] || allOfferings.current;
         if (target) setOfferings(target);
       } catch (e) {
         console.log('Offerings fetch failed', e);
@@ -48,7 +48,7 @@ export default function OnboardingOfferScreen() {
       return;
     }
     const pkg = offerings?.availablePackages?.find(
-      (p: any) => p.product.identifier === 'mummum_lifetime_pro'
+      (p: any) => p.product.identifier === 'lifetimemm' || p.identifier === 'prodeb4f0692c5'
     );
     if (!pkg) {
       Alert.alert("Store Error", "Launch special is currently unavailable. Please check back later.");
@@ -130,7 +130,7 @@ export default function OnboardingOfferScreen() {
 
             {/* Price row */}
             <View style={styles.priceRow}>
-              <Typography style={styles.price}>$29.99</Typography>
+              <Typography style={styles.price}>{offerings?.availablePackages?.find((p:any) => p.product.identifier === 'lifetimemm')?.product.priceString || '$29.99'}</Typography>
               <View style={styles.strikeBadge}>
                 <Typography style={styles.strikethrough}>$69.99</Typography>
                 <Typography weight="800" style={styles.saveText}>SAVE 60%</Typography>
