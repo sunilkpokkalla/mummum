@@ -112,22 +112,18 @@ export default function OnboardingAuthScreen() {
 
       setLoading(false);
       router.push('/onboarding/welcome');
-    } catch (error: any) {
-      // Use log instead of error to avoid the red LogBox in development
-      console.log('Auth Flow Error:', error);
+    } catch (e: any) {
+      console.error('Sign-In Error:', e);
       setLoading(false);
 
-      // Ignore user cancellations (Apple: 1001, Google: SIGN_IN_CANCELLED)
-      if (error.code === '1001' || error.code === 'SIGN_IN_CANCELLED') {
-        return;
-      }
+      if (e.code === 'auth/user-cancelled' || e.code === 'auth/cancelled' || e.code === '1001' || e.code === 'SIGN_IN_CANCELLED') return;
 
       Alert.alert(
         "Authentication Issue",
-        "We couldn't sync with your account right now. You can try again or continue with local storage.",
+        `We couldn't sync with your account: ${e.message || 'Unknown error'}. You can try again or continue with local storage.`,
         [
-          { text: "Try Again", style: "default" },
-          { text: "Continue Locally", onPress: handleGuestAccess }
+          { text: "Try Again", onPress: () => {} },
+          { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
         ]
       );
     }
