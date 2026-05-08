@@ -37,13 +37,18 @@ export default function OnboardingAuthScreen() {
     }
 
     setLoading(true);
+    console.log('[Email Auth]: Starting flow for', email);
     try {
       // Try to sign in, if fails, try to sign up
       try {
+        console.log('[Email Auth]: Attempting sign-in...');
         await auth().signInWithEmailAndPassword(email, password);
+        console.log('[Email Auth]: Sign-in successful!');
       } catch (signInError: any) {
-        if (signInError.code === 'auth/user-not-found') {
+        if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
+          console.log('[Email Auth]: User not found or invalid, attempting sign-up...');
           await auth().createUserWithEmailAndPassword(email, password);
+          console.log('[Email Auth]: Sign-up successful!');
         } else {
           throw signInError;
         }
@@ -183,7 +188,7 @@ export default function OnboardingAuthScreen() {
 
       Alert.alert(
         "Authentication Issue",
-        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nPlease check your Firebase project settings.`,
+        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nProject: mummum-baby-tracker\nBundle: com.ambright.mummumbaby\n\nPlease check your Firebase project settings.`,
         [
           { text: "Try Again", onPress: () => { } },
           { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
