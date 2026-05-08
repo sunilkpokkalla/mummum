@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>339373048707-t5nolvem79op2legd6k13m29tbp53s8q.apps.googleusercontent.com</string>
+	<string>944867470720-mkoaqm3gp6edmf84gclkek266h5kh592.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.339373048707-t5nolvem79op2legd6k13m29tbp53s8q</string>
+	<string>com.googleusercontent.apps.944867470720-mkoaqm3gp6edmf84gclkek266h5kh592</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBjhMnfwpmU5eUGxkbqB0xIRwgLHrVrgDo</string>
+	<string>AIzaSyDuKdW1ZhdfY_MFzkSSsH26MIqKEfbb0tA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>339373048707</string>
+	<string>944867470720</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ambright.mummum</string>
+	<string>com.ambright.mummumbaby</string>
 	<key>PROJECT_ID</key>
-	<string>mummum-babytracker</string>
+	<string>mummum-baby-tracker</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mummum-babytracker.firebasestorage.app</string>
+	<string>mummum-baby-tracker.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:339373048707:ios:635323e78e83b2e6ed6cb6</string>
+	<string>1:944867470720:ios:f8466c92eb2c006c4c6565</string>
 </dict>
 </plist>

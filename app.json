@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ambright.mummum",
+      "bundleIdentifier": "com.ambright.mummumbaby",
       "buildNumber": "5",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/MUMMUM_FINAL.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ambright.mummum",
+      "package": "com.ambright.mummumbaby",
       "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.RECORD_AUDIO",
