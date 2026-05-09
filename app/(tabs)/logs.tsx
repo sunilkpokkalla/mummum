@@ -38,7 +38,7 @@ export default function LogsScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { activities, babies, currentBabyId } = useBabyStore();
+  const { activities, babies, currentBabyId, memories, appointments, dayCareLogs } = useBabyStore();
   const { isFeatureUnlocked } = usePremium();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
@@ -180,7 +180,14 @@ export default function LogsScreen() {
 
               <TouchableOpacity 
                 style={styles.boardPdfBtn} 
-                onPress={() => generateBabyReport(currentBaby, activities, activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), useBabyStore.getState().memories)}
+                onPress={() => generateBabyReport(
+                  currentBaby, 
+                  activities, 
+                  activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), 
+                  memories,
+                  appointments,
+                  dayCareLogs
+                )}
               >
                 <FileText size={18} color="#fff" />
                 <Typography variant="body" weight="800" color="#fff">Generate {activeView.charAt(0).toUpperCase() + activeView.slice(1)} PDF</Typography>

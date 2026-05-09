@@ -30,6 +30,8 @@ import { useBabyStore } from '@/store/useBabyStore';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { usePremium } from '@/hooks/usePremium';
 
+import auth from '@react-native-firebase/auth';
+
 const { width } = Dimensions.get('window');
 
 export default function SettingsScreen() {
@@ -39,6 +41,7 @@ export default function SettingsScreen() {
   const { babies, currentBabyId, resetStore } = useBabyStore();
   const { isPro, trialStatus } = usePremium();
 
+  const user = auth().currentUser;
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const getTrialStatus = () => {
@@ -57,6 +60,24 @@ export default function SettingsScreen() {
         { text: "Reset", style: "destructive", onPress: () => {
           resetStore();
           router.replace('/onboarding/welcome');
+        }}
+      ]
+    );
+  };
+
+  const handleLogout = async () => {
+    Alert.alert(
+      "Sign Out",
+      "Are you sure you want to sign out? Your local data will be preserved, but cloud sync will stop.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Sign Out", style: "destructive", onPress: async () => {
+          try {
+            await auth().signOut();
+            router.replace('/onboarding/auth');
+          } catch (e) {
+            console.error('Logout error:', e);
+          }
         }}
       ]
     );
@@ -115,9 +136,10 @@ export default function SettingsScreen() {
             <View style={styles.elegantGroup}>
               <ElegantMenuItem 
                 icon={<Shield size={20} color="#1B3C35" />}
-                title="Sync & Secure Account"
-                detail="Enable cross-device restore"
-                onPress={() => router.push('/onboarding/auth')}
+                title={user ? "Account Secured" : "Sync & Secure Account"}
+                detail={user ? `Signed in as ${user.email || 'User'}` : "Enable cross-device restore"}
+                onPress={() => user ? {} : router.push('/onboarding/auth')}
+                hideChevron={!!user}
               />
               <ElegantMenuItem 
                 icon={<Baby size={20} color="#1B3C35" />}
@@ -149,8 +171,15 @@ export default function SettingsScreen() {
                 icon={<Shield size={20} color="#1B3C35" />}
                 title="Privacy & Data"
                 onPress={() => router.push('/settings/privacy')}
-                isLast
               />
+              {user && (
+                <ElegantMenuItem 
+                  icon={<LogOut size={20} color="#1B3C35" />}
+                  title="Sign Out"
+                  onPress={handleLogout}
+                  hideChevron
+                />
+              )}
               <ElegantMenuItem 
                 icon={<LogOut size={20} color="#f44336" />}
                 title="Reset All Clinical Data"

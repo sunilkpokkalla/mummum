@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ambright.mummumbaby",
-      "buildNumber": "1",
+      "buildNumber": "6",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Mummum needs access to your photos to save milestone memories and profile pictures for your baby.",
@@ -46,6 +46,13 @@
       "expo-router",
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosClientId": "944867470720-mkoaqm3gp6edmf84gclkek266h5kh592.apps.googleusercontent.com",
+          "iosUrlScheme": "com.googleusercontent.apps.944867470720-mkoaqm3gp6edmf84gclkek266h5kh592"
+        }
+      ],
       [
         "expo-image-picker",
         {

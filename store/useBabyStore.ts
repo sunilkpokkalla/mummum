@@ -32,6 +32,27 @@ export interface Baby {
   photoUri?: string;
 }
 
+export interface Appointment {
+  id: string;
+  babyId: string;
+  title: string;
+  doctor: string;
+  date: string; // ISO String
+  time: string; // "09:00 AM"
+  notes?: string;
+  notificationIds?: string[];
+}
+
+export interface DayCareLog {
+  id: string;
+  babyId: string;
+  date: string; // ISO String
+  dropOffTime?: string;
+  pickUpTime?: string;
+  notes?: string;
+  suppliesProvided: string[]; // item IDs from a standard list
+}
+
 export interface Reminder {
   id: string;
   title: string;
@@ -63,6 +84,8 @@ interface BabyState {
   userPhotoUri: string | null;
   userName: string;
   tempBaby: Partial<Baby>;
+  appointments: Appointment[];
+  dayCareLogs: DayCareLog[];
   isPro: boolean;
   isTrial: boolean;
   trialStartedAt: number | null;
@@ -84,6 +107,11 @@ interface BabyState {
   addReminder: (reminder: Reminder) => void;
   updateReminder: (id: string, data: Partial<Reminder>) => void;
   deleteReminder: (id: string) => void;
+  addAppointment: (appointment: Omit<Appointment, 'babyId'>) => void;
+  deleteAppointment: (id: string) => void;
+  addDayCareLog: (log: Omit<DayCareLog, 'babyId'>) => void;
+  updateDayCareLog: (id: string, data: Partial<DayCareLog>) => void;
+  deleteDayCareLog: (id: string) => void;
   addUserStandardTask: (task: { id: string; title: string; time: string; type: string }) => void;
   deleteUserStandardTask: (id: string) => void;
   updateStandardTaskSetting: (id: string, setting: { time: string; enabled: boolean; notificationId?: string }) => void;
@@ -107,6 +135,8 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
       currentBabyId: state.currentBabyId,
       activities: state.activities,
       memories: state.memories,
+      appointments: state.appointments,
+      dayCareLogs: state.dayCareLogs,
       completedChecklistItems: state.completedChecklistItems,
       completedMilestones: state.completedMilestones,
       userName: state.userName,
@@ -136,6 +166,8 @@ export const useBabyStore = create<BabyState>()(
       userPhotoUri: null,
       userName: 'MumMum Parent',
       tempBaby: {},
+      appointments: [],
+      dayCareLogs: [],
       isPro: false,
       isTrial: false,
       trialStartedAt: null,
@@ -157,6 +189,8 @@ export const useBabyStore = create<BabyState>()(
               babies: data?.babies || get().babies,
               activities: data?.activities || get().activities,
               memories: data?.memories || get().memories,
+              appointments: data?.appointments || get().appointments,
+              dayCareLogs: data?.dayCareLogs || get().dayCareLogs,
               completedChecklistItems: data?.completedChecklistItems || get().completedChecklistItems,
               completedMilestones: data?.completedMilestones || get().completedMilestones,
               userName: data?.userName || get().userName,
@@ -303,6 +337,47 @@ export const useBabyStore = create<BabyState>()(
       deleteReminder: (id) => set((state) => ({
         customReminders: state.customReminders.filter(r => r.id !== id)
       })),
+
+      addAppointment: (appointment) => {
+        set((state) => ({
+          appointments: [
+            ...state.appointments,
+            { ...appointment, babyId: state.currentBabyId || '' }
+          ]
+        }));
+        get().syncToCloud();
+      },
+
+      deleteAppointment: (id) => {
+        set((state) => ({
+          appointments: state.appointments.filter(a => a.id !== id)
+        }));
+        get().syncToCloud();
+      },
+
+      addDayCareLog: (log) => {
+        set((state) => ({
+          dayCareLogs: [
+            { ...log, babyId: state.currentBabyId || '' },
+            ...state.dayCareLogs
+          ]
+        }));
+        get().syncToCloud();
+      },
+
+      updateDayCareLog: (id, data) => {
+        set((state) => ({
+          dayCareLogs: state.dayCareLogs.map(l => l.id === id ? { ...l, ...data } : l)
+        }));
+        get().syncToCloud();
+      },
+
+      deleteDayCareLog: (id) => {
+        set((state) => ({
+          dayCareLogs: state.dayCareLogs.filter(l => l.id !== id)
+        }));
+        get().syncToCloud();
+      },
 
       toggleReminder: (id: string) => set((state) => ({
         customReminders: state.customReminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r)

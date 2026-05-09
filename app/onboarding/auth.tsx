@@ -5,7 +5,18 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, NativeModules, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { 
+  ActivityIndicator, 
+  Alert, 
+  NativeModules, 
+  StyleSheet, 
+  TextInput, 
+  TouchableOpacity, 
+  View, 
+  KeyboardAvoidingView, 
+  Platform, 
+  ScrollView 
+} from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 // Safe Native Module Discovery
@@ -77,6 +88,7 @@ export default function OnboardingAuthScreen() {
       try {
         GoogleSignin.configure({
           webClientId: GOOGLE_WEB_CLIENT_ID,
+          iosClientId: '944867470720-mkoaqm3gp6edmf84gclkek266h5kh592.apps.googleusercontent.com',
           offlineAccess: true,
         });
       } catch (e) {
@@ -140,8 +152,7 @@ export default function OnboardingAuthScreen() {
         });
         const { identityToken } = appleCredential;
         if (identityToken) {
-          const provider = new auth.AppleAuthProvider();
-          const credential = provider.credential(identityToken);
+          const credential = auth.AppleAuthProvider.credential(identityToken);
           const userCredential = await auth().signInWithCredential(credential);
           firebaseUser = userCredential.user;
         }
@@ -150,12 +161,27 @@ export default function OnboardingAuthScreen() {
       if (firebaseUser) {
         await pullFromCloud(); // DOWNLOAD CLOUD DATA
 
-        // If they already have babies from cloud, use those, otherwise create the one they just set up
-        const babyId = babies[0]?.id || addBaby(tempBaby);
-        setCurrentBaby(babyId);
+        // Re-check babies after pull
+        const updatedBabies = useBabyStore.getState().babies;
+        
+        let targetBabyId = updatedBabies[0]?.id;
+
+        if (!targetBabyId) {
+          // If no babies in cloud, create one from temp data or default
+          const newBaby = {
+            id: Math.random().toString(36).substring(7),
+            name: tempBaby.name || 'My Baby',
+            birthDate: tempBaby.birthDate || new Date(),
+          };
+          addBaby(newBaby);
+          targetBabyId = newBaby.id;
+        }
+
+        setCurrentBaby(targetBabyId);
         setLoading(false);
 
-        if (babies.length > 0) {
+        // Ensure we navigate to the main app if a baby exists
+        if (targetBabyId) {
           completeOnboarding();
           router.replace('/(tabs)');
         } else {
@@ -196,11 +222,18 @@ export default function OnboardingAuthScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       {/* Background Decor */}
       <View style={styles.decorCircle} />
 
-      <View style={styles.content}>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.header}>
           <View style={styles.iconContainer}>
             <Shield size={32} color="#4A5D4C" />
@@ -308,8 +341,8 @@ export default function OnboardingAuthScreen() {
             By continuing, you agree to Mummum's Terms and Clinical Data Privacy Policy.
           </Typography>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -328,8 +361,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F1E9',
     opacity: 0.5,
   },
-  content: {
-    flex: 1,
+  scrollContent: {
+    flexGrow: 1,
     padding: 32,
     paddingTop: 100,
     justifyContent: 'space-between',
