@@ -1,5 +1,5 @@
-import auth from '@react-native-firebase/auth';
-import app from '@react-native-firebase/app';
+const auth = require('@react-native-firebase/auth').default;
+const app = require('@react-native-firebase/app').default;
 
 /**
  * Mummum Firebase Native Integration
@@ -8,5 +8,5 @@ import app from '@react-native-firebase/app';
  * for better performance, native social auth support, and App Store compliance.
  */
 
-export { auth };
-export default app;
+module.exports = app;
+module.exports.auth = auth;

@@ -141,6 +141,18 @@ export default function RootLayout() {
     initPurchases();
   }, []);
 
+  // Firebase Anonymous Auth
+  useEffect(() => {
+    auth()
+      .signInAnonymously()
+      .then((user) => {
+        console.log('Firebase: Logged in anonymously as:', user.user.uid);
+      })
+      .catch((error) => {
+        console.log('Firebase: Anonymous auth failed:', error);
+      });
+  }, []);
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;

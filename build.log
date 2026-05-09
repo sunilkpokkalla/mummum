@@ -1,0 +1,1797 @@
+› Skipping dev server
+› Auto signing app using team(s): 2K4C865Z8F
+› Planning build
+› Preparing react-native Pods/Yoga » Yoga-Info.plist
+› Preparing expo-dev-menu-interface Pods/expo-dev-menu-interface » expo-dev-menu-interface-Info.plist
+› Preparing react-native Pods/React-featureflags » React-featureflags-Info.plist
+› Preparing react-native Pods/React-debug » React-debug-Info.plist
+› Preparing Pods/RNCAsyncStorage-RNCAsyncStorage_resources » ResourceBundle-RNCAsyncStorage_resources-RNCAsyncStorage-Info.plist
+› Preparing react-native Pods/RCTDeprecation » RCTDeprecation-Info.plist
+› Preparing react-native-purchases Pods/PurchasesHybridCommon-PurchasesHybridCommon » ResourceBundle-PurchasesHybridCommon-PurchasesHybridCommon-Info.plist
+› Preparing Pods/PromisesSwift-Promises_Privacy » ResourceBundle-Promises_Privacy-PromisesSwift-Info.plist
+› Preparing Pods/PromisesObjC-FBLPromises_Privacy » ResourceBundle-FBLPromises_Privacy-PromisesObjC-Info.plist
+› Preparing Pods/GoogleUtilities-GoogleUtilities_Privacy » ResourceBundle-GoogleUtilities_Privacy-GoogleUtilities-Info.plist
+› Preparing @react-native-google-signin/google-signin Pods/GoogleSignIn-GoogleSignIn » ResourceBundle-GoogleSignIn-GoogleSignIn-Info.plist
+› Executing react-native Pods/hermes-engine » [CP-User] [Hermes] Replace Hermes for the right configuration, if needed
+› Preparing Pods/GoogleDataTransport-GoogleDataTransport_Privacy » ResourceBundle-GoogleDataTransport_Privacy-GoogleDataTransport-Info.plist
+› Preparing Pods/GTMAppAuth-GTMAppAuth_Privacy » ResourceBundle-GTMAppAuth_Privacy-GTMAppAuth-Info.plist
+› Preparing Pods/expo-dev-menu-EXDevMenu » ResourceBundle-EXDevMenu-expo-dev-menu-Info.plist
+› Preparing Pods/expo-dev-launcher-EXDevLauncher » ResourceBundle-EXDevLauncher-expo-dev-launcher-Info.plist
+› Preparing Pods/React-Core-RCTI18nStrings » ResourceBundle-RCTI18nStrings-React-Core-Info.plist
+› Preparing @react-native-firebase/firestore Pods/FirebaseSharedSwift » FirebaseSharedSwift-Info.plist
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthorizationService+IOS.h ➜ ios/Pods/AppAuth/Sources/AppAuth/iOS/OIDAuthorizationService+IOS.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/strtod.h ➜ ios/Pods/DoubleConversion/double-conversion/strtod.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/ieee.h ➜ ios/Pods/DoubleConversion/double-conversion/ieee.h
+› Copying   @react-native-firebase/crashlytics FirebaseInstallations/FirebaseInstallations.framework/Headers/FirebaseInstallations.h ➜ ios/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FirebaseInstallations.h
+› Copying   Pods_MummumBabyTracker.framework/Headers/Pods-MummumBabyTracker-umbrella.h ➜ ios/Pods/Target/ Support/ Files/Pods-MummumBabyTracker/Pods-MummumBabyTracker-umbrella.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GoogleUtilities-umbrella.h ➜ ios/Pods/Target/ Support/ Files/GoogleUtilities/GoogleUtilities-umbrella.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULUserDefaults.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/UserDefaults/Public/GoogleUtilities/GULUserDefaults.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULSceneDelegateSwizzler.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULSceneDelegateSwizzler.h
+› Copying   react-native-view-shot react-native-view-shot/react_native_view_shot.framework/Headers/react-native-view-shot-umbrella.h ➜ ios/Pods/Target/ Support/ Files/react-native-view-shot/react-native-view-shot-umbrella.h
+› Copying   react-native-safe-area-context react-native-safe-area-context/react_native_safe_area_context.framework/Headers/react-native-safe-area-context-umbrella.h ➜ ios/Pods/Target/ Support/ Files/react-native-safe-area-context/react-native-safe-area-context-umbrella.h
+› Copying   @react-native-firebase/firestore gRPC-C++/grpcpp.framework/Headers/gRPC-C++-umbrella.h ➜ ios/Pods/Target/ Support/ Files/gRPC-C++/gRPC-C++-umbrella.h
+› Copying   expo-dev-menu-interface expo-dev-menu-interface/EXDevMenuInterface.framework/Headers/expo-dev-menu-interface-umbrella.h ➜ ios/Pods/Target/ Support/ Files/expo-dev-menu-interface/expo-dev-menu-interface-umbrella.h
+› Copying   expo-dev-menu expo-dev-menu/EXDevMenu.framework/Headers/expo-dev-menu-umbrella.h ➜ ios/Pods/Target/ Support/ Files/expo-dev-menu/expo-dev-menu-umbrella.h
+› Copying   expo-dev-launcher expo-dev-launcher/EXDevLauncher.framework/Headers/expo-dev-launcher-umbrella.h ➜ ios/Pods/Target/ Support/ Files/expo-dev-launcher/expo-dev-launcher-umbrella.h
+› Copying   abseil/absl.framework/Headers/abseil-umbrella.h ➜ ios/Pods/Target/ Support/ Files/abseil/abseil-umbrella.h
+› Copying   react-native Yoga/yoga.framework/Headers/Yoga-umbrella.h ➜ ios/Pods/Target/ Support/ Files/Yoga/Yoga-umbrella.h
+› Copying   react-native-purchases RevenueCat/RevenueCat.framework/Headers/RevenueCat-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RevenueCat/RevenueCat-umbrella.h
+› Copying   @react-native-firebase/crashlytics nanopb/nanopb.framework/Headers/nanopb-umbrella.h ➜ ios/Pods/Target/ Support/ Files/nanopb/nanopb-umbrella.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/c.h ➜ ios/Pods/leveldb-library/include/leveldb/c.h
+› Copying   react-native glog/glog.framework/Headers/glog-umbrella.h ➜ ios/Pods/Target/ Support/ Files/glog/glog-umbrella.h
+› Copying   react-native fmt/fmt.framework/Headers/fmt-umbrella.h ➜ ios/Pods/Target/ Support/ Files/fmt/fmt-umbrella.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/NSRunLoop+SRWebSocket.h ➜ ios/Pods/SocketRocket/SocketRocket/NSRunLoop+SRWebSocket.h
+› Copying   @react-native-firebase/auth RecaptchaInterop/RecaptchaInterop.framework/Headers/RCAActionProtocol.h ➜ ios/Pods/RecaptchaInterop/RecaptchaEnterprise/RecaptchaInterop/Public/RecaptchaInterop/RCAActionProtocol.h
+› Copying   react-native ReactCommon/ReactCommon.framework/Headers/ReactCommon-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ReactCommon/ReactCommon-umbrella.h
+› Copying   react-native React-utils/React_utils.framework/Headers/React-utils-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-utils/React-utils-umbrella.h
+› Copying   react-native React-runtimescheduler/React_runtimescheduler.framework/Headers/React-runtimescheduler-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-runtimescheduler/React-runtimescheduler-umbrella.h
+› Copying   react-native React-rendererdebug/React_rendererdebug.framework/Headers/React-rendererdebug-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-rendererdebug/React-rendererdebug-umbrella.h
+› Copying   react-native React-perflogger/reactperflogger.framework/Headers/React-perflogger-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-perflogger/React-perflogger-umbrella.h
+› Copying   react-native React-nativeconfig/React_nativeconfig.framework/Headers/React-nativeconfig-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-nativeconfig/React-nativeconfig-umbrella.h
+› Copying   react-native React-jsinspector/jsinspector_modern.framework/Headers/jsinspector-modern/React-jsinspector-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-jsinspector/React-jsinspector-umbrella.h
+› Copying   @react-native-firebase/crashlytics nanopb/nanopb.framework/Headers/pb_decode.h ➜ ios/Pods/nanopb/pb_decode.h
+› Copying   @react-native-firebase/crashlytics nanopb/nanopb.framework/Headers/pb_encode.h ➜ ios/Pods/nanopb/pb_encode.h
+› Copying   @react-native-firebase/crashlytics nanopb/nanopb.framework/Headers/pb_common.h ➜ ios/Pods/nanopb/pb_common.h
+› Copying   @react-native-firebase/crashlytics nanopb/nanopb.framework/Headers/pb.h ➜ ios/Pods/nanopb/pb.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/write_batch.h ➜ ios/Pods/leveldb-library/include/leveldb/write_batch.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/table_builder.h ➜ ios/Pods/leveldb-library/include/leveldb/table_builder.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/table.h ➜ ios/Pods/leveldb-library/include/leveldb/table.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/status.h ➜ ios/Pods/leveldb-library/include/leveldb/status.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/slice.h ➜ ios/Pods/leveldb-library/include/leveldb/slice.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/options.h ➜ ios/Pods/leveldb-library/include/leveldb/options.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/leveldb-library-umbrella.h ➜ ios/Pods/Target/ Support/ Files/leveldb-library/leveldb-library-umbrella.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/iterator.h ➜ ios/Pods/leveldb-library/include/leveldb/iterator.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/filter_policy.h ➜ ios/Pods/leveldb-library/include/leveldb/filter_policy.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/export.h ➜ ios/Pods/leveldb-library/include/leveldb/export.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/env.h ➜ ios/Pods/leveldb-library/include/leveldb/env.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/dumpfile.h ➜ ios/Pods/leveldb-library/include/leveldb/dumpfile.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/db.h ➜ ios/Pods/leveldb-library/include/leveldb/db.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/comparator.h ➜ ios/Pods/leveldb-library/include/leveldb/comparator.h
+› Copying   @react-native-firebase/firestore leveldb-library/leveldb.framework/Headers/cache.h ➜ ios/Pods/leveldb-library/include/leveldb/cache.h
+› Copying   react-native glog/glog.framework/Headers/vlog_is_on.h ➜ ios/Pods/glog/src/glog/vlog_is_on.h
+› Copying   react-native glog/glog.framework/Headers/stl_logging.h ➜ ios/Pods/glog/src/glog/stl_logging.h
+› Copying   react-native glog/glog.framework/Headers/raw_logging.h ➜ ios/Pods/glog/src/glog/raw_logging.h
+› Copying   react-native glog/glog.framework/Headers/logging.h ➜ ios/Pods/glog/src/glog/logging.h
+› Copying   react-native glog/glog.framework/Headers/log_severity.h ➜ ios/Pods/glog/src/glog/log_severity.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/SocketRocket.h ➜ ios/Pods/SocketRocket/SocketRocket/SocketRocket.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/SocketRocket-umbrella.h ➜ ios/Pods/Target/ Support/ Files/SocketRocket/SocketRocket-umbrella.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/SRWebSocket.h ➜ ios/Pods/SocketRocket/SocketRocket/SRWebSocket.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/SRSecurityPolicy.h ➜ ios/Pods/SocketRocket/SocketRocket/SRSecurityPolicy.h
+› Copying   react-native SocketRocket/SocketRocket.framework/Headers/NSURLRequest+SRWebSocket.h ➜ ios/Pods/SocketRocket/SocketRocket/NSURLRequest+SRWebSocket.h
+› Copying   @react-native-firebase/auth RecaptchaInterop/RecaptchaInterop.framework/Headers/RecaptchaInterop.h ➜ ios/Pods/RecaptchaInterop/RecaptchaEnterprise/RecaptchaInterop/Public/RecaptchaInterop/RecaptchaInterop.h
+› Copying   @react-native-firebase/auth RecaptchaInterop/RecaptchaInterop.framework/Headers/RecaptchaInterop-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RecaptchaInterop/RecaptchaInterop-umbrella.h
+› Copying   @react-native-firebase/auth RecaptchaInterop/RecaptchaInterop.framework/Headers/RCARecaptchaProtocol.h ➜ ios/Pods/RecaptchaInterop/RecaptchaEnterprise/RecaptchaInterop/Public/RecaptchaInterop/RCARecaptchaProtocol.h
+› Copying   @react-native-firebase/auth RecaptchaInterop/RecaptchaInterop.framework/Headers/RCARecaptchaClientProtocol.h ➜ ios/Pods/RecaptchaInterop/RecaptchaEnterprise/RecaptchaInterop/Public/RecaptchaInterop/RCARecaptchaClientProtocol.h
+› Copying   react-native React-jsiexecutor/jsireact.framework/Headers/React-jsiexecutor-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-jsiexecutor/React-jsiexecutor-umbrella.h
+› Copying   react-native React-jsi/jsi.framework/Headers/React-jsi-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-jsi/React-jsi-umbrella.h
+› Copying   react-native React-jserrorhandler/React_jserrorhandler.framework/Headers/React-jserrorhandler-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-jserrorhandler/React-jserrorhandler-umbrella.h
+› Copying   react-native React-hermes/reacthermes.framework/Headers/React-hermes-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-hermes/React-hermes-umbrella.h
+› Copying   react-native React-graphics/React_graphics.framework/Headers/React-graphics-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-graphics/React-graphics-umbrella.h
+› Copying   react-native React-featureflags/React_featureflags.framework/Headers/React-featureflags-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-featureflags/React-featureflags-umbrella.h
+› Copying   react-native React-debug/React_debug.framework/Headers/React-debug-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-debug/React-debug-umbrella.h
+› Copying   react-native React-cxxreact/cxxreact.framework/Headers/React-cxxreact-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-cxxreact/React-cxxreact-umbrella.h
+› Copying   react-native React-RuntimeHermes/React_RuntimeHermes.framework/Headers/React-RuntimeHermes-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RuntimeHermes/React-RuntimeHermes-umbrella.h
+› Copying   react-native React-RuntimeCore/React_RuntimeCore.framework/Headers/React-RuntimeCore-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RuntimeCore/React-RuntimeCore-umbrella.h
+› Copying   react-native React-RuntimeApple/React_RuntimeApple.framework/Headers/React-RuntimeApple-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RuntimeApple/React-RuntimeApple-umbrella.h
+› Copying   react-native React-RCTVibration/RCTVibration.framework/Headers/React-RCTVibration-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTVibration/React-RCTVibration-umbrella.h
+› Executing react-native Pods/hermes-engine » [CP] Copy XCFrameworks
+› Copying   react-native React-RCTText/RCTText.framework/Headers/React-RCTText-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTText/React-RCTText-umbrella.h
+› Copying   react-native React-RCTSettings/RCTSettings.framework/Headers/React-RCTSettings-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTSettings/React-RCTSettings-umbrella.h
+› Copying   react-native React-RCTNetwork/RCTNetwork.framework/Headers/React-RCTNetwork-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTNetwork/React-RCTNetwork-umbrella.h
+› Copying   react-native React-RCTLinking/RCTLinking.framework/Headers/React-RCTLinking-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTLinking/React-RCTLinking-umbrella.h
+› Copying   react-native React-RCTImage/RCTImage.framework/Headers/React-RCTImage-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTImage/React-RCTImage-umbrella.h
+› Copying   react-native React-RCTFabric/RCTFabric.framework/Headers/React/React-RCTFabric-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTFabric/React-RCTFabric-umbrella.h
+› Copying   react-native React-RCTFabric/RCTFabric.framework/Headers/React/RCTThirdPartyFabricComponentsProvider.h ➜ node_modules/react-native/React/Fabric/RCTThirdPartyFabricComponentsProvider.h
+› Copying   react-native React-RCTBlob/RCTBlob.framework/Headers/React-RCTBlob-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTBlob/React-RCTBlob-umbrella.h
+› Copying   react-native React-RCTAppDelegate/React_RCTAppDelegate.framework/Headers/React-RCTAppDelegate-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTAppDelegate/React-RCTAppDelegate-umbrella.h
+› Copying   react-native React-RCTAnimation/RCTAnimation.framework/Headers/React-RCTAnimation-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-RCTAnimation/React-RCTAnimation-umbrella.h
+› Copying   react-native React-NativeModulesApple/React_NativeModulesApple.framework/Headers/React-NativeModulesApple-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-NativeModulesApple/React-NativeModulesApple-umbrella.h
+› Copying   react-native React-Mapbuffer/React_Mapbuffer.framework/Headers/React-Mapbuffer-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-Mapbuffer/React-Mapbuffer-umbrella.h
+› Copying   react-native React-ImageManager/React_ImageManager.framework/Headers/React-ImageManager-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-ImageManager/React-ImageManager-umbrella.h
+› Copying   react-native React-FabricImage/React_FabricImage.framework/Headers/React-FabricImage-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-FabricImage/React-FabricImage-umbrella.h
+› Copying   react-native React-Fabric/React_Fabric.framework/Headers/React-Fabric-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-Fabric/React-Fabric-umbrella.h
+› Copying   react-native React-CoreModules/CoreModules.framework/Headers/React-CoreModules-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-CoreModules/React-CoreModules-umbrella.h
+› Copying   react-native React-Core/React.framework/Headers/React-Core-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-Core/React-Core-umbrella.h
+› Copying   mummum React-Codegen/React_Codegen.framework/Headers/React-Codegen-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-Codegen/React-Codegen-umbrella.h
+› Copying   react-native-screens RNScreens/RNScreens.framework/Headers/RNScreens-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNScreens/RNScreens-umbrella.h
+› Copying   react-native-svg RNSVG/RNSVG.framework/Headers/RNSVG-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNSVG/RNSVG-umbrella.h
+› Copying   react-native-reanimated RNReanimated/RNReanimated.framework/Headers/RNReanimated-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNReanimated/RNReanimated-umbrella.h
+› Copying   react-native-purchases RNPurchases/RNPurchases.framework/Headers/RNPurchases-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNPurchases/RNPurchases-umbrella.h
+› Copying   @react-native-google-signin/google-signin RNGoogleSignin/RNGoogleSignin.framework/Headers/RNGoogleSignin-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNGoogleSignin/RNGoogleSignin-umbrella.h
+› Copying   react-native-gesture-handler RNGestureHandler/RNGestureHandler.framework/Headers/RNGestureHandler-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNGestureHandler/RNGestureHandler-umbrella.h
+› Copying   @react-native-firebase/firestore RNFBFirestore/RNFBFirestore.framework/Headers/RNFBFirestore-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNFBFirestore/RNFBFirestore-umbrella.h
+› Copying   @react-native-firebase/crashlytics RNFBCrashlytics/RNFBCrashlytics.framework/Headers/RNFBCrashlytics-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNFBCrashlytics/RNFBCrashlytics-umbrella.h
+› Copying   @react-native-firebase/auth RNFBAuth/RNFBAuth.framework/Headers/RNFBAuth-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNFBAuth/RNFBAuth-umbrella.h
+› Copying   @react-native-firebase/app RNFBApp/RNFBApp.framework/Headers/RNFBApp-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNFBApp/RNFBApp-umbrella.h
+› Copying   @react-native-async-storage/async-storage RNCAsyncStorage/RNCAsyncStorage.framework/Headers/RNCAsyncStorage-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RNCAsyncStorage/RNCAsyncStorage-umbrella.h
+› Copying   react-native RCTTypeSafety/RCTTypeSafety.framework/Headers/RCTTypeSafety-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RCTTypeSafety/RCTTypeSafety-umbrella.h
+› Copying   react-native RCTDeprecation/RCTDeprecation.framework/Headers/RCTDeprecation-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RCTDeprecation/RCTDeprecation-umbrella.h
+› Copying   react-native RCT-Folly/folly.framework/Headers/RCT-Folly-umbrella.h ➜ ios/Pods/Target/ Support/ Files/RCT-Folly/RCT-Folly-umbrella.h
+› Copying   react-native-purchases PurchasesHybridCommon/PurchasesHybridCommon.framework/Headers/PurchasesHybridCommon.h ➜ ios/Pods/PurchasesHybridCommon/ios/PurchasesHybridCommon/PurchasesHybridCommon/PurchasesHybridCommon.h
+› Copying   react-native-purchases PurchasesHybridCommon/PurchasesHybridCommon.framework/Headers/PurchasesHybridCommon-umbrella.h ➜ ios/Pods/Target/ Support/ Files/PurchasesHybridCommon/PurchasesHybridCommon-umbrella.h
+› Copying   @react-native-firebase/crashlytics PromisesSwift/Promises.framework/Headers/PromisesSwift-umbrella.h ➜ ios/Pods/Target/ Support/ Files/PromisesSwift/PromisesSwift-umbrella.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/PrivateHeaders/FBLPromisePrivate.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromisePrivate.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/PromisesObjC-umbrella.h ➜ ios/Pods/Target/ Support/ Files/PromisesObjC/PromisesObjC-umbrella.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromiseError.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromiseError.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromises.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromises.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Wrap.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Wrap.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Validate.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Validate.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Timeout.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Timeout.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Then.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Then.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Testing.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Testing.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Retry.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Retry.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Recover.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Recover.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Race.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Race.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Reduce.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Reduce.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Do.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Do.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Delay.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Delay.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Catch.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Catch.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Await.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Await.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Async.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Async.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Any.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Any.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+Always.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Always.h
+› Copying   @react-native-firebase/crashlytics PromisesObjC/FBLPromises.framework/Headers/FBLPromise+All.h ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+All.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULReachabilityChecker.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Reachability/Public/GoogleUtilities/GULReachabilityChecker.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetworkURLSession.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkURLSession.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetworkMessageCode.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkMessageCode.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetworkLoggerProtocol.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkLoggerProtocol.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetworkInfo.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULNetworkInfo.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetworkConstants.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkConstants.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNetwork.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetwork.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULNSData+zlib.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/NSData+zlib/Public/GoogleUtilities/GULNSData+zlib.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULMutableDictionary.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULMutableDictionary.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULLogger.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Logger/Public/GoogleUtilities/GULLogger.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULLoggerLevel.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Logger/Public/GoogleUtilities/GULLoggerLevel.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULKeychainUtils.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULKeychainUtils.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULKeychainStorage.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULKeychainStorage.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULApplication.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULApplication.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULAppEnvironmentUtil.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULAppEnvironmentUtil.h
+› Copying   GoogleUtilities/GoogleUtilities.framework/Headers/GULAppDelegateSwizzler.h ➜ ios/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULAppDelegateSwizzler.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GoogleSignIn.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GoogleSignIn.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GoogleSignIn-umbrella.h ➜ ios/Pods/Target/ Support/ Files/GoogleSignIn/GoogleSignIn-umbrella.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDToken.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDToken.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDSignInResult.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDSignInResult.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDSignInButton.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDSignInButton.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDSignIn.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDSignIn.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDProfileData.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDProfileData.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDGoogleUser.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDGoogleUser.h
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.framework/Headers/GIDConfiguration.h ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Public/GoogleSignIn/GIDConfiguration.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GoogleDataTransport.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GoogleDataTransport.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GoogleDataTransport-umbrella.h ➜ ios/Pods/Target/ Support/ Files/GoogleDataTransport/GoogleDataTransport-umbrella.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCORTransport.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORTransport.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCORTargets.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORTargets.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCORProductData.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORProductData.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCOREventTransformer.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREventTransformer.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCOREventDataObject.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREventDataObject.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCOREvent.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREvent.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCOREndpoints.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREndpoints.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCORClock.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORClock.h
+› Copying   @react-native-firebase/crashlytics GoogleDataTransport/GoogleDataTransport.framework/Headers/GDTCORConsoleLogger.h ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORConsoleLogger.h
+› Copying   GTMSessionFetcher/GTMSessionFetcher.framework/Headers/GTMSessionUploadFetcher.h ➜ ios/Pods/GTMSessionFetcher/Sources/Core/Public/GTMSessionFetcher/GTMSessionUploadFetcher.h
+› Copying   GTMSessionFetcher/GTMSessionFetcher.framework/Headers/GTMSessionFetcherService.h ➜ ios/Pods/GTMSessionFetcher/Sources/Core/Public/GTMSessionFetcher/GTMSessionFetcherService.h
+› Copying   GTMSessionFetcher/GTMSessionFetcher.framework/Headers/GTMSessionFetcherLogging.h ➜ ios/Pods/GTMSessionFetcher/Sources/Core/Public/GTMSessionFetcher/GTMSessionFetcherLogging.h
+› Copying   GTMSessionFetcher/GTMSessionFetcher.framework/Headers/GTMSessionFetcher.h ➜ ios/Pods/GTMSessionFetcher/Sources/Core/Public/GTMSessionFetcher/GTMSessionFetcher.h
+› Copying   GTMSessionFetcher/GTMSessionFetcher.framework/Headers/GTMSessionFetcher-umbrella.h ➜ ios/Pods/Target/ Support/ Files/GTMSessionFetcher/GTMSessionFetcher-umbrella.h
+› Copying   @react-native-google-signin/google-signin GTMAppAuth/GTMAppAuth.framework/Headers/GTMAppAuth-umbrella.h ➜ ios/Pods/Target/ Support/ Files/GTMAppAuth/GTMAppAuth-umbrella.h
+› Copying   @react-native-firebase/firestore FirebaseSharedSwift/FirebaseSharedSwift.framework/Headers/FirebaseSharedSwift-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseSharedSwift/FirebaseSharedSwift-umbrella.h
+› Copying   @react-native-firebase/crashlytics FirebaseSessions/FirebaseSessions.framework/Headers/sessions.nanopb.h ➜ ios/Pods/FirebaseSessions/FirebaseSessions/SourcesObjC/Protogen/nanopb/sessions.nanopb.h
+› Copying   @react-native-firebase/crashlytics FirebaseSessions/FirebaseSessions.framework/Headers/FirebaseSessions-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseSessions/FirebaseSessions-umbrella.h
+› Copying   @react-native-firebase/crashlytics FirebaseSessions/FirebaseSessions.framework/Headers/FIRSESNanoPBHelpers.h ➜ ios/Pods/FirebaseSessions/FirebaseSessions/SourcesObjC/NanoPB/FIRSESNanoPBHelpers.h
+› Copying   @react-native-firebase/crashlytics FirebaseRemoteConfigInterop/FirebaseRemoteConfigInterop.framework/Headers/FirebaseRemoteConfigInterop-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseRemoteConfigInterop/FirebaseRemoteConfigInterop-umbrella.h
+› Copying   @react-native-firebase/crashlytics FirebaseInstallations/FirebaseInstallations.framework/Headers/FirebaseInstallations-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseInstallations/FirebaseInstallations-umbrella.h
+› Copying   @react-native-firebase/crashlytics FirebaseInstallations/FirebaseInstallations.framework/Headers/FIRInstallationsErrors.h ➜ ios/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallationsErrors.h
+› Copying   @react-native-firebase/crashlytics FirebaseInstallations/FirebaseInstallations.framework/Headers/FIRInstallationsAuthTokenResult.h ➜ ios/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallationsAuthTokenResult.h
+› Copying   @react-native-firebase/crashlytics FirebaseInstallations/FirebaseInstallations.framework/Headers/FIRInstallations.h ➜ ios/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallations.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FirebaseFirestoreInternal-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseFirestoreInternal/FirebaseFirestoreInternal-umbrella.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FirebaseFirestore.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FirebaseFirestore.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRWriteBatch.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRWriteBatch.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRVectorValue.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRVectorValue.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRTransactionOptions.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRTransactionOptions.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRTransaction.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRTransaction.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRSnapshotMetadata.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRSnapshotMetadata.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRSnapshotListenOptions.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRSnapshotListenOptions.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRQuerySnapshot.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRQuerySnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRQuery.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRQuery.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRPersistentCacheIndexManager.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRPersistentCacheIndexManager.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRLocalCacheSettings.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRLocalCacheSettings.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRLoadBundleTask.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRLoadBundleTask.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRGeoPoint.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRGeoPoint.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRListenerRegistration.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRListenerRegistration.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFirestoreSource.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFirestoreSource.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFirestoreSettings.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFirestoreSettings.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFirestoreErrors.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFirestoreErrors.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFirestore.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFirestore.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFilter.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFilter.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFieldValue.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFieldValue.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRFieldPath.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRFieldPath.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRDocumentSnapshot.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRDocumentSnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRDocumentReference.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRDocumentReference.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRDocumentChange.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRDocumentChange.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRCollectionReference.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRCollectionReference.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRAggregateSource.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRAggregateSource.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRAggregateQuerySnapshot.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRAggregateQuerySnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRAggregateQuery.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRAggregateQuery.h
+› Copying   @react-native-firebase/firestore FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers/FIRAggregateField.h ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Public/FirebaseFirestore/FIRAggregateField.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FirebaseFirestore.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FirebaseFirestore.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FirebaseFirestore-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseFirestore/FirebaseFirestore-umbrella.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRWriteBatch.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRWriteBatch.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRVectorValue.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRVectorValue.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRTransactionOptions.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRTransactionOptions.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRTransaction.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRTransaction.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRSnapshotMetadata.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRSnapshotMetadata.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRSnapshotListenOptions.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRSnapshotListenOptions.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRQuerySnapshot.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRQuerySnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRQuery.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRQuery.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRPersistentCacheIndexManager.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRPersistentCacheIndexManager.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRLocalCacheSettings.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRLocalCacheSettings.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRLoadBundleTask.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRLoadBundleTask.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRListenerRegistration.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRListenerRegistration.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRGeoPoint.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRGeoPoint.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFirestoreSource.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFirestoreSource.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFirestoreSettings.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFirestoreSettings.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFirestoreErrors.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFirestoreErrors.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFirestore.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFirestore.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFilter.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFilter.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFieldPath.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFieldPath.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRFieldValue.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRFieldValue.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRDocumentSnapshot.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRDocumentSnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRDocumentReference.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRDocumentReference.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRDocumentChange.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRDocumentChange.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRCollectionReference.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRCollectionReference.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRAggregateSource.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRAggregateSource.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRAggregateQuerySnapshot.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRAggregateQuerySnapshot.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRAggregateQuery.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRAggregateQuery.h
+› Copying   @react-native-firebase/firestore FirebaseFirestore/FirebaseFirestore.framework/Headers/FIRAggregateField.h ➜ ios/Pods/FirebaseFirestore/FirebaseFirestoreInternal/FirebaseFirestore/FIRAggregateField.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FirebaseCrashlytics.h ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FirebaseCrashlytics.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FirebaseCrashlytics-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseCrashlytics/FirebaseCrashlytics-umbrella.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FIRStackFrame.h ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRStackFrame.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FIRExceptionModel.h ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRExceptionModel.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FIRCrashlyticsReport.h ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRCrashlyticsReport.h
+› Copying   @react-native-firebase/crashlytics FirebaseCrashlytics/FirebaseCrashlytics.framework/Headers/FIRCrashlytics.h ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/Public/FirebaseCrashlytics/FIRCrashlytics.h
+› Copying   @react-native-firebase/auth FirebaseCoreInternal/FirebaseCoreInternal.framework/Headers/FirebaseCoreInternal-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseCoreInternal/FirebaseCoreInternal-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FirebaseCoreInternal.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FirebaseCoreInternal.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FirebaseCoreExtension-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseCoreExtension/FirebaseCoreExtension-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRLogger.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRLogger.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRLibrary.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRLibrary.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRHeartbeatLogger.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRHeartbeatLogger.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRComponentType.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponentType.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRComponent.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponent.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRComponentContainer.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponentContainer.h
+› Copying   @react-native-firebase/auth FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers/FIRAppInternal.h ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRAppInternal.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIRVersion.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRVersion.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FirebaseCore.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FirebaseCore.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FirebaseCore-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseCore/FirebaseCore-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIRTimestamp.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRTimestamp.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIROptions.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIROptions.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIRLoggerLevel.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRLoggerLevel.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIRConfiguration.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRConfiguration.h
+› Copying   @react-native-firebase/auth FirebaseCore/FirebaseCore.framework/Headers/FIRApp.h ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRApp.h
+› Copying   @react-native-firebase/auth FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers/FirebaseAuthInterop-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseAuthInterop/FirebaseAuthInterop-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers/FIRAuthInterop.h ➜ ios/Pods/FirebaseAuthInterop/FirebaseAuth/Interop/Public/FirebaseAuthInterop/FIRAuthInterop.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FirebaseAuth.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FirebaseAuth.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FirebaseAuth-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseAuth/FirebaseAuth-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRUser.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRUser.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRTwitterAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRTwitterAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRPhoneAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRPhoneAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRMultiFactor.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRMultiFactor.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRGoogleAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRGoogleAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRGitHubAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRGitHubAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRGameCenterAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRGameCenterAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRFederatedAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRFederatedAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRFacebookAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRFacebookAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIREmailAuthProvider.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIREmailAuthProvider.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRAuthErrors.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRAuthErrors.h
+› Copying   @react-native-firebase/auth FirebaseAuth/FirebaseAuth.framework/Headers/FIRAuth.h ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Public/FirebaseAuth/FIRAuth.h
+› Copying   @react-native-firebase/auth FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers/FirebaseAppCheckInterop.h ➜ ios/Pods/FirebaseAppCheckInterop/FirebaseAppCheck/Interop/Public/FirebaseAppCheckInterop/FirebaseAppCheckInterop.h
+› Copying   @react-native-firebase/auth FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers/FirebaseAppCheckInterop-umbrella.h ➜ ios/Pods/Target/ Support/ Files/FirebaseAppCheckInterop/FirebaseAppCheckInterop-umbrella.h
+› Copying   @react-native-firebase/auth FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers/FIRAppCheckTokenResultInterop.h ➜ ios/Pods/FirebaseAppCheckInterop/FirebaseAppCheck/Interop/Public/FirebaseAppCheckInterop/FIRAppCheckTokenResultInterop.h
+› Copying   @react-native-firebase/auth FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers/FIRAppCheckInterop.h ➜ ios/Pods/FirebaseAppCheckInterop/FirebaseAppCheck/Interop/Public/FirebaseAppCheckInterop/FIRAppCheckInterop.h
+› Copying   expo-web-browser ExpoWebBrowser/ExpoWebBrowser.framework/Headers/ExpoWebBrowser-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoWebBrowser/ExpoWebBrowser-umbrella.h
+› Copying   expo-sharing ExpoSharing/ExpoSharing.framework/Headers/ExpoSharing-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoSharing/ExpoSharing-umbrella.h
+› Copying   expo-print ExpoPrint/ExpoPrint.framework/Headers/ExpoPrint-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoPrint/ExpoPrint-umbrella.h
+› Copying   expo-modules-core ExpoModulesCore/ExpoModulesCore.framework/Headers/ExpoModulesCore-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoModulesCore/ExpoModulesCore-umbrella.h
+› Copying   expo-media-library ExpoMediaLibrary/ExpoMediaLibrary.framework/Headers/ExpoMediaLibrary-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoMediaLibrary/ExpoMediaLibrary-umbrella.h
+› Copying   expo-keep-awake ExpoKeepAwake/ExpoKeepAwake.framework/Headers/ExpoKeepAwake-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoKeepAwake/ExpoKeepAwake-umbrella.h
+› Copying   expo-image-picker ExpoImagePicker/ExpoImagePicker.framework/Headers/ExpoImagePicker-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoImagePicker/ExpoImagePicker-umbrella.h
+› Copying   expo-router ExpoHead/ExpoHead.framework/Headers/ExpoHead-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoHead/ExpoHead-umbrella.h
+› Copying   expo-haptics ExpoHaptics/ExpoHaptics.framework/Headers/ExpoHaptics-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoHaptics/ExpoHaptics-umbrella.h
+› Copying   expo-font ExpoFont/ExpoFont.framework/Headers/ExpoFont-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoFont/ExpoFont-umbrella.h
+› Copying   expo-file-system ExpoFileSystem/ExpoFileSystem.framework/Headers/ExpoFileSystem-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoFileSystem/ExpoFileSystem-umbrella.h
+› Copying   expo-crypto ExpoCrypto/ExpoCrypto.framework/Headers/ExpoCrypto-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoCrypto/ExpoCrypto-umbrella.h
+› Copying   expo-asset ExpoAsset/ExpoAsset.framework/Headers/ExpoAsset-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoAsset/ExpoAsset-umbrella.h
+› Copying   expo-apple-authentication ExpoAppleAuthentication/ExpoAppleAuthentication.framework/Headers/ExpoAppleAuthentication-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoAppleAuthentication/ExpoAppleAuthentication-umbrella.h
+› Copying   @react-native-google-signin/google-signin ExpoAdapterGoogleSignIn/ExpoAdapterGoogleSignIn.framework/Headers/ExpoAdapterGoogleSignIn-umbrella.h ➜ ios/Pods/Target/ Support/ Files/ExpoAdapterGoogleSignIn/ExpoAdapterGoogleSignIn-umbrella.h
+› Copying   expo Expo/Expo.framework/Headers/Expo-umbrella.h ➜ ios/Pods/Target/ Support/ Files/Expo/Expo-umbrella.h
+› Copying   expo-updates-interface EXUpdatesInterface/EXUpdatesInterface.framework/Headers/EXUpdatesInterface-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXUpdatesInterface/EXUpdatesInterface-umbrella.h
+› Copying   expo-splash-screen EXSplashScreen/EXSplashScreen.framework/Headers/EXSplashScreen-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXSplashScreen/EXSplashScreen-umbrella.h
+› Copying   expo-notifications EXNotifications/EXNotifications.framework/Headers/EXNotifications-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXNotifications/EXNotifications-umbrella.h
+› Copying   expo-manifests EXManifests/EXManifests.framework/Headers/EXManifests-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXManifests/EXManifests-umbrella.h
+› Copying   expo-json-utils EXJSONUtils/EXJSONUtils.framework/Headers/EXJSONUtils-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXJSONUtils/EXJSONUtils-umbrella.h
+› Copying   expo-image-loader EXImageLoader/EXImageLoader.framework/Headers/EXImageLoader-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXImageLoader/EXImageLoader-umbrella.h
+› Copying   expo-constants EXConstants/EXConstants.framework/Headers/EXConstants-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXConstants/EXConstants-umbrella.h
+› Copying   expo-application EXApplication/EXApplication.framework/Headers/EXApplication-umbrella.h ➜ ios/Pods/Target/ Support/ Files/EXApplication/EXApplication-umbrella.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/utils.h ➜ ios/Pods/DoubleConversion/double-conversion/utils.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/fixed-dtoa.h ➜ ios/Pods/DoubleConversion/double-conversion/fixed-dtoa.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/fast-dtoa.h ➜ ios/Pods/DoubleConversion/double-conversion/fast-dtoa.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/double-conversion.h ➜ ios/Pods/DoubleConversion/double-conversion/double-conversion.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/diy-fp.h ➜ ios/Pods/DoubleConversion/double-conversion/diy-fp.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/cached-powers.h ➜ ios/Pods/DoubleConversion/double-conversion/cached-powers.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/bignum.h ➜ ios/Pods/DoubleConversion/double-conversion/bignum.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/bignum-dtoa.h ➜ ios/Pods/DoubleConversion/double-conversion/bignum-dtoa.h
+› Copying   react-native DoubleConversion/DoubleConversion.framework/Headers/DoubleConversion-umbrella.h ➜ ios/Pods/Target/ Support/ Files/DoubleConversion/DoubleConversion-umbrella.h
+› Copying   @react-native-firebase/firestore BoringSSL-GRPC/openssl_grpc.framework/Headers/BoringSSL-GRPC-umbrella.h ➜ ios/Pods/Target/ Support/ Files/BoringSSL-GRPC/BoringSSL-GRPC-umbrella.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDURLSessionProvider.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDURLSessionProvider.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDURLQueryComponent.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDURLQueryComponent.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDTokenUtilities.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDTokenUtilities.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDTokenRequest.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDTokenRequest.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDTokenResponse.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDTokenResponse.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDServiceDiscovery.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDServiceDiscovery.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDServiceConfiguration.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDServiceConfiguration.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDScopes.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDScopes.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDScopeUtilities.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDScopeUtilities.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDResponseTypes.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDResponseTypes.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDRegistrationResponse.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDRegistrationResponse.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDRegistrationRequest.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDRegistrationRequest.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDIDToken.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDIDToken.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDGrantTypes.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDGrantTypes.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDFieldMapping.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDFieldMapping.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgentSession.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgentSession.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgentRequest.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgentRequest.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgentIOSCustomBrowser.h ➜ ios/Pods/AppAuth/Sources/AppAuth/iOS/OIDExternalUserAgentIOSCustomBrowser.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgentIOS.h ➜ ios/Pods/AppAuth/Sources/AppAuth/iOS/OIDExternalUserAgentIOS.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgentCatalyst.h ➜ ios/Pods/AppAuth/Sources/AppAuth/iOS/OIDExternalUserAgentCatalyst.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDExternalUserAgent.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgent.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDErrorUtilities.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDErrorUtilities.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDError.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDError.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDEndSessionResponse.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDEndSessionResponse.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDEndSessionRequest.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDEndSessionRequest.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDDefines.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDDefines.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDClientMetadataParameters.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDClientMetadataParameters.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthorizationService.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationService.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthorizationResponse.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationResponse.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthorizationRequest.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationRequest.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthStateErrorDelegate.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthStateErrorDelegate.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthStateChangeDelegate.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthStateChangeDelegate.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthState.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore/OIDAuthState.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/OIDAuthState+IOS.h ➜ ios/Pods/AppAuth/Sources/AppAuth/iOS/OIDAuthState+IOS.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/AppAuthCore.h ➜ ios/Pods/AppAuth/Sources/AppAuthCore.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/AppAuth.h ➜ ios/Pods/AppAuth/Sources/AppAuth.h
+› Copying   @react-native-google-signin/google-signin AppAuth/AppAuth.framework/Headers/AppAuth-umbrella.h ➜ ios/Pods/Target/ Support/ Files/AppAuth/AppAuth-umbrella.h
+› Preparing Pods/nanopb-nanopb_Privacy » ResourceBundle-nanopb_Privacy-nanopb-Info.plist
+› Copying   nanopb/nanopb_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/nanopb/spm_resources/PrivacyInfo.xcprivacy
+› Preparing Pods/leveldb-library-leveldb_Privacy » ResourceBundle-leveldb_Privacy-leveldb-library-Info.plist
+› Copying   leveldb-library/leveldb_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/leveldb-library/Resources/PrivacyInfo.xcprivacy
+› Preparing react-native Pods/glog » glog-Info.plist
+› Preparing Pods/gRPC-Core-grpc » ResourceBundle-grpc-gRPC-Core-Info.plist
+› Copying   gRPC-Core/grpc.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/gRPC-Core/src/objective-c/PrivacyInfo.xcprivacy
+› Preparing Pods/gRPC-C++-grpcpp » ResourceBundle-grpcpp-gRPC-C++-Info.plist
+› Copying   gRPC-C++/grpcpp.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/gRPC-C++/src/objective-c/PrivacyInfo.xcprivacy
+› Copying   react-native React-logger/logger.framework/Headers/React-logger-umbrella.h ➜ ios/Pods/Target/ Support/ Files/React-logger/React-logger-umbrella.h
+› Preparing Pods/gRPC-C++-gRPCCertificates-Cpp » ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist
+› Copying   gRPC-C++/gRPCCertificates-Cpp.bundle/roots.pem ➜ ios/Pods/gRPC-C++/etc/roots.pem
+› Preparing react-native Pods/fmt » fmt-Info.plist
+› Preparing Pods/abseil-xcprivacy » ResourceBundle-xcprivacy-abseil-Info.plist
+› Copying   abseil/xcprivacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/abseil/PrivacyInfo.xcprivacy
+› Preparing react-native Pods/SocketRocket » SocketRocket-Info.plist
+› Preparing react-native-purchases Pods/RevenueCat-RevenueCat » ResourceBundle-RevenueCat-RevenueCat-Info.plist
+› Copying   react-native-purchases RevenueCat/RevenueCat.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/RevenueCat/Sources/PrivacyInfo.xcprivacy
+› Preparing @react-native-firebase/auth Pods/RecaptchaInterop » RecaptchaInterop-Info.plist
+› Preparing react-native Pods/React-perflogger » React-perflogger-Info.plist
+› Preparing react-native Pods/React-nativeconfig » React-nativeconfig-Info.plist
+› Copying   react-native-purchases PurchasesHybridCommon/PurchasesHybridCommon.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/PurchasesHybridCommon/ios/PurchasesHybridCommon/PurchasesHybridCommon/PrivacyInfo.xcprivacy
+› Copying   PromisesSwift/Promises_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/PromisesSwift/Sources/Promises/Resources/PrivacyInfo.xcprivacy
+› Copying   PromisesObjC/FBLPromises_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/PromisesObjC/Sources/FBLPromises/Resources/PrivacyInfo.xcprivacy
+› Copying   GoogleUtilities/GoogleUtilities_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/GoogleUtilities/GoogleUtilities/Privacy/Resources/PrivacyInfo.xcprivacy
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/zh_TW.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/zh_TW.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/zh_CN.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/zh_CN.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/vi.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/vi.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/uk.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/uk.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/tr.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/tr.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/th.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/th.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/sv.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/sv.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/sk.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/sk.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ru.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ru.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ro.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ro.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/pt_PT.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/pt_PT.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/pt_BR.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/pt_BR.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/pt.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/pt.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/pl.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/pl.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/nl.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/nl.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/nb.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/nb.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ms.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ms.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ko.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ko.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ja.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ja.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/it.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/it.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/id.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/id.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/hu.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/hu.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/hr.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/hr.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/hi.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/hi.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/he.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/he.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/fr_CA.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/fr_CA.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/fr.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/fr.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/fi.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/fi.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/es_MX.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/es_MX.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/es.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/es.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/en_GB.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/en_GB.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/en.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/en.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/el.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/el.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/de.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/de.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/da.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/da.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/cs.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/cs.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ca.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ca.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/ar.lproj ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Strings/ar.lproj
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Resources/PrivacyInfo.xcprivacy
+› Copying   @react-native-google-signin/google-signin GoogleSignIn/GoogleSignIn.bundle/Roboto-Bold.ttf ➜ ios/Pods/GoogleSignIn/GoogleSignIn/Sources/Resources/Roboto-Bold.ttf
+› Copying   GoogleDataTransport/GoogleDataTransport_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/GoogleDataTransport/GoogleDataTransport/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/GTMSessionFetcher-GTMSessionFetcher_Core_Privacy » ResourceBundle-GTMSessionFetcher_Core_Privacy-GTMSessionFetcher-Info.plist
+› Copying   GTMSessionFetcher/GTMSessionFetcher_Core_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/GTMSessionFetcher/Sources/Core/Resources/PrivacyInfo.xcprivacy
+› Preparing @react-native-firebase/crashlytics Pods/FirebaseRemoteConfigInterop » FirebaseRemoteConfigInterop-Info.plist
+› Preparing Pods/FirebaseInstallations-FirebaseInstallations_Privacy » ResourceBundle-FirebaseInstallations_Privacy-FirebaseInstallations-Info.plist
+› Copying   GTMAppAuth/GTMAppAuth_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/GTMAppAuth/GTMAppAuth/Sources/Resources/PrivacyInfo.xcprivacy
+› Copying   FirebaseInstallations/FirebaseInstallations_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseFirestoreInternal-FirebaseFirestoreInternal_Privacy » ResourceBundle-FirebaseFirestoreInternal_Privacy-FirebaseFirestoreInternal-Info.plist
+› Copying   FirebaseFirestoreInternal/FirebaseFirestoreInternal_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseFirestoreInternal/Firestore/Source/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseFirestore-FirebaseFirestore_Privacy » ResourceBundle-FirebaseFirestore_Privacy-FirebaseFirestore-Info.plist
+› Copying   FirebaseFirestore/FirebaseFirestore_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseFirestore/Firestore/Swift/Source/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseCrashlytics-FirebaseCrashlytics_Privacy » ResourceBundle-FirebaseCrashlytics_Privacy-FirebaseCrashlytics-Info.plist
+› Copying   FirebaseCrashlytics/FirebaseCrashlytics_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseCrashlytics/Crashlytics/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseCoreInternal-FirebaseCoreInternal_Privacy » ResourceBundle-FirebaseCoreInternal_Privacy-FirebaseCoreInternal-Info.plist
+› Copying   FirebaseCoreInternal/FirebaseCoreInternal_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseCoreInternal/FirebaseCore/Internal/Sources/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseCoreExtension-FirebaseCoreExtension_Privacy » ResourceBundle-FirebaseCoreExtension_Privacy-FirebaseCoreExtension-Info.plist
+› Copying   FirebaseCoreExtension/FirebaseCoreExtension_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseCoreExtension/FirebaseCore/Extension/Resources/PrivacyInfo.xcprivacy
+› Preparing Pods/FirebaseCore-FirebaseCore_Privacy » ResourceBundle-FirebaseCore_Privacy-FirebaseCore-Info.plist
+› Copying   FirebaseCore/FirebaseCore_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseCore/FirebaseCore/Sources/Resources/PrivacyInfo.xcprivacy
+› Preparing @react-native-firebase/auth Pods/FirebaseAuthInterop » FirebaseAuthInterop-Info.plist
+› Preparing Pods/FirebaseAuth-FirebaseAuth_Privacy » ResourceBundle-FirebaseAuth_Privacy-FirebaseAuth-Info.plist
+› Copying   FirebaseAuth/FirebaseAuth_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/FirebaseAuth/FirebaseAuth/Sources/Resources/PrivacyInfo.xcprivacy
+› Preparing @react-native-firebase/auth Pods/FirebaseAppCheckInterop » FirebaseAppCheckInterop-Info.plist
+› Preparing Pods/ExpoMediaLibrary-ExpoMediaLibrary_privacy » ResourceBundle-ExpoMediaLibrary_privacy-ExpoMediaLibrary-Info.plist
+› Copying   ExpoMediaLibrary/ExpoMediaLibrary_privacy.bundle/PrivacyInfo.xcprivacy ➜ node_modules/expo-media-library/ios/PrivacyInfo.xcprivacy
+› Preparing Pods/ExpoFileSystem-ExpoFileSystem_privacy » ResourceBundle-ExpoFileSystem_privacy-ExpoFileSystem-Info.plist
+› Copying   ExpoFileSystem/ExpoFileSystem_privacy.bundle/PrivacyInfo.xcprivacy ➜ node_modules/expo-file-system/ios/PrivacyInfo.xcprivacy
+› Preparing Pods/EXNotifications-ExpoNotifications_privacy » ResourceBundle-ExpoNotifications_privacy-EXNotifications-Info.plist
+› Copying   EXNotifications/ExpoNotifications_privacy.bundle/PrivacyInfo.xcprivacy ➜ node_modules/expo-notifications/ios/PrivacyInfo.xcprivacy
+› Preparing expo-json-utils Pods/EXJSONUtils » EXJSONUtils-Info.plist
+› Preparing Pods/EXConstants-ExpoConstants_privacy » ResourceBundle-ExpoConstants_privacy-EXConstants-Info.plist
+› Copying   EXConstants/ExpoConstants_privacy.bundle/PrivacyInfo.xcprivacy ➜ node_modules/expo-constants/ios/PrivacyInfo.xcprivacy
+› Preparing expo-constants Pods/EXConstants-EXConstants » ResourceBundle-EXConstants-EXConstants-Info.plist
+› Preparing Pods/EXApplication-ExpoApplication_privacy » ResourceBundle-ExpoApplication_privacy-EXApplication-Info.plist
+› Copying   EXApplication/ExpoApplication_privacy.bundle/PrivacyInfo.xcprivacy ➜ node_modules/expo-application/ios/PrivacyInfo.xcprivacy
+› Preparing react-native Pods/DoubleConversion » DoubleConversion-Info.plist
+› Preparing Pods/BoringSSL-GRPC-openssl_grpc » ResourceBundle-openssl_grpc-BoringSSL-GRPC-Info.plist
+› Copying   BoringSSL-GRPC/openssl_grpc.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/BoringSSL-GRPC/src/PrivacyInfo.xcprivacy
+› Preparing Pods/AppAuth-AppAuthCore_Privacy » ResourceBundle-AppAuthCore_Privacy-AppAuth-Info.plist
+› Copying   AppAuth/AppAuthCore_Privacy.bundle/PrivacyInfo.xcprivacy ➜ ios/Pods/AppAuth/Sources/AppAuthCore/Resources/PrivacyInfo.xcprivacy
+› Preparing @react-native-firebase/crashlytics Pods/nanopb » nanopb-Info.plist
+› Preparing @react-native-firebase/firestore Pods/leveldb-library » leveldb-library-Info.plist
+› Preparing Pods/abseil » abseil-Info.plist
+› Preparing react-native-purchases Pods/RevenueCat » RevenueCat-Info.plist
+› Creating  Pods/RNCAsyncStorage-RNCAsyncStorage_resources » RNCAsyncStorage_resources.bundle
+› Creating  Pods/PromisesSwift-Promises_Privacy » Promises_Privacy.bundle
+› Creating  react-native-purchases Pods/PurchasesHybridCommon-PurchasesHybridCommon » PurchasesHybridCommon.bundle
+› Creating  Pods/PromisesObjC-FBLPromises_Privacy » FBLPromises_Privacy.bundle
+› Preparing @react-native-firebase/crashlytics Pods/PromisesObjC » PromisesObjC-Info.plist
+› Creating  Pods/GoogleUtilities-GoogleUtilities_Privacy » GoogleUtilities_Privacy.bundle
+› Preparing Pods/GoogleUtilities » GoogleUtilities-Info.plist
+› Creating  @react-native-google-signin/google-signin Pods/GoogleSignIn-GoogleSignIn » GoogleSignIn.bundle
+› Creating  Pods/GoogleDataTransport-GoogleDataTransport_Privacy » GoogleDataTransport_Privacy.bundle
+› Creating  Pods/GTMSessionFetcher-GTMSessionFetcher_Core_Privacy » GTMSessionFetcher_Core_Privacy.bundle
+› Preparing Pods/GTMSessionFetcher » GTMSessionFetcher-Info.plist
+› Creating  Pods/GTMAppAuth-GTMAppAuth_Privacy » GTMAppAuth_Privacy.bundle
+› Creating  Pods/FirebaseInstallations-FirebaseInstallations_Privacy » FirebaseInstallations_Privacy.bundle
+› Creating  Pods/FirebaseFirestoreInternal-FirebaseFirestoreInternal_Privacy » FirebaseFirestoreInternal_Privacy.bundle
+› Creating  Pods/FirebaseFirestore-FirebaseFirestore_Privacy » FirebaseFirestore_Privacy.bundle
+› Creating  Pods/FirebaseCrashlytics-FirebaseCrashlytics_Privacy » FirebaseCrashlytics_Privacy.bundle
+› Creating  Pods/FirebaseCoreInternal-FirebaseCoreInternal_Privacy » FirebaseCoreInternal_Privacy.bundle
+› Creating  Pods/FirebaseCoreExtension-FirebaseCoreExtension_Privacy » FirebaseCoreExtension_Privacy.bundle
+› Creating  Pods/FirebaseCore-FirebaseCore_Privacy » FirebaseCore_Privacy.bundle
+› Creating  Pods/FirebaseAuth-FirebaseAuth_Privacy » FirebaseAuth_Privacy.bundle
+› Creating  Pods/ExpoMediaLibrary-ExpoMediaLibrary_privacy » ExpoMediaLibrary_privacy.bundle
+› Creating  Pods/ExpoFileSystem-ExpoFileSystem_privacy » ExpoFileSystem_privacy.bundle
+› Creating  Pods/EXNotifications-ExpoNotifications_privacy » ExpoNotifications_privacy.bundle
+› Creating  Pods/EXConstants-ExpoConstants_privacy » ExpoConstants_privacy.bundle
+› Creating  expo-constants Pods/EXConstants-EXConstants » EXConstants.bundle
+› Creating  Pods/EXApplication-ExpoApplication_privacy » ExpoApplication_privacy.bundle
+› Creating  Pods/BoringSSL-GRPC-openssl_grpc » openssl_grpc.bundle
+› Preparing @react-native-firebase/firestore Pods/BoringSSL-GRPC » BoringSSL-GRPC-Info.plist
+› Creating  Pods/AppAuth-AppAuthCore_Privacy » AppAuthCore_Privacy.bundle
+› Preparing @react-native-google-signin/google-signin Pods/AppAuth » AppAuth-Info.plist
+› Compiling Pods/abseil » zone_info_source.cc
+› Compiling Pods/abseil » win32_waiter.cc
+› Compiling Pods/abseil » waiter_base.cc
+› Compiling Pods/abseil » vlog_config.cc
+› Compiling Pods/abseil » vdso_support.cc
+› Compiling Pods/abseil » utf8_for_code_point.cc
+› Compiling Pods/abseil » utf8.cc
+› Compiling Pods/abseil » usage_config.cc
+› Compiling Pods/abseil » unscaledcycleclock.cc
+› Compiling Pods/abseil » time_zone_posix.cc
+› Compiling Pods/abseil » time_zone_lookup.cc
+› Compiling Pods/abseil » time_zone_libc.cc
+› Compiling Pods/abseil » time_zone_info.cc
+› Compiling Pods/abseil » time_zone_impl.cc
+› Compiling Pods/abseil » time_zone_if.cc
+› Compiling Pods/abseil » time_zone_format.cc
+› Compiling Pods/abseil » time_zone_fixed.cc
+› Compiling Pods/abseil » time.cc
+› Compiling Pods/abseil » throw_delegate.cc
+› Compiling Pods/abseil » thread_identity.cc
+› Compiling Pods/abseil » sysinfo.cc
+› Compiling Pods/abseil » symbolize.cc
+› Compiling Pods/abseil » substitute.cc
+› Compiling Pods/abseil » stringify_sink.cc
+› Compiling Pods/abseil » string_view.cc
+› Compiling Pods/abseil » strerror.cc
+› Compiling Pods/abseil » str_split.cc
+› Compiling Pods/abseil » str_replace.cc
+› Compiling Pods/abseil » str_cat.cc
+› Compiling Pods/abseil » stdcpp_waiter.cc
+› Compiling Pods/abseil » statusor.cc
+› Compiling Pods/abseil » status_payload_printer.cc
+› Compiling Pods/abseil » status_internal.cc
+› Compiling Pods/abseil » status.cc
+› Compiling Pods/abseil » stacktrace.cc
+› Compiling Pods/abseil » spinlock_wait.cc
+› Compiling Pods/abseil » spinlock.cc
+› Compiling Pods/abseil » sem_waiter.cc
+› Compiling Pods/abseil » seed_sequences.cc
+› Compiling Pods/abseil » seed_material.cc
+› Compiling Pods/abseil » seed_gen_exception.cc
+› Compiling Pods/abseil » reflection.cc
+› Compiling Pods/abseil » raw_logging.cc
+› Compiling Pods/abseil » raw_hash_set.cc
+› Compiling Pods/abseil » randen_slow.cc
+› Compiling Pods/abseil » randen_round_keys.cc
+› Compiling Pods/abseil » randen_hwaes.cc
+› Compiling Pods/abseil » randen_detect.cc
+› Compiling Pods/abseil » randen.cc
+› Compiling Pods/abseil » pthread_waiter.cc
+› Compiling Pods/abseil » proto.cc
+› Compiling Pods/abseil » program_name.cc
+› Compiling Pods/abseil » private_handle_accessor.cc
+› Compiling Pods/abseil » pool_urbg.cc
+› Compiling Pods/abseil » poison.cc
+› Compiling Pods/abseil » per_thread_sem.cc
+› Compiling Pods/abseil » parser.cc
+› Compiling Pods/abseil » output.cc
+› Compiling Pods/abseil » ostringstream.cc
+› Compiling Pods/abseil » numbers.cc
+› Compiling Pods/abseil » nullguard.cc
+› Compiling Pods/abseil » notification.cc
+› Compiling Pods/abseil » mutex.cc
+› Compiling Pods/abseil » memutil.cc
+› Compiling Pods/abseil » match.cc
+› Compiling Pods/abseil » marshalling.cc
+› Compiling Pods/abseil » low_level_hash.cc
+› Compiling Pods/abseil » low_level_alloc.cc
+› Compiling Pods/abseil » log_sink_set.cc
+› Compiling Pods/abseil » log_sink.cc
+› Compiling Pods/abseil » log_severity.cc
+› Compiling Pods/abseil » log_message.cc
+› Compiling Pods/abseil » log_format.cc
+› Compiling Pods/abseil » log_entry.cc
+› Compiling Pods/abseil » kernel_timeout.cc
+› Compiling Pods/abseil » int128.cc
+› Compiling Pods/abseil » hashtablez_sampler_force_weak_definition.cc
+› Compiling Pods/abseil » hashtablez_sampler.cc
+› Compiling Pods/abseil » hash.cc
+› Compiling Pods/abseil » graphcycles.cc
+› Compiling Pods/abseil » globals.cc
+› Compiling Pods/abseil » globals.cc
+› Compiling Pods/abseil » gaussian_distribution.cc
+› Compiling Pods/abseil » futex_waiter.cc
+› Compiling Pods/abseil » format.cc
+› Compiling Pods/abseil » fnmatch.cc
+› Compiling Pods/abseil » float_conversion.cc
+› Compiling Pods/abseil » flag.cc
+› Compiling Pods/abseil » extension.cc
+› Compiling Pods/abseil » exponential_biased.cc
+› Compiling Pods/abseil » examine_stack.cc
+› Compiling Pods/abseil » escaping.cc
+› Compiling Pods/abseil » escaping.cc
+› Compiling Pods/abseil » elf_mem_image.cc
+› Compiling Pods/abseil » duration.cc
+› Compiling Pods/abseil » discrete_distribution.cc
+› Compiling Pods/abseil » demangle_rust.cc
+› Compiling Pods/abseil » demangle.cc
+› Compiling Pods/abseil » decode_rust_punycode.cc
+› Compiling Pods/abseil » damerau_levenshtein_distance.cc
+› Compiling Pods/abseil » cycleclock.cc
+› Compiling Pods/abseil » create_thread_identity.cc
+› Compiling Pods/abseil » crc_x86_arm_combined.cc
+› Compiling Pods/abseil » crc_non_temporal_memcpy.cc
+› Compiling Pods/abseil » crc_memcpy_x86_arm_combined.cc
+› Compiling Pods/abseil » crc_memcpy_fallback.cc
+› Compiling Pods/abseil » crc_cord_state.cc
+› Compiling Pods/abseil » crc32c.cc
+› Compiling Pods/abseil » crc.cc
+› Compiling Pods/abseil » cpu_detect.cc
+› Compiling Pods/abseil » cordz_info.cc
+› Compiling Pods/abseil » cordz_handle.cc
+› Compiling Pods/abseil » cordz_functions.cc
+› Compiling Pods/abseil » cord_rep_crc.cc
+› Compiling Pods/abseil » cord_rep_consume.cc
+› Compiling Pods/abseil » cord_rep_btree_reader.cc
+› Compiling Pods/abseil » cord_rep_btree_navigator.cc
+› Compiling Pods/abseil » cord_rep_btree.cc
+› Compiling Pods/abseil » cord_internal.cc
+› Compiling Pods/abseil » cord_buffer.cc
+› Compiling Pods/abseil » cord_analysis.cc
+› Compiling Pods/abseil » cord.cc
+› Compiling Pods/abseil » conditions.cc
+› Compiling Pods/abseil » commandlineflag.cc
+› Compiling Pods/abseil » commandlineflag.cc
+› Compiling Pods/abseil » clock.cc
+› Compiling Pods/abseil » civil_time_detail.cc
+› Compiling Pods/abseil » civil_time.cc
+› Compiling Pods/abseil » city.cc
+› Compiling Pods/abseil » check_op.cc
+› Compiling Pods/abseil » charconv_parse.cc
+› Compiling Pods/abseil » charconv_bigint.cc
+› Compiling Pods/abseil » charconv.cc
+› Compiling Pods/abseil » blocking_counter.cc
+› Compiling Pods/abseil » bind.cc
+› Compiling Pods/abseil » barrier.cc
+› Compiling Pods/abseil » bad_variant_access.cc
+› Compiling Pods/abseil » bad_optional_access.cc
+› Compiling Pods/abseil » bad_any_cast.cc
+› Compiling Pods/abseil » ascii.cc
+› Compiling Pods/abseil » arg.cc
+› Compiling Pods/abseil » address_is_readable.cc
+› Compiling react-native Pods/Yoga » yoga_vers.c
+› Compiling react-native Pods/Yoga » event.cpp
+› Compiling react-native Pods/Yoga » YGValue.cpp
+› Compiling react-native Pods/Yoga » YGPixelGrid.cpp
+› Compiling react-native Pods/Yoga » YGNodeStyle.cpp
+› Compiling react-native Pods/Yoga » YGNodeLayout.cpp
+› Compiling react-native Pods/Yoga » YGNode.cpp
+› Compiling react-native Pods/Yoga » YGEnums.cpp
+› Compiling react-native Pods/Yoga » YGConfig.cpp
+› Compiling react-native Pods/Yoga » PixelGrid.cpp
+› Compiling react-native Pods/Yoga » Node.cpp
+› Compiling react-native Pods/Yoga » Log.cpp
+› Compiling react-native Pods/Yoga » LayoutResults.cpp
+› Compiling react-native Pods/Yoga » FlexLine.cpp
+› Compiling react-native Pods/Yoga » Config.cpp
+› Compiling react-native Pods/Yoga » CalculateLayout.cpp
+› Compiling react-native Pods/Yoga » Cache.cpp
+› Compiling react-native Pods/Yoga » Baseline.cpp
+› Compiling react-native Pods/Yoga » AssertFatal.cpp
+› Compiling react-native Pods/Yoga » AbsoluteLayout.cpp
+› Compiling react-native Pods/SocketRocket » SocketRocket_vers.c
+› Compiling @react-native-firebase/auth Pods/RecaptchaInterop » RecaptchaInterop_vers.c
+› Compiling react-native Pods/React-perflogger » reactperflogger_vers.c
+› Compiling react-native Pods/React-nativeconfig » React_nativeconfig_vers.c
+› Compiling react-native Pods/React-perflogger » BridgeNativeModulePerfLogger.cpp
+› Compiling react-native Pods/React-nativeconfig » ReactNativeConfig.cpp
+› Compiling react-native Pods/React-logger » react_native_log.cpp
+› Compiling react-native Pods/React-logger » logger_vers.c
+› Compiling react-native Pods/React-logger » React-logger-dummy.m
+› Compiling react-native Pods/React-featureflags » React_featureflags_vers.c
+› Compiling react-native Pods/React-featureflags » ReactNativeFeatureFlagsAccessor.cpp
+› Compiling react-native Pods/React-featureflags » ReactNativeFeatureFlags.cpp
+› Compiling react-native Pods/React-debug » react_native_assert.cpp
+› Compiling react-native Pods/React-debug » React_debug_vers.c
+› Compiling react-native Pods/RCTDeprecation » RCTDeprecation_vers.c
+› Compiling react-native Pods/DoubleConversion » strtod.cc
+› Compiling react-native Pods/DoubleConversion » fixed-dtoa.cc
+› Compiling react-native Pods/DoubleConversion » fast-dtoa.cc
+› Compiling react-native Pods/DoubleConversion » double-conversion.cc
+› Compiling react-native Pods/DoubleConversion » diy-fp.cc
+› Compiling react-native Pods/DoubleConversion » cached-powers.cc
+› Compiling react-native Pods/DoubleConversion » bignum.cc
+› Compiling react-native Pods/DoubleConversion » bignum-dtoa.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls_record.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls_method.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls13_server.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls13_enc.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls13_client.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls13_both.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » t1_enc.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_x509.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_versions.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_transcript.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_stat.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_session.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_privkey.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_lib.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_key_share.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_file.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_credential.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_cipher.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_cert.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_buffer.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_asn1.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ssl_aead_ctx.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » s3_pkt.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » s3_lib.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » s3_both.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » mlkem.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » handshake_server.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » handshake_client.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » handshake.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » handoff.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » extensions.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » encrypted_client_hello.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dtls_record.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dtls_method.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » d1_srtp.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » d1_pkt.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » d1_lib.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » d1_both.cc
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » bio_ssl.cc
+› Compiling @react-native-firebase/crashlytics Pods/nanopb » nanopb_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/nanopb » nanopb-dummy.m
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » leveldb_vers.c
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » write_batch.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » version_set.cc
+› Compiling @react-native-firebase/crashlytics Pods/nanopb » pb_encode.c
+› Compiling @react-native-firebase/crashlytics Pods/nanopb » pb_decode.c
+› Compiling @react-native-firebase/crashlytics Pods/nanopb » pb_common.c
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » version_edit.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » two_level_iterator.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » table_cache.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » table_builder.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » table.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » status.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » repair.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » options.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » merger.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » memtable.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » logging.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » log_writer.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » log_reader.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » leveldb-library-dummy.m
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » iterator.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » histogram.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » hash.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » format.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » filter_policy.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » filter_block.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » filename.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » env_posix.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » env.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » dumpfile.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » dbformat.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » db_iter.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » db_impl.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » crc32c.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » comparator.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » coding.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » cache.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » c.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » builder.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » bloom.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » block_builder.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » block.cc
+› Compiling @react-native-firebase/firestore Pods/leveldb-library » arena.cc
+› Compiling react-native Pods/glog » glog_vers.c
+› Compiling react-native Pods/fmt » fmt_vers.c
+› Compiling react-native Pods/glog » vlog_is_on.cc
+› Compiling react-native Pods/glog » utilities.cc
+› Compiling react-native Pods/glog » symbolize.cc
+› Compiling react-native Pods/glog » signalhandler.cc
+› Compiling react-native Pods/glog » raw_logging.cc
+› Compiling react-native Pods/glog » logging.cc
+› Compiling react-native Pods/glog » glog-dummy.m
+› Compiling react-native Pods/glog » demangle.cc
+› Compiling react-native Pods/fmt » format.cc
+› Compiling react-native Pods/fmt » fmt-dummy.m
+› Compiling Pods/abseil » absl_vers.c
+› Compiling react-native Pods/SocketRocket » SocketRocket-dummy.m
+› Compiling react-native Pods/SocketRocket » SRURLUtilities.m
+› Compiling react-native Pods/Yoga » Yoga-dummy.m
+› Compiling react-native Pods/SocketRocket » SRWebSocket.m
+› Compiling react-native Pods/SocketRocket » SRSecurityPolicy.m
+› Compiling react-native Pods/SocketRocket » SRRunLoopThread.m
+› Compiling react-native Pods/SocketRocket » SRSIMDHelpers.m
+› Compiling react-native Pods/SocketRocket » SRRandom.m
+› Compiling react-native Pods/SocketRocket » SRProxyConnect.m
+› Compiling react-native Pods/SocketRocket » SRPinningSecurityPolicy.m
+› Compiling react-native Pods/SocketRocket » SRMutex.m
+› Compiling react-native Pods/SocketRocket » SRLog.m
+› Compiling react-native Pods/SocketRocket » SRIOConsumerPool.m
+› Compiling react-native Pods/SocketRocket » SRIOConsumer.m
+› Compiling react-native Pods/SocketRocket » SRHash.m
+› Compiling react-native Pods/SocketRocket » SRHTTPConnectMessage.m
+› Compiling react-native Pods/SocketRocket » SRError.m
+› Compiling react-native Pods/SocketRocket » SRDelegateController.m
+› Compiling react-native Pods/SocketRocket » SRConstants.m
+› Compiling react-native Pods/SocketRocket » NSURLRequest+SRWebSocket.m
+› Compiling react-native Pods/SocketRocket » NSRunLoop+SRWebSocket.m
+› Compiling Pods/abseil » abseil-dummy.m
+› Compiling @react-native-firebase/auth Pods/RecaptchaInterop » placeholder.m
+› Compiling @react-native-firebase/auth Pods/RecaptchaInterop » RecaptchaInterop-dummy.m
+› Compiling react-native Pods/React-perflogger » React-perflogger-dummy.m
+› Compiling react-native Pods/React-nativeconfig » React-nativeconfig-dummy.m
+› Compiling react-native Pods/React-featureflags » React-featureflags-dummy.m
+› Compiling react-native Pods/React-debug » React-debug-dummy.m
+› Compiling react-native Pods/RCTDeprecation » RCTDeprecation-dummy.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromises_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » PromisesObjC-dummy.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Validate.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromiseError.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Wrap.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Timeout.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Then.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Testing.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Retry.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Reduce.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Recover.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Do.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Race.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Delay.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Catch.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Await.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Async.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Any.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+Always.m
+› Compiling @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromise+All.m
+› Compiling Pods/GoogleUtilities » GoogleUtilities_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GoogleDataTransport_vers.c
+› Compiling react-native Pods/RCTDeprecation » RCTDeprecation.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » external_privacy_context.nanopb.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » external_prequest_context.nanopb.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » compliance.nanopb.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » client_metrics.nanopb.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » cct.nanopb.c
+› Compiling Pods/GoogleUtilities » IsAppEncrypted.m
+› Compiling Pods/GTMSessionFetcher » GTMSessionFetcher_vers.c
+› Compiling Pods/GTMSessionFetcher » GTMSessionFetcher-dummy.m
+› Compiling Pods/GTMSessionFetcher » GTMSessionUploadFetcher.m
+› Compiling Pods/GTMSessionFetcher » GTMSessionFetcherService.m
+› Compiling Pods/GTMSessionFetcher » GTMSessionFetcherLogging.m
+› Compiling Pods/GTMSessionFetcher » GTMSessionFetcher.m
+› Compiling Pods/GoogleUtilities » GoogleUtilities-dummy.m
+› Compiling Pods/GoogleUtilities » GULUserDefaults.m
+› Compiling Pods/GoogleUtilities » GULReachabilityChecker.m
+› Compiling Pods/GoogleUtilities » GULNetworkURLSession.m
+› Compiling Pods/GoogleUtilities » GULNetworkConstants.m
+› Compiling Pods/GoogleUtilities » GULNetwork.m
+› Compiling Pods/GoogleUtilities » GULNSData+zlib.m
+› Compiling Pods/GoogleUtilities » GULMutableDictionary.m
+› Compiling Pods/GoogleUtilities » GULLogger.m
+› Compiling Pods/GoogleUtilities » GULKeychainUtils.m
+› Compiling Pods/GoogleUtilities » GULKeychainStorage.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GoogleDataTransport-dummy.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORUploadBatch.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORStorageMetadata.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORStorageEventSelector.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORProductData.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORMetricsMetadata.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORMetrics.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORLogSourceMetrics.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCOREvent+GDTMetricsSupport.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCOREvent+GDTCCTSupport.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCOREndpoints.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORConsoleLogger.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORClock.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORAssert.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCCTURLSessionDataResponse.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCCTCompressionHelper.m
+› Compiling Pods/GoogleUtilities » GULNetworkInfo.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuthInterop » FirebaseAuthInterop_vers.c
+› Compiling @react-native-firebase/auth Pods/FirebaseAppCheckInterop » FirebaseAppCheckInterop_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORUploadCoordinator.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORTransport.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORTransformer.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORRegistrar.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORReachability.m
+› Compiling Pods/GoogleUtilities » GULSceneDelegateSwizzler.m
+› Compiling Pods/GoogleUtilities » GULAppEnvironmentUtil.m
+› Compiling Pods/GoogleUtilities » GULAppDelegateSwizzler.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORPlatform.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORLifecycle.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORFlatFileStorage.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCOREvent.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORDirectorySizeTracker.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCCTUploader.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuthInterop » dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuthInterop » FirebaseAuthInterop-dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAppCheckInterop » dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAppCheckInterop » FirebaseAppCheckInterop-dummy.m
+› Compiling expo-json-utils Pods/EXJSONUtils » EXJSONUtils_vers.c
+› Compiling expo-json-utils Pods/EXJSONUtils » NSDictionary+EXJSONUtils.m
+› Compiling expo-json-utils Pods/EXJSONUtils » EXJSONUtils-dummy.m
+› Compiling react-native Pods/DoubleConversion » DoubleConversion_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORMetrics+GDTCCTSupport.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCCTNanopbHelpers.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORMetricsController.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCORFlatFileStorage+Promises.m
+› Compiling @react-native-firebase/crashlytics Pods/GoogleDataTransport » GDTCCTUploadOperation.m
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » wots.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » windows.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » urandom.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » unicode.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » trusty.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tls_cbc.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » thread_win.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » thread_pthread.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » thread_none.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » thread.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » thash.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_x509a.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_val.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_spki.c
+› Compiling react-native Pods/DoubleConversion » DoubleConversion-dummy.m
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_sig.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_req.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_pubkey.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_name.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_exten.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_crl.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_attrib.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_all.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x_algor.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509spki.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509rset.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509name.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509cset.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_vpm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_vfy.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_v3.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_txt.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_trs.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_set.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_req.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_obj.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_lu.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_ext.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_def.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_d2.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_cmp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509_att.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » voprf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_utl.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_skey.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_purp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_prn.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_pmaps.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_pcons.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_ocsp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_ncons.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_lib.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_int.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_info.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_ia5.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_genn.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_extku.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_enum.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_crld.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_cpols.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_conf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_bitst.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_bcons.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_alt.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_akeya.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » v3_akey.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » trust_token.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_utl.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_typ.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_new.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_fre.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_enc.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » tasn_dec.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » t_x509a.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » t_x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » t_req.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » stack.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » t_crl.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » spx_util.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » spx.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » spake25519.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » siphash.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » sign.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » scrypt.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rsa_crypt.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rsa_print.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rsa_pss.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rsa_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » refcount.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rc4.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » rand_extra.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » printf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » print.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pool.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » posix_time.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » poly1305_vec.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » poly1305_arm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » poly1305.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » policy.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pmbtoken.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pkcs8_x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pkcs8.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pkcs7_x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_xaux.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pkcs7.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_x509.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_pkey.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_pk8.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » socket_helper.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » socket.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_oth.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_lib.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_info.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pem_all.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pbkdf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » passive.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » params.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » pair.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_x25519_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_x25519.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_rsa_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_rsa.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_hkdf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_ed25519.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_ed25519_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_ec_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_dsa_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_ec.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_dh_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p_dh.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » openssl_grpc_vers.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » p5_pbev2.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » obj_xref.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » obj.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » name_print.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » mldsa.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » merkle.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » mem.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » lhash.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » kyber.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » keccak.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » i2d_pr.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ios.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » hpke.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » hexdump.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » hash_to_curve.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » getentropy.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » fips_shared_support.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » fors.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » forkunsafe.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » fork_detect.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » file.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » fd.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » f_string.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » f_int.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ex_data.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » evp_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » evp_ctx.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » evp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » err_data.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » errno.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » err.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » engine.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ecdsa_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ecdh_extra.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ec_derive.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ec_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_tls.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_rc4.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_rc2.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_null.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_des.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_chacha20poly1305.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_aesgcmsiv.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » e_aesctrhmac.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dsa_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dsa.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dilithium.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » digest_extra.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » dh_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » deterministic.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » des.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » hrss.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » curve25519_64_adx.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » derive_key.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » curve25519.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_intel.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » crypto.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_arm_linux.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_sysreg.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_arm_freebsd.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_win.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_openbsd.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_linux.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_fuchsia.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » convert.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cpu_aarch64_apple.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cipher_extra.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » conf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cbs.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » chacha.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » connect.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » cbb.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » by_file.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » by_dir.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » buf.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » bn_asn1.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » bio_mem.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » blake2.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » bio.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » ber.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » base64.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » asn1_par.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » bcm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » asn_pack.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » asn1_lib.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » asn1_compat.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » asn1_gen.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » algorithm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_verify.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_utctm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » address.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_time.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_type.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_strnid.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_sign.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_strex.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_octet.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_object.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_mbstr.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_gentm.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_i2d_fp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_int.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_dup.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_digest.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_d2i_fp.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_bool.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » a_bitstr.c
+› Compiling @react-native-firebase/firestore Pods/BoringSSL-GRPC » BoringSSL-GRPC-dummy.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDServiceConfiguration.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDTokenResponse.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDURLSessionProvider.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDTokenRequest.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDServiceDiscovery.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDScopes.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDURLQueryComponent.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDTokenUtilities.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDScopeUtilities.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDResponseTypes.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDRegistrationResponse.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDIDToken.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDRegistrationRequest.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDGrantTypes.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDFieldMapping.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDExternalUserAgentIOSCustomBrowser.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDErrorUtilities.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDError.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDEndSessionResponse.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDEndSessionRequest.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDClientMetadataParameters.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthorizationResponse.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthorizationService+IOS.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthorizationService.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthorizationRequest.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthState.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDAuthState+IOS.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » AppAuth_vers.c
+› Signing   @react-native-firebase/crashlytics Pods/nanopb » nanopb.framework
+› Signing   @react-native-firebase/firestore Pods/leveldb-library » leveldb.framework
+› Signing   react-native Pods/glog » glog.framework
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDExternalUserAgentIOS.m
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » OIDExternalUserAgentCatalyst.m
+› Executing react-native Pods/fmt » Create Symlinks to Header Folders
+› Preparing react-native Pods/React-logger » React-logger-Info.plist
+› Signing   react-native Pods/fmt » fmt.framework
+› Executing Pods/abseil » Create Symlinks to Header Folders
+› Compiling expo-dev-menu-interface Pods/expo-dev-menu-interface » EXDevMenuInterface_vers.c
+› Executing react-native Pods/Yoga » Create Symlinks to Header Folders
+› Compiling @react-native-google-signin/google-signin Pods/AppAuth » AppAuth-dummy.m
+› Executing react-native Pods/React-nativeconfig » Create Symlinks to Header Folders
+› Compiling react-native-purchases Pods/RevenueCat » RevenueCat_vers.c
+› Executing react-native Pods/React-featureflags » Create Symlinks to Header Folders
+› Signing   react-native Pods/SocketRocket » SocketRocket.framework
+› Signing   @react-native-firebase/auth Pods/RecaptchaInterop » RecaptchaInterop.framework
+› Signing   react-native Pods/React-perflogger » reactperflogger.framework
+› Signing   react-native Pods/React-nativeconfig » React_nativeconfig.framework
+› Signing   react-native Pods/React-logger » logger.framework
+› Executing react-native Pods/React-debug » Create Symlinks to Header Folders
+› Signing   react-native Pods/RCTDeprecation » RCTDeprecation.framework
+› Compiling @react-native-firebase/crashlytics Pods/PromisesSwift » Promises_vers.c
+› Creating  react-native Pods/RCTDeprecation » RCTDeprecation.framework
+› Compiling @react-native-google-signin/google-signin Pods/GTMAppAuth » GTMAppAuth_vers.c
+› Compiling @react-native-firebase/firestore Pods/FirebaseSharedSwift » FirebaseSharedSwift_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseRemoteConfigInterop » FirebaseRemoteConfigInterop_vers.c
+› Compiling @react-native-firebase/auth Pods/FirebaseCoreInternal » FirebaseCoreInternal_vers.c
+› Signing   @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromises.framework
+› Executing @react-native-firebase/firestore Pods/BoringSSL-GRPC » Create Symlinks to Header Folders
+› Compiling @react-native-google-signin/google-signin Pods/GTMAppAuth » GTMAppAuth-dummy.m
+› Compiling expo-dev-menu-interface Pods/expo-dev-menu-interface » expo-dev-menu-interface-dummy.m
+› Compiling react-native-purchases Pods/RevenueCat » RevenueCat-dummy.m
+› Signing   Pods/abseil » absl.framework
+› Compiling @react-native-firebase/firestore Pods/FirebaseSharedSwift » FirebaseSharedSwift-dummy.m
+› Signing   react-native Pods/Yoga » yoga.framework
+› Compiling @react-native-firebase/crashlytics Pods/PromisesSwift » PromisesSwift-dummy.m
+› Signing   react-native Pods/React-featureflags » React_featureflags.framework
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseRemoteConfigInterop » FirebaseRemoteConfigInterop-dummy.m
+› Creating  react-native Pods/Yoga » yoga.framework
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GoogleSignIn_vers.c
+› Compiling @react-native-firebase/auth Pods/FirebaseCoreInternal » FirebaseCoreInternal-dummy.m
+› Creating  react-native Pods/React-featureflags » React_featureflags.framework
+› Signing   react-native Pods/React-debug » React_debug.framework
+› Signing   expo-dev-menu-interface Pods/expo-dev-menu-interface » EXDevMenuInterface.framework
+› Creating  @react-native-firebase/crashlytics Pods/PromisesObjC » FBLPromises.framework
+› Signing   Pods/GoogleUtilities » GoogleUtilities.framework
+› Creating  Pods/abseil » absl.framework
+› Preparing @react-native-firebase/crashlytics Pods/PromisesSwift » PromisesSwift-Info.plist
+› Preparing @react-native-firebase/crashlytics Pods/GoogleDataTransport » GoogleDataTransport-Info.plist
+› Compiling react-native-purchases Pods/PurchasesHybridCommon » PurchasesHybridCommon_vers.c
+› Creating  react-native Pods/React-debug » React_debug.framework
+› Creating  expo-dev-menu-interface Pods/expo-dev-menu-interface » EXDevMenuInterface.framework
+› Creating  Pods/GoogleUtilities » GoogleUtilities.framework
+› Preparing react-native Pods/React-Mapbuffer » React-Mapbuffer-Info.plist
+› Signing   Pods/GTMSessionFetcher » GTMSessionFetcher.framework
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FirebaseInstallations_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FirebaseInstallations-dummy.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsItem.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsItem+RegisterInstallationAPI.m
+› Compiling react-native-purchases Pods/PurchasesHybridCommon » PurchasesHybridCommon-dummy.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsHTTPError.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsStoredItem.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsStoredAuthToken.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsSingleOperationPromiseCache.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsLogger.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsIIDStore.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsBackoffController.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsAuthTokenResult.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsErrorUtil.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsStore.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsIIDTokenStore.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsIDController.m
+› Compiling react-native Pods/React-Mapbuffer » MapBufferBuilder.cpp
+› Compiling react-native Pods/React-Mapbuffer » MapBuffer.cpp
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallations.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRInstallationsAPIService.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseInstallations » FIRCurrentDateProvider.m
+› Compiling react-native Pods/React-Mapbuffer » React_Mapbuffer_vers.c
+› Preparing @react-native-firebase/auth Pods/FirebaseCoreInternal » FirebaseCoreInternal-Info.plist
+› Compiling @react-native-firebase/auth Pods/FirebaseCoreExtension » FirebaseCoreExtension_vers.c
+› Signing   react-native-purchases Pods/RevenueCat » RevenueCat.framework
+› Signing   @react-native-firebase/crashlytics Pods/PromisesSwift » Promises.framework
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GoogleSignIn-dummy.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDToken.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInStrings.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInPreferences.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInCallbackSchemes.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDScopes.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDProfileData.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDMDMPasscodeState.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDConfiguration.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDCallbackQueue.m
+› Creating  Pods/GTMSessionFetcher » GTMSessionFetcher.framework
+› Compiling react-native Pods/React-Mapbuffer » React-Mapbuffer-dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCoreExtension » dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCoreExtension » FirebaseCoreExtension-dummy.m
+› Signing   @react-native-firebase/crashlytics Pods/GoogleDataTransport » GoogleDataTransport.framework
+› Signing   @react-native-firebase/firestore Pods/FirebaseSharedSwift » FirebaseSharedSwift.framework
+› Creating  react-native-purchases Pods/RevenueCat » RevenueCat.framework
+› Signing   @react-native-firebase/crashlytics Pods/FirebaseRemoteConfigInterop » FirebaseRemoteConfigInterop.framework
+› Preparing react-native-purchases Pods/PurchasesHybridCommon » PurchasesHybridCommon-Info.plist
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FirebaseCore_vers.c
+› Creating  @react-native-firebase/crashlytics Pods/PromisesSwift » Promises.framework
+› Creating  @react-native-firebase/crashlytics Pods/GoogleDataTransport » GoogleDataTransport.framework
+› Creating  @react-native-firebase/firestore Pods/FirebaseSharedSwift » FirebaseSharedSwift.framework
+› Signing   react-native-purchases Pods/PurchasesHybridCommon » PurchasesHybridCommon.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseAuthInterop » FirebaseAuthInterop.framework
+› Creating  @react-native-firebase/crashlytics Pods/FirebaseRemoteConfigInterop » FirebaseRemoteConfigInterop.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseCoreInternal » FirebaseCoreInternal.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseAppCheckInterop » FirebaseAppCheckInterop.framework
+› Creating  react-native-purchases Pods/PurchasesHybridCommon » PurchasesHybridCommon.framework
+› Signing   expo-json-utils Pods/EXJSONUtils » EXJSONUtils.framework
+› Creating  @react-native-firebase/auth Pods/FirebaseAuthInterop » FirebaseAuthInterop.framework
+› Signing   react-native Pods/DoubleConversion » DoubleConversion.framework
+› Signing   @react-native-firebase/firestore Pods/BoringSSL-GRPC » openssl_grpc.framework
+› Signing   @react-native-google-signin/google-signin Pods/AppAuth » AppAuth.framework
+› Creating  @react-native-firebase/auth Pods/FirebaseCoreInternal » FirebaseCoreInternal.framework
+› Creating  @react-native-firebase/auth Pods/FirebaseAppCheckInterop » FirebaseAppCheckInterop.framework
+› Preparing @react-native-firebase/auth Pods/FirebaseCore » FirebaseCore-Info.plist
+› Creating  expo-json-utils Pods/EXJSONUtils » EXJSONUtils.framework
+› Creating  react-native Pods/DoubleConversion » DoubleConversion.framework
+› Preparing react-native Pods/RCT-Folly » RCT-Folly-Info.plist
+› Executing react-native Pods/React-Mapbuffer » Create Symlinks to Header Folders
+› Creating  @react-native-google-signin/google-signin Pods/AppAuth » AppAuth.framework
+› Preparing @react-native-google-signin/google-signin Pods/GTMAppAuth » GTMAppAuth-Info.plist
+› Creating  @react-native-firebase/firestore Pods/BoringSSL-GRPC » openssl_grpc.framework
+› Preparing @react-native-firebase/firestore Pods/gRPC-Core » gRPC-Core-Info.plist
+› Signing   @react-native-google-signin/google-signin Pods/GTMAppAuth » GTMAppAuth.framework
+› Signing   react-native Pods/React-Mapbuffer » React_Mapbuffer.framework
+› Creating  @react-native-google-signin/google-signin Pods/GTMAppAuth » GTMAppAuth.framework
+› Preparing @react-native-google-signin/google-signin Pods/GoogleSignIn » GoogleSignIn-Info.plist
+› Compiling react-native Pods/RCT-Folly » Unicode.cpp
+› Compiling react-native Pods/RCT-Folly » UniqueInstance.cpp
+› Compiling react-native Pods/RCT-Folly » json_pointer.cpp
+› Compiling react-native Pods/RCT-Folly » json.cpp
+› Compiling react-native Pods/RCT-Folly » dynamic.cpp
+› Compiling react-native Pods/RCT-Folly » ToAscii.cpp
+› Compiling react-native Pods/RCT-Folly » ThreadId.cpp
+› Compiling react-native Pods/RCT-Folly » SysUio.cpp
+› Compiling react-native Pods/RCT-Folly » String.cpp
+› Compiling react-native Pods/RCT-Folly » SpookyHashV2.cpp
+› Compiling react-native Pods/RCT-Folly » SplitStringSimd.cpp
+› Compiling react-native Pods/RCT-Folly » SharedMutex.cpp
+› Compiling react-native Pods/RCT-Folly » ScopeGuard.cpp
+› Compiling react-native Pods/RCT-Folly » SanitizeThread.cpp
+› Compiling react-native Pods/RCT-Folly » SafeAssert.cpp
+› Compiling react-native Pods/RCT-Folly » ParkingLot.cpp
+› Compiling react-native Pods/RCT-Folly » NetOps.cpp
+› Compiling react-native Pods/RCT-Folly » MallocImpl.cpp
+› Compiling react-native Pods/RCT-Folly » Malloc.cpp
+› Compiling react-native Pods/RCT-Folly » Futex.cpp
+› Compiling react-native Pods/RCT-Folly » Format.cpp
+› Compiling react-native Pods/RCT-Folly » FileUtilDetail.cpp
+› Compiling react-native Pods/RCT-Folly » FileUtil.cpp
+› Compiling react-native Pods/RCT-Folly » F14Table.cpp
+› Compiling react-native Pods/RCT-Folly » Exception.cpp
+› Compiling react-native Pods/RCT-Folly » Demangle.cpp
+› Compiling react-native Pods/RCT-Folly » Conv.cpp
+› Compiling react-native Pods/RCT-Folly » CacheLocality.cpp
+› Compiling react-native Pods/RCT-Folly » CString.cpp
+› Compiling react-native Pods/RCT-Folly » AtFork.cpp
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » NSBundle+GID3PAdditions.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInInternalOptions.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInButton.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDMDMPasscodeCache.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDEMMErrorHandler.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDAuthentication.m
+› Compiling react-native Pods/RCT-Folly » folly_vers.c
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignInResult.m
+› Compiling react-native Pods/RCT-Folly » RCT-Folly-dummy.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDSignIn.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDGoogleUser.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDEMMSupport.m
+› Compiling @react-native-google-signin/google-signin Pods/GoogleSignIn » GIDAuthStateMigration.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FirebaseCore-dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRVersion.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRTimestamp.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIROptions.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRConfiguration.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRComponentType.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRComponentContainer.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRComponent.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRAnalyticsConfiguration.m
+› Executing react-native Pods/RCT-Folly » Create Symlinks to Header Folders
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRLogger.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRFirebaseUserAgent.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRHeartbeatLogger.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRBundleUtil.m
+› Compiling @react-native-firebase/auth Pods/FirebaseCore » FIRApp.m
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseSessions » FirebaseSessions_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseSessions » sessions.nanopb.c
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FirebaseAuth_vers.c
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FirebaseAuth-dummy.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FIRMultiFactorConstants.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FIRAuthProvider.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FIRAuthErrorUtils.m
+› Compiling @react-native-firebase/auth Pods/FirebaseAuth » FIRAuth.m
+› Compiling react-native Pods/React-jsinspector » RuntimeTarget.cpp
+› Compiling react-native Pods/React-jsinspector » RuntimeAgent.cpp
+› Compiling react-native Pods/React-jsinspector » Parsing.cpp
+› Compiling react-native Pods/React-jsinspector » PageTarget.cpp
+› Compiling react-native Pods/React-jsinspector » PageAgent.cpp
+› Compiling react-native Pods/React-jsinspector » InstanceTarget.cpp
+› Compiling react-native Pods/React-jsinspector » InstanceAgent.cpp
+› Compiling react-native Pods/React-jsinspector » InspectorUtilities.cpp
+› Compiling react-native Pods/React-jsinspector » InspectorPackagerConnection.cpp
+› Compiling react-native Pods/React-jsinspector » InspectorInterfaces.cpp
+› Compiling react-native Pods/React-jsinspector » InspectorFlags.cpp
+› Compiling react-native Pods/React-jsinspector » FallbackRuntimeAgentDelegate.cpp
+› Compiling react-native Pods/React-jsinspector » ExecutionContextManager.cpp
+› Compiling react-native Pods/React-jsinspector » ExecutionContext.cpp
+› Compiling react-native Pods/React-jsinspector » jsinspector_modern_vers.c
+› Compiling react-native Pods/React-jsiexecutor » JSINativeModules.cpp
+› Compiling react-native Pods/React-jsiexecutor » JSIExecutor.cpp
+› Compiling react-native Pods/React-jsiexecutor » jsireact_vers.c
+› Compiling react-native Pods/React-jsinspector » React-jsinspector-dummy.m
+› Compiling react-native Pods/React-jsi » JSIDynamic.cpp
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseSessions » FirebaseSessions-dummy.m
+› Compiling react-native Pods/React-jsi » jsi_vers.c
+› Compiling react-native Pods/React-jsiexecutor » React-jsiexecutor-dummy.m
+› Creating  react-native Pods/React-Mapbuffer » React_Mapbuffer.framework
+› Compiling react-native Pods/React-hermes » Registration.cpp
+› Compiling react-native Pods/React-hermes » HermesRuntimeAgentDelegate.cpp
+› Compiling react-native Pods/React-hermes » HermesExecutorFactory.cpp
+› Compiling react-native Pods/React-hermes » ConnectionDemux.cpp
+› Compiling react-native Pods/React-jsi » React-jsi-dummy.m
+› Compiling react-native Pods/React-hermes » reacthermes_vers.c
+› Compiling @react-native-firebase/crashlytics Pods/FirebaseSessions » FIRSESNanoPBHelpers.m
+› Compiling react-native Pods/React-cxxreact » ReactMarker.cpp
+› Compiling react-native Pods/React-cxxreact » RAMBundleRegistry.cpp
+› Compiling react-native Pods/React-cxxreact » NativeToJsBridge.cpp
+› Compiling react-native Pods/React-cxxreact » ModuleRegistry.cpp
+› Compiling react-native Pods/React-cxxreact » MethodCall.cpp
+› Compiling react-native Pods/React-cxxreact » JSIndexedRAMBundle.cpp
+› Compiling react-native Pods/React-cxxreact » JSExecutor.cpp
+› Compiling react-native Pods/React-cxxreact » JSBundleType.cpp
+› Compiling react-native Pods/React-cxxreact » JSBigString.cpp
+› Compiling react-native Pods/React-cxxreact » Instance.cpp
+› Compiling react-native Pods/React-cxxreact » CxxNativeModule.cpp
+› Compiling react-native Pods/React-cxxreact » cxxreact_vers.c
+› Compiling react-native Pods/React-cxxreact » React-cxxreact-dummy.m
+› Signing   react-native Pods/RCT-Folly » folly.framework
+› Creating  react-native Pods/RCT-Folly » folly.framework
+› Preparing react-native Pods/React-rendererdebug » React-rendererdebug-Info.plist
+› Signing   @react-native-google-signin/google-signin Pods/GoogleSignIn » GoogleSignIn.framework
+› Preparing react-native Pods/React-jsi » React-jsi-Info.plist
+› Compiling react-native Pods/React-rendererdebug » DebugStringConvertibleItem.cpp
+› Compiling react-native Pods/React-rendererdebug » DebugStringConvertible.cpp
+› Compiling react-native Pods/React-rendererdebug » React_rendererdebug_vers.c
+› Creating  @react-native-google-signin/google-signin Pods/GoogleSignIn » GoogleSignIn.framework
+› Signing   react-native Pods/React-jsi » jsi.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseCore » FirebaseCore.framework
+› Creating  react-native Pods/React-jsi » jsi.framework
+› Preparing react-native Pods/React-utils » React-utils-Info.plist
+› Creating  @react-native-firebase/auth Pods/FirebaseCore » FirebaseCore.framework
+› Preparing react-native Pods/React-jsinspector » React-jsinspector-Info.plist
+› Preparing react-native Pods/React-jserrorhandler » React-jserrorhandler-Info.plist
+› Compiling react-native Pods/React-utils » jsi.cpp
+› Compiling react-native Pods/React-utils » RunLoopObserver.cpp
+› Compiling react-native Pods/React-utils » ManagedObjectWrapper.mm
+› Compiling react-native Pods/React-utils » CoreFeatures.cpp
+› Compiling react-native Pods/React-rendererdebug » React-rendererdebug-dummy.m
+› Compiling react-native Pods/React-utils » React_utils_vers.c
+› Compiling react-native Pods/React-hermes » React-hermes-dummy.m
+› Compiling react-native Pods/React-jserrorhandler » JsErrorHandler.cpp
+› Compiling react-native Pods/React-jserrorhandler » React_jserrorhandler_vers.c
+› Compiling react-native Pods/React-utils » React-utils-dummy.m
+› Preparing @react-native-firebase/crashlytics Pods/FirebaseInstallations » FirebaseInstallations-Info.plist
+› Preparing @react-native-firebase/auth Pods/FirebaseCoreExtension » FirebaseCoreExtension-Info.plist
+› Signing   react-native Pods/React-jsinspector » jsinspector_modern.framework
+› Signing   @react-native-firebase/crashlytics Pods/FirebaseInstallations » FirebaseInstallations.framework
+› Creating  react-native Pods/React-jsinspector » jsinspector_modern.framework
+› Preparing react-native Pods/React-cxxreact » React-cxxreact-Info.plist
+› Executing react-native Pods/React-rendererdebug » Create Symlinks to Header Folders
+› Creating  @react-native-firebase/crashlytics Pods/FirebaseInstallations » FirebaseInstallations.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseCoreExtension » FirebaseCoreExtension.framework
+› Creating  @react-native-firebase/auth Pods/FirebaseCoreExtension » FirebaseCoreExtension.framework
+› Preparing @react-native-firebase/crashlytics Pods/FirebaseSessions » FirebaseSessions-Info.plist
+› Preparing @react-native-firebase/auth Pods/FirebaseAuth » FirebaseAuth-Info.plist
+› Signing   react-native Pods/React-cxxreact » cxxreact.framework
+› Signing   react-native Pods/React-rendererdebug » React_rendererdebug.framework
+› Compiling react-native Pods/React-jserrorhandler » React-jserrorhandler-dummy.m
+› Signing   @react-native-firebase/crashlytics Pods/FirebaseSessions » FirebaseSessions.framework
+› Creating  react-native Pods/React-rendererdebug » React_rendererdebug.framework
+› Signing   @react-native-firebase/auth Pods/FirebaseAuth » FirebaseAuth.framework
+› Creating  @react-native-firebase/crashlytics Pods/FirebaseSessions » FirebaseSessions.framework
+› Preparing @react-native-firebase/crashlytics Pods/FirebaseCrashlytics » FirebaseCrashlytics-Info.plist
+› Creating  react-native Pods/React-cxxreact » cxxreact.framework
+› Preparing react-native Pods/React-jsiexecutor » React-jsiexecutor-Info.plist
+› Signing   react-native Pods/React-jsiexecutor » jsireact.framework
+› Creating  @react-native-firebase/auth Pods/FirebaseAuth » FirebaseAuth.framework
+› Creating  react-native Pods/React-jsiexecutor » jsireact.framework
+› Preparing react-native Pods/React-hermes » React-hermes-Info.plist
+› Signing   react-native Pods/React-hermes » reacthermes.framework
+› Creating  react-native Pods/React-hermes » reacthermes.framework
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_wrr_locality.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_transport_grpc.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_server_grpc.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_server_config_fetcher.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_routing.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_route_config_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_route_config.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_override_host.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_metadata_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_metadata.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_listener_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_listener.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_lb_policy_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_stateful_session_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_rbac_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_proxy_mapper.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_gcp_authn_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_filter_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_http_fault_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_health_status.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_endpoint_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_endpoint.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_dependency_manager.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_config.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_common_types_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_common_types.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_cluster_specifier_plugin.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_cluster_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_cluster_manager.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_cluster_impl.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_cluster.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_client_grpc.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_channel_stack_modifier.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_certificate_provider.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_bootstrap_grpc.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_bootstrap.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_backend_metric_propagation.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_audit_logger_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » xds_api.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » writing.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » write_size_policy.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » work_stealing_thread_pool.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » work_serializer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » windows_listener.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » windows_engine.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » windows_endpoint.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » win_socket.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » weighted_target.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » weighted_round_robin.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_posix_default.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_pipe.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_pipe.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_nospecial.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_eventfd.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » wakeup_fd_eventfd.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » vsock.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » version.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » varint.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » validation_errors.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » validate_metadata.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » uuid_v4.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » url_external_account_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » uri.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » unix_sockets_posix_noop.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » unix_sockets_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » unicode_groups.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » unicode_casefold.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » transport_security_grpc.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » transport_security_common_api.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » transport_security.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » transport_op_string.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » transport.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » traced_buffer_list.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » trace_flags.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » trace.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tostring.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » token_fetcher_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tmpfile.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tmpfile.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tmpfile.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tls_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tls_security_connector.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tls_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer_manager.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer_manager.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer_heap.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer_heap.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer_generic.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » timeout_encoding.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time_precise.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time_averaged_stats.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » time.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thready_event_engine.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thread_quota.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thread_pool_factory.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thread_local.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thread_count.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thd.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » thd.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_socket_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_socket_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server_utils_posix_noifaddrs.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server_utils_posix_ifaddrs.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server_utils_posix_common.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_server.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_connect_handshaker.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_client_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_client_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_client_cfstream.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tcp_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » tchar.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » systemd_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sync_abseil.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sync.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sync.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sync.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » subchannel_stream_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » subchannel_pool_interface.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » subchannel.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » strutil.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stringpiece.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » string_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » string.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » string.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » string.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » strerror.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stream_lists.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stdout_logger.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » status_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » status_helper.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » status_conversion.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stats_data.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stats.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » static_stride_scheduler.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stateful_session_service_config_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stateful_session_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stat.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » stat.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_transport_security_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_transport_security.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_session_openssl.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_session_cache.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_session_boringssl.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_security_connector.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_key_logging.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ssl_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_utils_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_utils_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_utils_linux.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_utils_common_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_mutator.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » socket_factory_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sockaddr_utils_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sockaddr_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sockaddr_resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » slice_string_helpers.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » slice_buffer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » slice_buffer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » slice.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » slice.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » sleep.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » simplify.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » shim.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » set.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » service_config_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » service_config_impl.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » service_config_helper.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » service_config_channel_arg_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » server_config_selector_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » server_call_tracer_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » server_call.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » server_auth_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » server.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » security_handshaker.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » security_context.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » security_connector.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » secure_endpoint.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » rune.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » round_robin.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » rls.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ring_hash.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » retry_throttle.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » retry_service_config.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » retry_filter_legacy_call_data.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » retry_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resource_quota.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolver_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolved_address.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolve_address_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolve_address_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » resolve_address.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » regexp.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ref_counted_string.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » re2.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » rbac_service_config_parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » rbac_policy.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » rbac_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » random_early_detection.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » proxy_mapper_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » promise_based_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » prog.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » priority.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » prefilter_tree.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » prefilter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » posix_engine_listener_utils.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » posix_engine_listener.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » posix_engine.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » posix_endpoint.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » pollset_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » pollset_set_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » pollset_set.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » pollset.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » polling_resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » polling_entity.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » plugin_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ping_rate_policy.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ping_callbacks.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » ping_abuse_policy.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » pick_first.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » perl_groups.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » periodic_update.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » percent_encoding.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » per_cpu.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » party.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » parsing.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » parser.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » parsed_metadata.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » parse_address.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » parse.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » outlier_detection.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » oob_backend_metric.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » onepass.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » oauth2_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » nfa.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » native_windows_dns_resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » native_posix_dns_resolver.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » mpscq.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » mimics_pcre.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » metrics.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » metadata_info.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » metadata_batch.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » metadata_array.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » metadata.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » message_size_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » message_compress.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » message.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » memory_quota.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » matchers.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » matchers.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lrs_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » log.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lockfree_event.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lockfree_event.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » local_transport_security.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » local_subchannel_pool.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » local_security_connector.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » local_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_system_roots_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_system_roots_supported.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_system_roots_fallback.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_file.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_config.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_balancer_api.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » load_balanced_call_destination.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » legacy_inproc_transport.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » legacy_channel_idle_filter.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » legacy_channel.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lb_policy_registry.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lb_policy.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lb_metadata.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » latent_see.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » lame_client.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » jwt_verifier.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » jwt_credentials.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_writer.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_util.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_token.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_reader.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » json_object_loader.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iomgr_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iomgr_posix_cfstream.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iomgr_posix.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iomgr_internal.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iomgr.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iocp_windows.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » iocp.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » internal_errqueue.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » internal_errqueue.cc
+› Compiling @react-native-firebase/firestore Pods/gRPC-Core » interception_chain.cc

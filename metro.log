@@ -1,0 +1,72 @@
+Starting project at /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+iOS Bundled 2955ms node_modules/expo-router/entry.js (3639 modules)
+iOS Bundled 2182ms node_modules/react-native-purchases/dist/index.js (573 modules)
+ LOG  [RevenueCat]: undefined
+iOS Bundled 223ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 45ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `collection`. Please use `collection()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `doc`. Please use `doc()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `FieldValue`. Please use `FieldValue` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `serverTimestamp`. Please use `serverTimestamp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `collection`. Please use `collection()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `doc`. Please use `doc()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `FieldValue`. Please use `FieldValue` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22. Method called was `serverTimestamp`. Please use `serverTimestamp()` instead.
+iOS Bundled 10ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [Auth Silent]: User cancelled sign-in flow.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  --- AUTH ERROR ---
+ LOG  Code: auth/internal-error
+ LOG  Message: [auth/internal-error] An internal error has occurred, please try again.
+ LOG  Stack: NativeFirebaseError: [auth/internal-error] An internal error has occurred, please try again.
+    at signInWithCredential (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:275203:48)
+    at apply (native)
+    at anonymous (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:267661:40)
+    at ?anon_0_ (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:338004:81)
+    at next (native)
+    at asyncGeneratorStep (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5863:19)
+    at _next (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5877:29)
+    at tryCallOne (address at InternalBytecode.js:1:1180)
+    at anonymous (address at InternalBytecode.js:1:1874)
+    at apply (native)
+    at anonymous (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:14855:26)
+ LOG  ------------------
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  --- AUTH ERROR ---
+ LOG  Code: auth/internal-error
+ LOG  Message: [auth/internal-error] An internal error has occurred, please try again.
+ LOG  Stack: NativeFirebaseError: [auth/internal-error] An internal error has occurred, please try again.
+    at signInWithCredential (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:275203:48)
+    at apply (native)
+    at anonymous (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:267661:40)
+    at ?anon_0_ (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:338004:81)
+    at next (native)
+    at asyncGeneratorStep (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5863:19)
+    at _next (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5877:29)
+    at tryCallOne (address at InternalBytecode.js:1:1180)
+    at anonymous (address at InternalBytecode.js:1:1874)
+    at apply (native)
+    at anonymous (http://192.168.1.180:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:14855:26)
+ LOG  ------------------
+iOS Bundled 203ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 78ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+iOS Bundled 1031ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 319ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.

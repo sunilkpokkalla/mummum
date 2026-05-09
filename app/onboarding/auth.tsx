@@ -5,7 +5,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, NativeModules, StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
+import { ActivityIndicator, Alert, NativeModules, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 // Safe Native Module Discovery
@@ -59,7 +59,7 @@ export default function OnboardingAuthScreen() {
       const babyId = babies[0]?.id || addBaby(tempBaby);
       setCurrentBaby(babyId);
       setLoading(false);
-      
+
       if (babies.length > 0) {
         completeOnboarding();
         router.replace('/(tabs)');
@@ -149,7 +149,7 @@ export default function OnboardingAuthScreen() {
 
       if (firebaseUser) {
         await pullFromCloud(); // DOWNLOAD CLOUD DATA
-        
+
         // If they already have babies from cloud, use those, otherwise create the one they just set up
         const babyId = babies[0]?.id || addBaby(tempBaby);
         setCurrentBaby(babyId);

@@ -3,7 +3,7 @@ import * as Sharing from 'expo-sharing';
 import { format, subDays, isWithinInterval } from 'date-fns';
 import { Alert } from 'react-native';
 import { Asset } from 'expo-asset';
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 
 export const generateBabyReport = async (baby: any, activities: any[], days: number, memories: any[] = []) => {
   if (!Print.printToFileAsync || !Sharing.shareAsync) {
