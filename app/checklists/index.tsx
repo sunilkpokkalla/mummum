@@ -47,7 +47,9 @@ export default function ChecklistsScreen() {
   const themeColors = Colors[colorScheme];
   const { 
     completedChecklistItems, 
+    completedDayCareItems,
     toggleChecklistItem, 
+    toggleDayCareItem,
     standardTaskSettings,
     updateStandardTaskSetting,
     userStandardTasks,
@@ -89,6 +91,9 @@ export default function ChecklistsScreen() {
   const dateKey = format(new Date(), 'yyyy-MM-dd');
   const babyChecklists = (completedChecklistItems as any)[currentBabyId || ''] || {};
   const items = babyChecklists[dateKey] || [];
+
+  const babyDayCareItems = (completedDayCareItems as any)[currentBabyId || ''] || {};
+  const dcItems = babyDayCareItems[dateKey] || [];
 
   const babyAppointments = appointments.filter(a => a.babyId === currentBabyId)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -362,22 +367,6 @@ export default function ChecklistsScreen() {
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {activeTab === 'tasks' && (
             <>
-              {/* Progress Card */}
-              <Card style={styles.progressCard}>
-                <View style={styles.progressHeader}>
-                  <View>
-                    <Typography variant="bodyLg" weight="700" color="#4A5D4C">Daily Progress</Typography>
-                    <Typography variant="label" color="#607D8B">{items.length} tasks completed</Typography>
-                  </View>
-                  <View style={styles.progressBadge}>
-                    <Typography variant="label" weight="700" color="#fff">{progress}%</Typography>
-                  </View>
-                </View>
-                <View style={styles.progressBarBg}>
-                  <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
-                </View>
-              </Card>
-
               <View style={styles.sectionHeader}>
                  <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>NURTURE LIST</Typography>
                  <TouchableOpacity onPress={() => setIsAddStandardModalVisible(true)}>
@@ -517,25 +506,25 @@ export default function ChecklistsScreen() {
               </View>
 
               {DAYCARE_BAG_ITEMS.map((item) => (
-                <View key={item.id} style={[styles.taskCard, items.includes(item.id) && styles.taskCardCompleted]}>
+                <View key={item.id} style={[styles.taskCard, dcItems.includes(item.id) && styles.taskCardCompleted]}>
                   <View style={[styles.taskIconContainer, { backgroundColor: '#E0F2F1' }]}>
                     <Package size={20} color="#009688" />
                   </View>
                   <Pressable 
                     style={styles.taskPressArea}
-                    onPress={() => toggleChecklistItem(item.id)}
+                    onPress={() => toggleDayCareItem(item.id)}
                   >
                     <View style={styles.taskInfo}>
                       <Typography
                         variant="bodyMd"
                         weight="700"
-                        color={items.includes(item.id) ? '#B0BEC5' : '#455A64'}
-                        style={items.includes(item.id) && { textDecorationLine: 'line-through' }}
+                        color={dcItems.includes(item.id) ? '#B0BEC5' : '#455A64'}
+                        style={dcItems.includes(item.id) && { textDecorationLine: 'line-through' }}
                       >
                         {item.title}
                       </Typography>
                     </View>
-                    {items.includes(item.id) ? (
+                    {dcItems.includes(item.id) ? (
                       <CheckCircle size={24} color="#4CAF50" />
                     ) : (
                       <Circle size={24} color="#CFD8DC" />

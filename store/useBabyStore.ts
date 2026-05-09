@@ -76,6 +76,7 @@ interface BabyState {
   activeSessions: ActiveSession[];
   memories: Memory[];
   completedChecklistItems: Record<string, Record<string, string[]>>; // babyId -> dateKey -> itemIds
+  completedDayCareItems: Record<string, Record<string, string[]>>; // babyId -> dateKey -> itemIds
   completedMilestones: Record<string, string[]>; // babyId -> itemIds
   customReminders: Reminder[];
   userStandardTasks: { id: string; title: string; time: string; type: string }[];
@@ -103,6 +104,7 @@ interface BabyState {
   stopSession: (type: ActivityType) => void;
   addMemory: (memory: Omit<Memory, 'babyId'>) => void;
   toggleChecklistItem: (id: string) => void;
+  toggleDayCareItem: (id: string) => void;
   toggleMilestone: (id: string) => void;
   addReminder: (reminder: Reminder) => void;
   updateReminder: (id: string, data: Partial<Reminder>) => void;
@@ -138,6 +140,7 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
       appointments: state.appointments,
       dayCareLogs: state.dayCareLogs,
       completedChecklistItems: state.completedChecklistItems,
+      completedDayCareItems: state.completedDayCareItems,
       completedMilestones: state.completedMilestones,
       userName: state.userName,
       userPhotoUri: state.userPhotoUri,
@@ -158,6 +161,7 @@ export const useBabyStore = create<BabyState>()(
       activeSessions: [],
       memories: [],
       completedChecklistItems: {},
+      completedDayCareItems: {},
       completedMilestones: {},
       customReminders: [],
       userStandardTasks: [],
@@ -192,6 +196,7 @@ export const useBabyStore = create<BabyState>()(
               appointments: data?.appointments || get().appointments,
               dayCareLogs: data?.dayCareLogs || get().dayCareLogs,
               completedChecklistItems: data?.completedChecklistItems || get().completedChecklistItems,
+              completedDayCareItems: data?.completedDayCareItems || get().completedDayCareItems,
               completedMilestones: data?.completedMilestones || get().completedMilestones,
               userName: data?.userName || get().userName,
               userPhotoUri: data?.userPhotoUri || get().userPhotoUri,
@@ -298,6 +303,30 @@ export const useBabyStore = create<BabyState>()(
           return {
             completedChecklistItems: {
               ...state.completedChecklistItems,
+              [state.currentBabyId]: {
+                ...babyChecklists,
+                [dateKey]: newItems
+              }
+            }
+          };
+        });
+        get().syncToCloud();
+      },
+
+      toggleDayCareItem: (id) => {
+        set((state) => {
+          if (!state.currentBabyId) return state;
+          const dateKey = format(new Date(), 'yyyy-MM-dd');
+          const babyChecklists = state.completedDayCareItems[state.currentBabyId] || {};
+          const currentItems = babyChecklists[dateKey] || [];
+          
+          const newItems = currentItems.includes(id)
+            ? currentItems.filter(i => i !== id)
+            : [...currentItems, id];
+          
+          return {
+            completedDayCareItems: {
+              ...state.completedDayCareItems,
               [state.currentBabyId]: {
                 ...babyChecklists,
                 [dateKey]: newItems
