@@ -1,26 +1,43 @@
 {
   "project_info": {
-    "project_number": "339373048707",
-    "project_id": "mummum-babytracker",
-    "storage_bucket": "mummum-babytracker.firebasestorage.app"
+    "project_number": "944867470720",
+    "project_id": "mummum-baby-tracker",
+    "storage_bucket": "mummum-baby-tracker.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:339373048707:android:12eeef4c2092a5a9ed6cb6",
+        "mobilesdk_app_id": "1:944867470720:android:c6601c1e82f1adb74c6565",
         "android_client_info": {
-          "package_name": "com.ambright.mummum"
+          "package_name": "com.ambright.mummumbaby"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "944867470720-h7d30nai7d1ktod685pk3jk0fl1qm8cv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyChMeuCXU-xl7Vg9mXD_-ILA3udeint_Tg"
+          "current_key": "AIzaSyCUDGuw_oWoBxpCCoTczaDCOR5zFeYjoCo"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944867470720-h7d30nai7d1ktod685pk3jk0fl1qm8cv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "944867470720-mkoaqm3gp6edmf84gclkek266h5kh592.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ambright.mummumbaby"
+              }
+            }
+          ]
         }
       }
     }

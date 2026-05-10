@@ -37,7 +37,6 @@ export default function ControlsScreen() {
   const [parentName, setParentName] = useState(userName);
 
   // Privacy State
-  const [biometricLock, setBiometricLock] = useState(false);
   const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
   const [cloudBackup, setCloudBackup] = useState(true);
 
@@ -116,15 +115,6 @@ export default function ControlsScreen() {
 
   const renderPrivacy = () => (
     <View style={styles.form}>
-      <Card style={styles.card}>
-        <View style={styles.switchItem}>
-          <View style={{ flex: 1 }}>
-            <Typography variant="body" weight="700" color="#1B3C35">Biometric App Lock</Typography>
-            <Typography variant="label" color="#607D8B">Require FaceID/TouchID on start</Typography>
-          </View>
-          <Switch value={biometricLock} onValueChange={setBiometricLock} trackColor={{ true: '#4A5D4C' }} />
-        </View>
-        <View style={styles.divider} />
         <View style={styles.switchItem}>
           <View style={{ flex: 1 }}>
             <Typography variant="body" weight="700" color="#1B3C35">Anonymous Analytics</Typography>

@@ -96,22 +96,6 @@ export default function PrivacySettingsScreen() {
             </View>
           </View>
 
-          <View style={styles.section}>
-            <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>SECURITY</Typography>
-            
-            <View style={styles.elegantGroup}>
-              <MenuItem 
-                icon={<Lock size={20} color="#1B3C35" />}
-                title="Biometric Lock"
-                detail="Protect your baby's clinical hub"
-                onPress={() => Alert.alert(
-                  "Biometric Security", 
-                  "Biometric Lock allows you to secure the Mummum app using FaceID or TouchID. This ensures that your baby's clinical logs are only accessible to you. This feature is coming in the next clinical update."
-                )}
-                isLast
-              />
-            </View>
-          </View>
 
           <View style={styles.section}>
             <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>CLINICAL HELP CENTER</Typography>
@@ -120,8 +104,8 @@ export default function PrivacySettingsScreen() {
               <MenuItem 
                 icon={<Shield size={20} color="#1B3C35" />}
                 title="Support & Clinical Inquiries"
-                detail="support@mummum.app"
-                onPress={() => Alert.alert("Clinical Support", "Our clinical support team is available 24/7. Please email support@mummum.app for assistance.")}
+                detail="contact@ambrighttech.com"
+                onPress={() => Alert.alert("Clinical Support", "Our clinical support team is available 24/7. Please email contact@ambrighttech.com for assistance.")}
               />
               <MenuItem 
                 icon={<FileText size={20} color="#1B3C35" />}

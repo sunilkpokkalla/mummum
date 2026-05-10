@@ -47,9 +47,7 @@ export default function ChecklistsScreen() {
   const themeColors = Colors[colorScheme];
   const { 
     completedChecklistItems, 
-    completedDayCareItems,
     toggleChecklistItem, 
-    toggleDayCareItem,
     standardTaskSettings,
     updateStandardTaskSetting,
     userStandardTasks,
@@ -91,9 +89,6 @@ export default function ChecklistsScreen() {
   const dateKey = format(new Date(), 'yyyy-MM-dd');
   const babyChecklists = (completedChecklistItems as any)[currentBabyId || ''] || {};
   const items = babyChecklists[dateKey] || [];
-
-  const babyDayCareItems = (completedDayCareItems as any)[currentBabyId || ''] || {};
-  const dcItems = babyDayCareItems[dateKey] || [];
 
   const babyAppointments = appointments.filter(a => a.babyId === currentBabyId)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -501,30 +496,52 @@ export default function ChecklistsScreen() {
             <>
               {/* Day Care Bag Section */}
               <View style={styles.sectionHeader}>
-                 <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>DAY CARE BAG</Typography>
+                 <View>
+                   <Typography variant="label" weight="800" color="#90A4AE" style={{ letterSpacing: 1 }}>DAY CARE BAG</Typography>
+                   <Typography variant="label" color="#B0BEC5">
+                     {(() => {
+                       const dcItems = items.filter((id: string) => id.startsWith('b')).length;
+                       return `${dcItems} of ${DAYCARE_BAG_ITEMS.length} packed`;
+                     })()}
+                   </Typography>
+                 </View>
                  <Briefcase size={20} color="#4A5D4C" />
               </View>
 
+              {/* Small Progress Line for Day Care */}
+              <View style={[styles.progressBarBg, { height: 4, marginVertical: 12, backgroundColor: '#E0F2F1' }]}>
+                <View 
+                  style={[
+                    styles.progressBarFill, 
+                    { 
+                      height: 4, 
+                      backgroundColor: '#009688',
+                      width: `${Math.round((items.filter((id: string) => id.startsWith('b')).length / DAYCARE_BAG_ITEMS.length) * 100)}%` 
+                    }
+                  ]} 
+                />
+              </View>
+
               {DAYCARE_BAG_ITEMS.map((item) => (
-                <View key={item.id} style={[styles.taskCard, dcItems.includes(item.id) && styles.taskCardCompleted]}>
+                <View key={item.id} style={[styles.taskCard, items.includes(item.id) && styles.taskCardCompleted]}>
                   <View style={[styles.taskIconContainer, { backgroundColor: '#E0F2F1' }]}>
                     <Package size={20} color="#009688" />
                   </View>
                   <Pressable 
                     style={styles.taskPressArea}
-                    onPress={() => toggleDayCareItem(item.id)}
+                    onPress={() => toggleChecklistItem(item.id)}
                   >
                     <View style={styles.taskInfo}>
                       <Typography
                         variant="bodyMd"
                         weight="700"
-                        color={dcItems.includes(item.id) ? '#B0BEC5' : '#455A64'}
-                        style={dcItems.includes(item.id) && { textDecorationLine: 'line-through' }}
+                        color={items.includes(item.id) ? '#B0BEC5' : '#455A64'}
+                        style={items.includes(item.id) && { textDecorationLine: 'line-through' }}
                       >
                         {item.title}
                       </Typography>
                     </View>
-                    {dcItems.includes(item.id) ? (
+                    {items.includes(item.id) ? (
                       <CheckCircle size={24} color="#4CAF50" />
                     ) : (
                       <Circle size={24} color="#CFD8DC" />

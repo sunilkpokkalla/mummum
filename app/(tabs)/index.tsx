@@ -345,9 +345,13 @@ export default function DashboardScreen() {
             const dateKey = format(new Date(), 'yyyy-MM-dd');
             const babyChecklists = (useBabyStore.getState().completedChecklistItems as any)[currentBabyId || ''] || {};
             const completedItems = babyChecklists[dateKey] || [];
+            
+            // Filter: only include Daily Tasks (IDs starting with 'd' or Custom tasks)
+            // Day Care items start with 'b'
+            const dailyTasksCompleted = completedItems.filter((id: string) => !id.startsWith('b'));
             const userTasks = useBabyStore.getState().userStandardTasks || [];
-            const totalTasks = 4 + userTasks.length;
-            const progress = Math.round((completedItems.length / totalTasks) * 100);
+            const totalTasks = 4 + userTasks.length; // 4 is the count of DEFAULT_DAILY_TASKS
+            const progress = totalTasks > 0 ? Math.round((dailyTasksCompleted.length / totalTasks) * 100) : 0;
 
             return (
               <Card style={[styles.checklistCard, { backgroundColor: themeColors.surface, borderColor: themeColors.surfaceVariant }]}>
@@ -358,7 +362,7 @@ export default function DashboardScreen() {
                     <Bell size={16} color={themeColors.icon} style={{ marginLeft: 4 }} />
                   </View>
                   <Typography variant="label" weight="700" color={themeColors.icon}>
-                    {completedItems.length} of {totalTasks} TASKS
+                    {dailyTasksCompleted.length} of {totalTasks} TASKS
                   </Typography>
                 </View>
                 <View style={[styles.progressBarBg, { backgroundColor: themeColors.surfaceVariant }]}>

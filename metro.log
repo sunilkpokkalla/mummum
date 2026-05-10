@@ -170,3 +170,741 @@ iOS Bundled 32ms node_modules/react-native-purchases/dist/index.js (1 module)
  WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
  WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
  WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ ERROR  ReferenceError: Property 'dailyTasksCompleted' doesn't exist
+
+This error is located at:
+    in DashboardScreen
+    in Unknown (created by Route(index))
+    in Suspense (created by Route(index))
+    in Route (created by Route(index))
+    in Route(index) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by Screen)
+    in RCTView (created by View)
+    in View (created by Background)
+    in Background (created by Screen)
+    in Screen (created by BottomTabView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by MaybeScreen)
+    in MaybeScreen (created by BottomTabView)
+    in RNSScreenNavigationContainer (created by ScreenContainer)
+    in ScreenContainer (created by MaybeScreenContainer)
+    in MaybeScreenContainer (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by BottomTabView)
+    in BottomTabView (created by BottomTabNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by BottomTabNavigator)
+    in BottomTabNavigator
+    in Unknown (created by TabLayout)
+    in TabLayout
+    in Unknown (created by Route((tabs)))
+    in Suspense (created by Route((tabs)))
+    in Route (created by Route((tabs)))
+    in Route((tabs)) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by SceneView)
+    in RCTView (created by View)
+    in View (created by DebugContainer)
+    in DebugContainer (created by MaybeNestedStack)
+    in MaybeNestedStack (created by SceneView)
+    in RCTView (created by View)
+    in View (created by SceneView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by SceneView)
+    in SceneView (created by NativeStackViewInner)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by ScreenStack)
+    in RNSScreenStack (created by ScreenStack)
+    in ScreenStack (created by NativeStackViewInner)
+    in NativeStackViewInner (created by NativeStackView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by NativeStackView)
+    in NativeStackView (created by NativeStackNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by NativeStackNavigator)
+    in NativeStackNavigator
+    in Unknown (created by RootLayoutNav)
+    in ThemeProvider (created by RootLayoutNav)
+    in RCTView (created by View)
+    in View (created by GestureHandlerRootView)
+    in GestureHandlerRootView (created by RootLayoutNav)
+    in RootLayoutNav (created by RootLayout)
+    in RootLayout
+    in Try
+    in Unknown
+    in Unknown (created by Route())
+    in Suspense (created by Route())
+    in Route (created by Route())
+    in Route() (created by ContextNavigator)
+    in RNCSafeAreaProvider (created by SafeAreaProvider)
+    in SafeAreaProvider (created by wrapper)
+    in wrapper (created by ContextNavigator)
+    in EnsureSingleNavigator
+    in BaseNavigationContainer
+    in ThemeProvider
+    in NavigationContainerInner (created by ContextNavigator)
+    in ContextNavigator (created by ExpoRoot)
+    in ExpoRoot (created by App)
+    in App (created by ErrorOverlay)
+    in ErrorToastContainer (created by ErrorOverlay)
+    in ErrorOverlay (created by withDevTools(ErrorOverlay))
+    in withDevTools(ErrorOverlay)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in AppContainer
+    in main(RootComponent), js engine: hermes
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ ERROR  ReferenceError: Property 'dailyTasksCompleted' doesn't exist
+
+This error is located at:
+    in DashboardScreen
+    in Unknown (created by Route(index))
+    in Suspense (created by Route(index))
+    in Route (created by Route(index))
+    in Route(index) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by Screen)
+    in RCTView (created by View)
+    in View (created by Background)
+    in Background (created by Screen)
+    in Screen (created by BottomTabView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by MaybeScreen)
+    in MaybeScreen (created by BottomTabView)
+    in RNSScreenNavigationContainer (created by ScreenContainer)
+    in ScreenContainer (created by MaybeScreenContainer)
+    in MaybeScreenContainer (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by BottomTabView)
+    in BottomTabView (created by BottomTabNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by BottomTabNavigator)
+    in BottomTabNavigator
+    in Unknown (created by TabLayout)
+    in TabLayout
+    in Unknown (created by Route((tabs)))
+    in Suspense (created by Route((tabs)))
+    in Route (created by Route((tabs)))
+    in Route((tabs)) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by SceneView)
+    in RCTView (created by View)
+    in View (created by DebugContainer)
+    in DebugContainer (created by MaybeNestedStack)
+    in MaybeNestedStack (created by SceneView)
+    in RCTView (created by View)
+    in View (created by SceneView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by SceneView)
+    in SceneView (created by NativeStackViewInner)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by ScreenStack)
+    in RNSScreenStack (created by ScreenStack)
+    in ScreenStack (created by NativeStackViewInner)
+    in NativeStackViewInner (created by NativeStackView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by NativeStackView)
+    in NativeStackView (created by NativeStackNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by NativeStackNavigator)
+    in NativeStackNavigator
+    in Unknown (created by RootLayoutNav)
+    in ThemeProvider (created by RootLayoutNav)
+    in RCTView (created by View)
+    in View (created by GestureHandlerRootView)
+    in GestureHandlerRootView (created by RootLayoutNav)
+    in RootLayoutNav (created by RootLayout)
+    in RootLayout
+    in Try
+    in Unknown
+    in Unknown (created by Route())
+    in Suspense (created by Route())
+    in Route (created by Route())
+    in Route() (created by ContextNavigator)
+    in RNCSafeAreaProvider (created by SafeAreaProvider)
+    in SafeAreaProvider (created by wrapper)
+    in wrapper (created by ContextNavigator)
+    in EnsureSingleNavigator
+    in BaseNavigationContainer
+    in ThemeProvider
+    in NavigationContainerInner (created by ContextNavigator)
+    in ContextNavigator (created by ExpoRoot)
+    in ExpoRoot (created by App)
+    in App (created by ErrorOverlay)
+    in ErrorToastContainer (created by ErrorOverlay)
+    in ErrorOverlay (created by withDevTools(ErrorOverlay))
+    in withDevTools(ErrorOverlay)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in AppContainer
+    in main(RootComponent), js engine: hermes
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ ERROR  ReferenceError: Property 'dailyTasksCompleted' doesn't exist
+
+This error is located at:
+    in DashboardScreen
+    in Unknown (created by Route(index))
+    in Suspense (created by Route(index))
+    in Route (created by Route(index))
+    in Route(index) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by Screen)
+    in RCTView (created by View)
+    in View (created by Background)
+    in Background (created by Screen)
+    in Screen (created by BottomTabView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by MaybeScreen)
+    in MaybeScreen (created by BottomTabView)
+    in RNSScreenNavigationContainer (created by ScreenContainer)
+    in ScreenContainer (created by MaybeScreenContainer)
+    in MaybeScreenContainer (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by BottomTabView)
+    in BottomTabView (created by BottomTabNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by BottomTabNavigator)
+    in BottomTabNavigator
+    in Unknown (created by TabLayout)
+    in TabLayout
+    in Unknown (created by Route((tabs)))
+    in Suspense (created by Route((tabs)))
+    in Route (created by Route((tabs)))
+    in Route((tabs)) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by SceneView)
+    in RCTView (created by View)
+    in View (created by DebugContainer)
+    in DebugContainer (created by MaybeNestedStack)
+    in MaybeNestedStack (created by SceneView)
+    in RCTView (created by View)
+    in View (created by SceneView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by SceneView)
+    in SceneView (created by NativeStackViewInner)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by ScreenStack)
+    in RNSScreenStack (created by ScreenStack)
+    in ScreenStack (created by NativeStackViewInner)
+    in NativeStackViewInner (created by NativeStackView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by NativeStackView)
+    in NativeStackView (created by NativeStackNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by NativeStackNavigator)
+    in NativeStackNavigator
+    in Unknown (created by RootLayoutNav)
+    in ThemeProvider (created by RootLayoutNav)
+    in RCTView (created by View)
+    in View (created by GestureHandlerRootView)
+    in GestureHandlerRootView (created by RootLayoutNav)
+    in RootLayoutNav (created by RootLayout)
+    in RootLayout
+    in Try
+    in Unknown
+    in Unknown (created by Route())
+    in Suspense (created by Route())
+    in Route (created by Route())
+    in Route() (created by ContextNavigator)
+    in RNCSafeAreaProvider (created by SafeAreaProvider)
+    in SafeAreaProvider (created by wrapper)
+    in wrapper (created by ContextNavigator)
+    in EnsureSingleNavigator
+    in BaseNavigationContainer
+    in ThemeProvider
+    in NavigationContainerInner (created by ContextNavigator)
+    in ContextNavigator (created by ExpoRoot)
+    in ExpoRoot (created by App)
+    in App (created by ErrorOverlay)
+    in ErrorToastContainer (created by ErrorOverlay)
+    in ErrorOverlay (created by withDevTools(ErrorOverlay))
+    in withDevTools(ErrorOverlay)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in AppContainer
+    in main(RootComponent), js engine: hermes
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ ERROR  ReferenceError: Property 'dailyTasksCompleted' doesn't exist
+
+This error is located at:
+    in DashboardScreen
+    in Unknown (created by Route(index))
+    in Suspense (created by Route(index))
+    in Route (created by Route(index))
+    in Route(index) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by Screen)
+    in RCTView (created by View)
+    in View (created by Background)
+    in Background (created by Screen)
+    in Screen (created by BottomTabView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by MaybeScreen)
+    in MaybeScreen (created by BottomTabView)
+    in RNSScreenNavigationContainer (created by ScreenContainer)
+    in ScreenContainer (created by MaybeScreenContainer)
+    in MaybeScreenContainer (created by BottomTabView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by BottomTabView)
+    in BottomTabView (created by BottomTabNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by BottomTabNavigator)
+    in BottomTabNavigator
+    in Unknown (created by TabLayout)
+    in TabLayout
+    in Unknown (created by Route((tabs)))
+    in Suspense (created by Route((tabs)))
+    in Route (created by Route((tabs)))
+    in Route((tabs)) (created by SceneView)
+    in StaticContainer
+    in EnsureSingleNavigator (created by SceneView)
+    in SceneView (created by SceneView)
+    in RCTView (created by View)
+    in View (created by DebugContainer)
+    in DebugContainer (created by MaybeNestedStack)
+    in MaybeNestedStack (created by SceneView)
+    in RCTView (created by View)
+    in View (created by SceneView)
+    in RNSScreen (created by Animated(Anonymous))
+    in Animated(Anonymous) (created by InnerScreen)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by InnerScreen)
+    in InnerScreen (created by Screen)
+    in Screen (created by SceneView)
+    in SceneView (created by NativeStackViewInner)
+    in Suspender (created by Freeze)
+    in Suspense (created by Freeze)
+    in Freeze (created by DelayedFreeze)
+    in DelayedFreeze (created by ScreenStack)
+    in RNSScreenStack (created by ScreenStack)
+    in ScreenStack (created by NativeStackViewInner)
+    in NativeStackViewInner (created by NativeStackView)
+    in RCTView (created by View)
+    in View (created by SafeAreaProviderCompat)
+    in SafeAreaProviderCompat (created by NativeStackView)
+    in NativeStackView (created by NativeStackNavigator)
+    in PreventRemoveProvider (created by NavigationContent)
+    in NavigationContent
+    in Unknown (created by NativeStackNavigator)
+    in NativeStackNavigator
+    in Unknown (created by RootLayoutNav)
+    in ThemeProvider (created by RootLayoutNav)
+    in RCTView (created by View)
+    in View (created by GestureHandlerRootView)
+    in GestureHandlerRootView (created by RootLayoutNav)
+    in RootLayoutNav (created by RootLayout)
+    in RootLayout
+    in Try
+    in Unknown
+    in Unknown (created by Route())
+    in Suspense (created by Route())
+    in Route (created by Route())
+    in Route() (created by ContextNavigator)
+    in RNCSafeAreaProvider (created by SafeAreaProvider)
+    in SafeAreaProvider (created by wrapper)
+    in wrapper (created by ContextNavigator)
+    in EnsureSingleNavigator
+    in BaseNavigationContainer
+    in ThemeProvider
+    in NavigationContainerInner (created by ContextNavigator)
+    in ContextNavigator (created by ExpoRoot)
+    in ExpoRoot (created by App)
+    in App (created by ErrorOverlay)
+    in ErrorToastContainer (created by ErrorOverlay)
+    in ErrorOverlay (created by withDevTools(ErrorOverlay))
+    in withDevTools(ErrorOverlay)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in RCTView (created by View)
+    in View (created by AppContainer)
+    in AppContainer
+    in main(RootComponent), js engine: hermes
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+iOS Bundled 72ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 66ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ LOG  [RevenueCat]: undefined
+iOS Bundled 80ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 31ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+iOS Bundled 199ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 57ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+iOS Bundled 69ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 46ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  [RevenueCat]: undefined
+iOS Bundled 222ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 84ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  [RevenueCat]: undefined
+iOS Bundled 75ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 53ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  Unsupported dashed / dotted border style
+ WARN  Unsupported dashed / dotted border style
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+iOS Bundled 866ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 175ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  [RevenueCat]: undefined
+ LOG  [RevenueCat]: undefined
+ LOG  [RevenueCat]: undefined
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+iOS Bundled 1013ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 186ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+iOS Bundled 118ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 44ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+iOS Bundled 67ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 31ms node_modules/react-native-purchases/dist/index.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+iOS Bundled 73ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 27ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+iOS Bundled 107ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 55ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+iOS Bundled 225ms node_modules/expo-router/entry.js (1 module)
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 90ms node_modules/react-native-purchases/dist/index.js (1 module)
+ LOG  Firebase: Anonymous auth failed: [Error: [auth/unknown] This operation is restricted to administrators only.]
+ LOG  [RevenueCat]: undefined
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ LOG  --- AUTH ERROR ---
+ LOG  Code: auth/internal-error
+ LOG  Message: [auth/internal-error] An internal error has occurred, please try again.
+ LOG  Stack: NativeFirebaseError: [auth/internal-error] An internal error has occurred, please try again.
+    at signInWithCredential (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:275264:48)
+    at apply (native)
+    at anonymous (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:267722:40)
+    at ?anon_0_ (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:339014:81)
+    at next (native)
+    at asyncGeneratorStep (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5863:19)
+    at _next (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:5877:29)
+    at tryCallOne (address at InternalBytecode.js:1:1180)
+    at anonymous (address at InternalBytecode.js:1:1874)
+    at apply (native)
+    at anonymous (http://192.168.1.181:8081/node_modules/expo-router/entry.bundle//&platform=ios&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.bytecode=true&transform.routerRoot=app:14855:26)
+ LOG  ------------------
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead.
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+ WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (134:6)
+
+  132 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  133 |         </View>
+> 134 |       </Card>
+      |       ^
+  135 |     </View>
+  136 |   );
+  137 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (134:6)
+
+[0m [90m 132 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 133 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 134 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 135 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 136 |[39m   )[33m;[39m
+ [90m 137 |[39m[0m]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+error: SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+  131 |           <Switch value={cloudBackup} onValueChange={setCloudBackup} trackColor={{ true: '#4A5D4C' }} />
+  132 |         </View>
+> 133 |       </Card>
+      |       ^
+  134 |     </View>
+  135 |   );
+  136 |
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
+ ERROR  [Error: TransformError SyntaxError: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/app/settings/controls.tsx: Expected corresponding JSX closing tag for <View>. (133:6)
+
+[0m [90m 131 |[39m           [33m<[39m[33mSwitch[39m value[33m=[39m{cloudBackup} onValueChange[33m=[39m{setCloudBackup} trackColor[33m=[39m{{ [36mtrue[39m[33m:[39m [32m'#4A5D4C'[39m }} [33m/[39m[33m>[39m
+ [90m 132 |[39m         [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+[31m[1m>[22m[39m[90m 133 |[39m       [33m<[39m[33m/[39m[33mCard[39m[33m>[39m
+ [90m     |[39m       [31m[1m^[22m[39m
+ [90m 134 |[39m     [33m<[39m[33m/[39m[33mView[39m[33m>[39m
+ [90m 135 |[39m   )[33m;[39m
+ [90m 136 |[39m[0m]
