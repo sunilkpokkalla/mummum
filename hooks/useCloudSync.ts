@@ -13,7 +13,7 @@ export function useCloudSync() {
 
   // 1. DOWNLOAD FROM CLOUD (On Sign In / App Launch)
   useEffect(() => {
-    if (!user || !isPro) return;
+    if (!user) return;
 
     const fetchCloudData = async () => {
       try {
@@ -22,37 +22,45 @@ export function useCloudSync() {
         if (userDoc.exists) {
           const cloudData = userDoc.data();
           if (cloudData) {
-            console.log('[CloudSync] Data downloaded from Firestore');
+            // console.log('[CloudSync] Data downloaded from Firestore');
             
-            // TRANSLATION LAYER: Convert Firebase Timestamps back to JS Dates
-            const translateDates = (arr: any[]) => arr.map(item => ({
-              ...item,
-              timestamp: item.timestamp?.toDate ? item.timestamp.toDate() : item.timestamp,
-              startTime: item.startTime?.toDate ? item.startTime.toDate() : item.startTime,
-              birthDate: item.birthDate?.toDate ? item.birthDate.toDate() : item.birthDate,
-            }));
+            // USE THE ROBUST STORE REHYDRATOR
+            const rehydrateDates = (obj: any): any => {
+              if (!obj || typeof obj !== 'object') return obj;
+              if (obj.seconds !== undefined && obj.nanoseconds !== undefined) {
+                return new Date(obj.seconds * 1000);
+              }
+              if (Array.isArray(obj)) return obj.map(rehydrateDates);
+              const newObj: any = {};
+              for (const key in obj) {
+                newObj[key] = rehydrateDates(obj[key]);
+              }
+              return newObj;
+            };
 
-            const translatedActivities = translateDates(cloudData.activities || []);
-            const translatedBabies = translateDates(cloudData.babies || []);
-            const translatedMemories = translateDates(cloudData.memories || []);
+            const rehydrated = rehydrateDates(cloudData);
 
             // Mark that the next change is from a download, so don't upload it back
             skipNextUpload.current = true;
             
             setStore({
-              activities: translatedActivities,
-              babies: translatedBabies,
-              currentBabyId: cloudData.currentBabyId || null,
-              memories: translatedMemories,
-              appointments: cloudData.appointments || [],
-              dayCareLogs: cloudData.dayCareLogs || [],
-              completedMilestones: cloudData.completedMilestones || {},
-              isOnboarded: (translatedBabies.length > 0)
+              activities: rehydrated.activities || [],
+              babies: rehydrated.babies || [],
+              currentBabyId: rehydrated.currentBabyId || null,
+              memories: rehydrated.memories || [],
+              appointments: rehydrated.appointments || [],
+              dayCareLogs: rehydrated.dayCareLogs || [],
+              completedMilestones: rehydrated.completedMilestones || {},
+              completedChecklistItems: rehydrated.completedChecklistItems || {},
+              userName: rehydrated.userName || 'Parent',
+              userPhotoUri: rehydrated.userPhotoUri || null,
+              isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : isPro,
+              isOnboarded: (rehydrated.babies?.length > 0)
             });
           }
         }
       } catch (e) {
-        if (__DEV__) console.error('[CloudSync] Download error:', e);
+        console.error('[CloudSync] Download error:', e);
       } finally {
         isInitialLoad.current = false;
         setSyncing(false);
@@ -60,11 +68,11 @@ export function useCloudSync() {
     };
 
     fetchCloudData();
-  }, [user?.uid, isPro]);
+  }, [user?.uid]);
 
   // 2. UPLOAD TO CLOUD (On Local Change)
   useEffect(() => {
-    if (!user || !isPro || isInitialLoad.current) return;
+    if (!user || isInitialLoad.current) return;
 
     // If this change came from a download, skip this upload cycle
     if (skipNextUpload.current) {
@@ -85,11 +93,15 @@ export function useCloudSync() {
           appointments,
           dayCareLogs,
           completedMilestones,
+          completedChecklistItems: useBabyStore.getState().completedChecklistItems,
+          isPro,
+          userName: useBabyStore.getState().userName,
+          userPhotoUri: useBabyStore.getState().userPhotoUri,
           lastSync: firestore.FieldValue.serverTimestamp(),
           updatedAt: new Date().toISOString()
         }, { merge: true });
       } catch (e) {
-        if (__DEV__) console.error('[CloudSync] Upload error:', e);
+        console.error('[CloudSync] Upload error:', e);
       } finally {
         setSyncing(false);
       }
@@ -97,5 +109,5 @@ export function useCloudSync() {
 
     const timer = setTimeout(syncToCloud, 2000);
     return () => clearTimeout(timer);
-  }, [activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, user?.uid, isPro]);
+  }, [activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, user?.uid]);
 }

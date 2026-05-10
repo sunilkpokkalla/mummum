@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, Pressable, Image, Dimensions } from 'react-native';
+import { StyleSheet, ScrollView, View, Pressable, Image, Dimensions, ActivityIndicator, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/Colors';
@@ -31,7 +31,7 @@ import { formatDistanceToNow, isToday, format, intervalToDuration } from 'date-f
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { usePremium } from '@/hooks/usePremium';
 
-import { saveImagePermanently } from '@/utils/imagePersistor';
+import { saveImagePermanently, resolveImageUri } from '@/utils/imagePersistor';
 
 const { width } = Dimensions.get('window');
 
@@ -40,7 +40,8 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, showGlobalModal } = useBabyStore();
+  const [profileLoading, setProfileLoading] = useState(false);
   const { isPro } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
@@ -53,31 +54,55 @@ export default function DashboardScreen() {
       title: "Baby Photo",
       description: "Personalize your baby's clinical dashboard.",
       confirmText: "Camera",
-      onConfirm: () => processImage(true),
+      onConfirm: () => {
+        useBabyStore.getState().hideGlobalModal();
+        setTimeout(() => processImage(true), 100);
+      },
       secondaryText: "Gallery",
-      onSecondary: () => processImage(false),
+      onSecondary: () => {
+        useBabyStore.getState().hideGlobalModal();
+        setTimeout(() => processImage(false), 100);
+      },
       cancelText: "Cancel"
     });
   };
 
   const processImage = async (useCamera: boolean) => {
+    setProfileLoading(true);
     try {
       const { status } = useCamera 
         ? await ImagePicker.requestCameraPermissionsAsync() 
         : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      if (status !== 'granted') return;
+      if (status !== 'granted') {
+        showGlobalModal({
+          title: "Permission Needed",
+          description: `We need ${useCamera ? 'camera' : 'photo library'} access to personalize your baby's dashboard. Please enable this in your device settings.`,
+          confirmText: "Open Settings",
+          onConfirm: () => {
+            hideGlobalModal();
+            Linking.openSettings();
+          }
+        });
+        setProfileLoading(false);
+        return;
+      }
 
       const result = useCamera 
         ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 })
         : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
 
-      if (!result.canceled && currentBabyId) {
-        const permanentUri = await saveImagePermanently(result.assets[0].uri);
+      if (!result.canceled && currentBabyId && result.assets && result.assets.length > 0) {
+        const tempUri = result.assets[0].uri;
+        if (!tempUri) throw new Error('No URI returned');
+        
+        const permanentUri = await saveImagePermanently(tempUri);
         updateBaby(currentBabyId, { photoUri: permanentUri });
       }
     } catch (e) {
       console.log('Image selection failed', e);
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -164,10 +189,16 @@ export default function DashboardScreen() {
                 { borderColor: themeColors.surfaceVariant, opacity: pressed ? 0.7 : 1 }
               ]}
             >
-              <Image 
-                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-                style={styles.avatar}
-              />
+              {profileLoading ? (
+                <View style={[styles.avatar, { alignItems: 'center', justifyContent: 'center', backgroundColor: themeColors.surfaceVariant }]}>
+                  <ActivityIndicator color={themeColors.primary} />
+                </View>
+              ) : (
+                <Image 
+                  source={currentBaby?.photoUri && resolveImageUri(currentBaby.photoUri) ? { uri: resolveImageUri(currentBaby.photoUri)! } : require('@/assets/images/baby_avatar.png')} 
+                  style={styles.avatar}
+                />
+              )}
             </Pressable>
             <View style={styles.headerInfo}>
               <Typography variant="headline" weight="700">{currentBaby?.name || 'Your Baby'}</Typography>

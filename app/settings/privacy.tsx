@@ -124,6 +124,7 @@ export default function PrivacySettingsScreen() {
                 title="Export Baby Data"
                 detail="Download full clinical history"
                 onPress={handleExportData}
+                isPro
               />
               <MenuItem 
                 icon={<FileText size={20} color="#1B3C35" />}
@@ -186,9 +187,11 @@ export default function PrivacySettingsScreen() {
               <TouchableOpacity onPress={() => setIsPolicyVisible(false)}><X size={24} color="#1B3C35" /></TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.modalBody}>
-              <PolicySection title="1. Clinical-Grade Privacy" content="Mummum is designed as a clinical assistant. Your baby's health data is encrypted and synced only to your private account. We do not sell or share clinical data." />
-              <PolicySection title="2. Data Encryption" content="All sensitive logs are protected using high-entropy system-level encryption both on-device and in-transit." />
-              <PolicySection title="3. Data Portability" content="You have the right to export your entire clinical history at any time." />
+              <PolicySection title="1. Clinical-Grade Privacy" content="Mummum is designed as a clinical assistant first. Your baby's health data is strictly yours. We do not sell, rent, or monetize your clinical records. Our business model is supported solely by Pro subscriptions." />
+              <PolicySection title="2. Advanced Encryption" content="All clinical data—including feeding logs, growth metrics, and medical records—is encrypted using industry-standard AES-256 encryption. Data is encrypted both at rest on your device and in-transit to our secure cloud servers." />
+              <PolicySection title="3. Data Ownership & Portability" content="You own your data. At any time, you can export your entire clinical history into a medical-grade report. If you choose to delete your account, all cloud and local records are purged permanently within 24 hours." />
+              <PolicySection title="4. Child Privacy Protection" content="Mummum is fully compliant with global child privacy standards, including COPPA. We do not collect identifiable information from children. All baby profiles are managed by authenticated adult guardians." />
+              <PolicySection title="5. Hybrid-Cloud Architecture" content="To ensure reliability, Mummum uses a dual-layer storage system. Your logs are saved locally for instant access (offline) and synced to the cloud whenever a connection is available to prevent data loss." />
             </ScrollView>
           </View>
         </Modal>
@@ -201,8 +204,10 @@ export default function PrivacySettingsScreen() {
               <TouchableOpacity onPress={() => setIsDocVisible(false)}><X size={24} color="#1B3C35" /></TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.modalBody}>
-              <PolicySection title="Growth OS Standards" content="Our growth tracking follows standard WHO and CDC clinical percentile models." />
-              <PolicySection title="Security Architecture" content="Mummum uses a Hybrid-Cloud architecture. Your data is stored locally for speed and synced to the cloud for safety." />
+              <PolicySection title="Growth OS Standards" content="Our growth tracking and percentile curves are derived from the World Health Organization (WHO) and CDC clinical standards for infant development (0-24 months)." />
+              <PolicySection title="Security Architecture" content="Mummum utilizes Google Firebase for real-time synchronization. Your identity is managed via Apple or Google authentication, ensuring that only you can access your baby's clinical hub." />
+              <PolicySection title="Clinical Logging Engine" content="Our logging algorithms use atomic timestamps to ensure that multiple caregivers can log data simultaneously without conflicts, creating a single, reliable clinical timeline." />
+              <PolicySection title="Offline Resilience" content="Mummum is built for high-stakes parenting. All critical features (feeding timers, medical logs) are fully functional without an internet connection, with automatic reconciliation once back online." />
             </ScrollView>
           </View>
         </Modal>
@@ -211,13 +216,20 @@ export default function PrivacySettingsScreen() {
   );
 }
 
-function MenuItem({ icon, title, detail, onPress, isLast }: any) {
+function MenuItem({ icon, title, detail, onPress, isLast, isPro }: any) {
   return (
     <TouchableOpacity style={[styles.menuItem, !isLast && styles.menuBorder]} onPress={onPress}>
       <View style={styles.menuLeft}>
         <View style={styles.menuIconContainer}>{icon}</View>
         <View style={{ flex: 1 }}>
-          <Typography variant="body" weight="700" color="#1B3C35">{title}</Typography>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Typography variant="body" weight="700" color="#1B3C35">{title}</Typography>
+            {isPro && (
+              <View style={{ backgroundColor: '#C69C82', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }}>
+                <Typography variant="label" weight="900" color="#fff" style={{ fontSize: 8 }}>PRO</Typography>
+              </View>
+            )}
+          </View>
           <Typography variant="label" color="#90A4AE" weight="600">{detail}</Typography>
         </View>
       </View>

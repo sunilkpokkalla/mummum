@@ -4,7 +4,7 @@ import { useBabyStore } from '@/store/useBabyStore';
 import auth from '@react-native-firebase/auth';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
-import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
+import { Apple, ChevronRight, Cloud, Mail, Shield, X } from 'lucide-react-native';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -29,7 +29,7 @@ try {
     GoogleSignin = require('@react-native-google-signin/google-signin').GoogleSignin;
   }
 } catch (e) {
-  console.warn('RNGoogleSignin native module not found. Google login will be project-wide disabled.');
+  // Safe Fallback: RNGoogleSignin native module not found
 }
 
 // Note: Replace with your actual Web Client ID from Firebase Console
@@ -124,11 +124,20 @@ export default function OnboardingAuthScreen() {
           onConfirm: () => {
             // OPTION A: Keep Cloud Data
             setModalConfig(prev => ({ ...prev, visible: false }));
-            const targetId = cloudBabies[0].id;
-            setCurrentBaby(targetId);
-            completeOnboarding();
-            setLoading(false);
-            router.replace('/(tabs)');
+            const targetId = cloudBabies[0]?.id;
+            if (targetId) {
+              setCurrentBaby(targetId);
+              completeOnboarding();
+              setLoading(false);
+              
+              // Temporal Buffer to prevent dashboard race-condition crash
+              setTimeout(() => {
+                router.replace('/(tabs)');
+              }, 100);
+            } else {
+              setLoading(false);
+              router.replace('/(tabs)');
+            }
           },
           secondaryText: "Start Fresh",
           onSecondary: () => {
@@ -146,7 +155,11 @@ export default function OnboardingAuthScreen() {
             setCurrentBaby(id);
             completeOnboarding();
             setLoading(false);
-            router.replace('/(tabs)');
+            
+            // Temporal Buffer
+            setTimeout(() => {
+              router.replace('/(tabs)');
+            }, 100);
           }
         });
         return; // Wait for user choice
@@ -167,9 +180,13 @@ export default function OnboardingAuthScreen() {
       }
 
       setCurrentBaby(targetBabyId);
-      setLoading(false);
       completeOnboarding();
-      router.replace('/(tabs)');
+      setLoading(false);
+      
+      // Temporal Buffer for state propagation
+      setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 100);
     } catch (e) {
       console.error('[Sync]: Post-login sync failed', e);
       setLoading(false);
@@ -341,6 +358,14 @@ export default function OnboardingAuthScreen() {
       {/* Background Decor */}
       <View style={styles.decorCircle} />
 
+      {/* Close Button for Guest Users escaping to Dashboard */}
+      <TouchableOpacity 
+        style={styles.closeButton} 
+        onPress={() => router.back()}
+      >
+        <X size={24} color="#4A5D4C" />
+      </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -488,6 +513,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    zIndex: 100,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   decorCircle: {
     position: 'absolute',

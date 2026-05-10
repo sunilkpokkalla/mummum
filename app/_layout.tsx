@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -7,13 +8,28 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import * as SplashScreen from 'expo-splash-screen';
 import { useBabyStore } from '@/store/useBabyStore';
 import ElegantModal from '@/components/ElegantModal';
+import { useCloudSync } from '@/hooks/useCloudSync';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+// CLINICAL SILENCE: Suppress non-critical production noise
+LogBox.ignoreLogs([
+  'deployment version mismatch',
+  'ignoring duplicate libraries',
+  'NativeEventEmitter',
+  'Non-serializable value',
+  'ClonableElement',
+  'Task exceeded',
+  'Sending',
+]);
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const { globalModalConfig, hideGlobalModal } = useBabyStore();
+  
+  // ACTIVATE REAL-TIME CLINICAL SYNC
+  useCloudSync();
 
   useEffect(() => {
     SplashScreen.hideAsync();
@@ -28,6 +44,11 @@ export default function RootLayout() {
           <Stack.Screen name="onboarding/baby-info" options={{ headerShown: false }} />
           <Stack.Screen name="onboarding/offer" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="premium" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="log/feed" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="log/diaper" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="log/sleep" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="log/medical" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name="checklists/index" options={{ headerShown: false, presentation: 'modal' }} />
         </Stack>
         <StatusBar style="auto" />
         

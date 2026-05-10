@@ -12,7 +12,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
@@ -45,6 +46,7 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from '
 import DateTimePicker from '@/components/DateTimePicker';
 import { usePremium } from '@/hooks/usePremium';
 import ProModal from '@/components/ProModal';
+import { resolveImageUri } from '@/utils/imagePersistor';
 
 const WHO_VACCINATIONS = [
   { id: 'v1', title: 'BCG (Tuberculosis)', period: 'At Birth' },
@@ -214,9 +216,9 @@ export default function MedicalLogScreen() {
       style={{ flex: 1 }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
+        <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
           {/* Header */}
-          <View style={styles.header}>
+          <View style={[styles.header, { paddingTop: 16 }]}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
               <ArrowLeft size={24} color="#1B3C35" />
             </TouchableOpacity>
@@ -700,6 +702,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 5,
     elevation: 2,
+  },
+  avatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   content: {
     padding: 20,

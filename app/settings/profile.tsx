@@ -19,7 +19,8 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { format } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
 import * as ImagePicker from 'expo-image-picker';
-import { saveImagePermanently } from '@/utils/imagePersistor';
+import { saveImagePermanently, resolveImageUri } from '@/utils/imagePersistor';
+import { Linking } from 'react-native';
 
 export default function BabyProfileScreen() {
   const router = useRouter();
@@ -34,13 +35,20 @@ export default function BabyProfileScreen() {
   const [isUploading, setIsUploading] = React.useState(false);
 
   const handlePickImage = async () => {
+    const { hideGlobalModal } = useBabyStore.getState();
     showGlobalModal({
       title: "Baby Profile Photo",
       description: "Choose a source for your baby's clinical profile photo.",
       confirmText: "Camera",
-      onConfirm: () => processImage(true),
+      onConfirm: () => {
+        hideGlobalModal();
+        setTimeout(() => processImage(true), 100);
+      },
       secondaryText: "Gallery",
-      onSecondary: () => processImage(false),
+      onSecondary: () => {
+        hideGlobalModal();
+        setTimeout(() => processImage(false), 100);
+      },
       cancelText: "Cancel"
     });
   };
@@ -52,9 +60,15 @@ export default function BabyProfileScreen() {
         : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (status !== 'granted') {
+        const { hideGlobalModal } = useBabyStore.getState();
         showGlobalModal({
           title: "Permission Required",
-          description: "We need access to your photos to personalize the clinical hub."
+          description: "We need access to your photos to personalize the clinical hub. Please enable this in your device settings.",
+          confirmText: "Open Settings",
+          onConfirm: () => {
+            hideGlobalModal();
+            Linking.openSettings();
+          }
         });
         return;
       }
@@ -136,8 +150,8 @@ export default function BabyProfileScreen() {
           <Animated.View entering={FadeInDown.duration(600)} style={styles.avatarSection}>
             <TouchableOpacity style={styles.avatarWrapper} onPress={handlePickImage} disabled={isUploading}>
               <View style={styles.avatarCircle}>
-                {photoUri ? (
-                  <Image source={{ uri: photoUri }} style={styles.avatarImg} />
+                {photoUri && resolveImageUri(photoUri) ? (
+                  <Image source={{ uri: resolveImageUri(photoUri)! }} style={styles.avatarImg} />
                 ) : (
                   <Baby size={48} color="#fff" />
                 )}

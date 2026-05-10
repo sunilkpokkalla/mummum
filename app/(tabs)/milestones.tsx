@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Pressable, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Pressable, Alert, Linking, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -7,7 +7,7 @@ import Typography from '@/components/Typography';
 import Card from '@/components/Card';
 import { Award, Camera, CheckCircle, Circle, Bell, ChevronRight, Star, Lock, Unlock } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
-import { saveImagePermanently, saveToAlbum } from '@/utils/imagePersistor';
+import { saveImagePermanently, saveToAlbum, resolveImageUri } from '@/utils/imagePersistor';
 import * as Haptics from 'expo-haptics';
 import { format } from 'date-fns';
 
@@ -64,7 +64,7 @@ const MILESTONE_DATA = [
 export default function MilestonesScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone, showGlobalModal } = useBabyStore();
+  const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone, showGlobalModal, hideGlobalModal } = useBabyStore();
   const [loading, setLoading] = useState(false);
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const completedIds = (completedMilestones as any)[currentBabyId || ''] || [];
@@ -75,39 +75,64 @@ export default function MilestonesScreen() {
       title: "Add Milestone Memory",
       description: "Capture a new moment or choose from your library.",
       confirmText: "Take Photo",
-      onConfirm: () => processImage(true),
+      onConfirm: () => {
+        hideGlobalModal();
+        setTimeout(() => processImage(true), 100);
+      },
       secondaryText: "Choose from Library",
-      onSecondary: () => processImage(false),
+      onSecondary: () => {
+        hideGlobalModal();
+        setTimeout(() => processImage(false), 100);
+      },
       cancelText: "Cancel"
     });
   };
 
   const processImage = async (useCamera: boolean) => {
-    const { status } = useCamera 
-      ? await ImagePicker.requestCameraPermissionsAsync() 
-      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    setLoading(true);
+    try {
+      const { status } = useCamera 
+        ? await ImagePicker.requestCameraPermissionsAsync() 
+        : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status !== 'granted') {
-      showGlobalModal({
-        title: "Permission needed",
-        description: `We need ${useCamera ? 'camera' : 'photo library'} access to save memories.`
-      });
-      return;
-    }
+      if (status !== 'granted') {
+        showGlobalModal({
+          title: "Permission Needed",
+          description: `We need ${useCamera ? 'camera' : 'photo library'} access to capture your baby's memories. Please enable this in your device settings.`,
+          confirmText: "Open Settings",
+          onConfirm: () => {
+            hideGlobalModal();
+            Linking.openSettings();
+          }
+        });
+        setLoading(false);
+        return;
+      }
 
-    const result = useCamera 
-      ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [4, 5], quality: 0.8 })
-      : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [4, 5], quality: 0.8 });
+      const result = useCamera 
+        ? await ImagePicker.launchCameraAsync({ 
+            allowsEditing: true, 
+            quality: 0.7,
+            exif: false 
+          })
+        : await ImagePicker.launchImageLibraryAsync({ 
+            allowsEditing: true, 
+            quality: 0.7,
+            exif: false
+          });
 
-    if (!result.canceled) {
-      setLoading(true);
-      try {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         const tempUri = result.assets[0].uri;
+        if (!tempUri) throw new Error('No URI returned');
+
         const permanentUri = await saveImagePermanently(tempUri);
         
-        // Auto-save to phone album if it's a new camera photo
         if (useCamera) {
-          await saveToAlbum(tempUri);
+          try {
+            await saveToAlbum(tempUri);
+          } catch (albumErr) {
+            console.log('[Album Save]: Non-critical failure', albumErr);
+          }
         }
 
         const newMemory = {
@@ -116,16 +141,23 @@ export default function MilestonesScreen() {
           title: `Memory - ${format(new Date(), 'MMM d')}`,
           timestamp: new Date()
         };
+        
         addMemory(newMemory);
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } catch (e) {
-        showGlobalModal({
-          title: "Save Failed",
-          description: "We couldn't save that photo to your milestone. Please try again or check your storage."
-        });
-      } finally {
-        setLoading(false);
+        
+        try {
+          await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        } catch (hapticErr) {
+          // Non-critical
+        }
       }
+    } catch (e) {
+      console.error('[Memory Save Error]:', e);
+      showGlobalModal({
+        title: "Save Failed",
+        description: "We couldn't save that photo. Please ensure you have storage space available and try again."
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -219,9 +251,19 @@ export default function MilestonesScreen() {
               decelerationRate="fast"
               contentContainerStyle={{ paddingRight: 40 }}
             >
-              <TouchableOpacity style={styles.addMemory} onPress={handleAddMemory}>
-                <Camera size={28} color="#C69C82" />
-                <Typography variant="label" color="#C69C82" weight="700">Add Photo</Typography>
+              <TouchableOpacity 
+                style={[styles.addMemory, loading && { opacity: 0.7 }]} 
+                onPress={handleAddMemory}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#C69C82" />
+                ) : (
+                  <>
+                    <Camera size={28} color="#C69C82" />
+                    <Typography variant="label" color="#C69C82" weight="700">Add Photo</Typography>
+                  </>
+                )}
               </TouchableOpacity>
               
               {babyMemories.map((memory, index) => (
@@ -233,7 +275,7 @@ export default function MilestonesScreen() {
                   ]}
                 >
                    <Image 
-                     source={memory.uri ? { uri: memory.uri } : require('@/assets/images/baby_avatar.png')} 
+                     source={memory.uri && resolveImageUri(memory.uri) ? { uri: resolveImageUri(memory.uri)! } : require('@/assets/images/baby_avatar.png')} 
                      style={styles.polaroidImg} 
                    />
                    <Typography variant="label" weight="700" style={styles.polaroidLabel}>{memory.title}</Typography>

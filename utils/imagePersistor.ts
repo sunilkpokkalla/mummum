@@ -6,7 +6,7 @@ export const saveImagePermanently = async (tempUri: string): Promise<string> => 
   try {
     if (!tempUri) return '';
     
-    // Create a permanent filename
+    // Create a permanent filename (Portable: just the filename)
     const filename = `baby_photo_${Date.now()}.jpg`;
     const permanentUri = `${FileSystem.documentDirectory}${filename}`;
     
@@ -16,11 +16,26 @@ export const saveImagePermanently = async (tempUri: string): Promise<string> => 
       to: permanentUri
     });
     
-    return permanentUri;
+    // Return ONLY the filename to ensure portability across app updates/UUID changes
+    return filename;
   } catch (error) {
     console.error('Error persisting image:', error);
-    return tempUri; // Fallback to temp if copy fails
+    return tempUri;
   }
+};
+
+/**
+ * Resolves a stored image path (filename or absolute URI) to the current document directory.
+ * This ensures photos stay visible even after the app's internal UUID changes.
+ */
+export const resolveImageUri = (storedUri: string | undefined): string | null => {
+  if (!storedUri) return null;
+  
+  // If it's already a full file URI and exists, keep it (backwards compatibility)
+  if (storedUri.startsWith('file://')) return storedUri;
+  
+  // If it's just a filename, join it with the current document directory
+  return `${FileSystem.documentDirectory}${storedUri}`;
 };
 
 export const saveToAlbum = async (uri: string) => {

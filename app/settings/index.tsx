@@ -20,7 +20,9 @@ import {
   Shield, 
   LogOut,
   Star,
-  ArrowLeft
+  ArrowLeft,
+  ShieldCheck,
+  Activity
 } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -139,18 +141,28 @@ export default function SettingsScreen() {
             <TouchableOpacity 
               activeOpacity={0.9}
               onPress={() => router.push('/premium')}
-              style={[styles.luxuryCard, { backgroundColor: isPro ? '#1B3C35' : '#C69C82' }]}
+              style={[styles.luxuryCard, { backgroundColor: '#1B3C35', borderWidth: isPro ? 0 : 1, borderColor: '#C69C82' }]}
             >
               <View style={styles.cardContent}>
-                <View style={styles.iconCircle}>
-                  <Star size={24} color={isPro ? '#C69C82' : '#fff'} fill={isPro ? '#C69C82' : '#fff'} />
+                <View style={[styles.iconCircle, { backgroundColor: isPro ? 'rgba(198, 156, 130, 0.15)' : '#C69C82' }]}>
+                  {isPro ? <ShieldCheck size={22} color="#C69C82" /> : <Activity size={20} color="#fff" />}
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Typography variant="body" weight="800" color="#fff">
-                      {isPro ? 'Pro Status Active' : 'Free Version'}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography variant="body" weight="900" color="#fff" style={{ letterSpacing: 0.5, fontSize: 14 }}>
+                      {isPro ? "MUMMUM PRO ACTIVE" : "UNLOCK CLINICAL PRO"}
                     </Typography>
+                    {!isPro && (
+                      <View style={{ backgroundColor: '#C69C82', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                        <Typography variant="label" weight="900" color="#fff" style={{ fontSize: 7 }}>PREMIUM</Typography>
+                      </View>
+                    )}
+                  </View>
+                  <Typography variant="label" color="rgba(255,255,255,0.6)" weight="600" style={{ marginTop: 2, fontSize: 11 }}>
+                    {isPro ? "Lifetime clinical assistant enabled" : "Unlimited logs, PDF reports & sync"}
+                  </Typography>
                 </View>
-                <ChevronRight size={20} color="rgba(255,255,255,0.5)" />
+                <ChevronRight size={18} color={isPro ? 'rgba(255,255,255,0.2)' : '#C69C82'} />
               </View>
             </TouchableOpacity>
           </Animated.View>
@@ -250,9 +262,9 @@ const styles = StyleSheet.create({
   content: { padding: 24, paddingTop: 8 },
   mainTitle: { fontSize: 40, color: '#1B3C35' },
   subtitle: { marginTop: 4, marginBottom: 32 },
-  luxuryCard: { padding: 24, borderRadius: 32, shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 8, marginBottom: 40 },
-  cardContent: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-  iconCircle: { width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
+  luxuryCard: { padding: 14, paddingVertical: 18, borderRadius: 24, shadowColor: '#000', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 8, marginBottom: 20, position: 'relative', overflow: 'hidden' },
+  cardContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  iconCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.15)', alignItems: 'center', justifyContent: 'center' },
   section: { marginBottom: 32 },
   sectionLabel: { letterSpacing: 1.5, marginBottom: 12, marginLeft: 4, fontSize: 11 },
   elegantGroup: { backgroundColor: '#fff', borderRadius: 28, borderWidth: 1, borderColor: '#F1F5F9', overflow: 'hidden', shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.03, shadowRadius: 16, elevation: 4 },

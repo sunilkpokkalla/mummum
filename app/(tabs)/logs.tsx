@@ -33,6 +33,7 @@ import {
 import { Milk, Moon, Droplet, ChevronRight, FileText, Share2, Syringe, Pill, Baby, Scale, Star, Settings } from 'lucide-react-native';
 import { generateBabyReport } from '@/utils/reportGenerator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 
 const { width } = Dimensions.get('window');
 
@@ -407,12 +408,22 @@ function SocialShareModal({ visible, onClose, baby, data, activities, setModalCo
       setIsSnapshotLoading(true);
       const uri = await captureRef(viewRef, { format: 'png', quality: 1 });
       await MediaLibrary.saveToLibraryAsync(uri);
-      setModalConfig({
-        visible: true,
-        title: "Snapshot Saved",
-        desc: "Your clinical summary has been saved to your photo gallery and is ready to share.",
-        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
-      });
+      
+      // DISMISS THE SHARE PREVIEW FIRST TO PREVENT MODAL COLLISION
+      onClose();
+      
+      // DELAY THE SUCCESS MODAL SLIGHTLY FOR FLUID HANDSHAKE
+      setTimeout(() => {
+        setModalConfig({
+          visible: true,
+          title: "Snapshot Saved",
+          desc: "Your clinical summary has been saved to your photo gallery and is ready to share.",
+          onConfirm: () => {
+            setModalConfig(prev => ({ ...prev, visible: false }));
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          }
+        });
+      }, 400);
     } catch (e) {
       setModalConfig({
         visible: true,

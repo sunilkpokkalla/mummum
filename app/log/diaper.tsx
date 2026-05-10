@@ -20,12 +20,16 @@ import { Bell, Droplet, AlertCircle, FileText, Calendar } from 'lucide-react-nat
 import { useBabyStore } from '@/store/useBabyStore';
 import { format } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
+import { resolveImageUri } from '@/utils/imagePersistor';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ArrowLeft } from 'lucide-react-native';
 
 export default function DiaperLogScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { addActivity, stopSession, babies, currentBabyId } = useBabyStore();
+  const { addActivity, stopSession, babies, currentBabyId, showGlobalModal, hideGlobalModal } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const [type, setType] = useState('Wet');
@@ -60,30 +64,33 @@ export default function DiaperLogScreen() {
       style={{ flex: 1 }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1, backgroundColor: '#F8FAFB' }}>
+        {/* Header */}
+        <View style={[styles.header, { justifyContent: 'center', paddingTop: 16 }]}>
+          <TouchableOpacity 
+            style={[styles.backBtn, { position: 'absolute', left: 20, top: 16 }]} 
+            onPress={() => router.back()}
+          >
+            <ArrowLeft size={24} color="#1B3C35" />
+          </TouchableOpacity>
+          
+          <View style={{ alignItems: 'center' }}>
+            <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
+            <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
+          </View>
+
+          <Image 
+            source={currentBaby?.photoUri && resolveImageUri(currentBaby.photoUri) ? { uri: resolveImageUri(currentBaby.photoUri)! } : require('@/assets/images/baby_avatar.png')} 
+            style={[styles.avatar, { position: 'absolute', right: 20, top: 16 }]} 
+          />
+        </View>
+
         <ScrollView 
           style={[styles.container, { backgroundColor: '#F8FAFB' }]}
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Header */}
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()} hitSlop={20} style={styles.backBtn}>
-              <Image 
-                source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-                style={styles.avatar}
-              />
-            </TouchableOpacity>
-            <Typography variant="headline" weight="700" style={{ color: '#1B3C35' }}>Diaper Log</Typography>
-            <View style={{ width: 40 }} />
-          </View>
-
-          {/* Title */}
-          <View style={styles.titleSection}>
-            <Typography variant="bodyLg" color={themeColors.icon} align="center">
-              Monitoring {currentBaby?.name || 'Baby'}'s comfort
-            </Typography>
-          </View>
 
           {/* Type Selection Grid */}
           <View style={styles.gridContainer}>
@@ -137,14 +144,18 @@ export default function DiaperLogScreen() {
             />
           </Card>
 
-          {/* Save Button */}
-          <TouchableOpacity 
-            style={[styles.saveButton, { backgroundColor: '#C69C82' }]}
-            onPress={handleSave}
-          >
-            <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Save Diaper Log</Typography>
-          </TouchableOpacity>
-        </ScrollView>
+          </ScrollView>
+
+          {/* Sticky Footer */}
+          <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 16 }]}>
+            <TouchableOpacity 
+              style={[styles.saveButton, { backgroundColor: '#C69C82', marginTop: 0 }]}
+              onPress={handleSave}
+            >
+              <Typography variant="bodyLg" weight="700" style={{ color: '#fff' }}>Save Diaper Log</Typography>
+            </TouchableOpacity>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -163,20 +174,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    backgroundColor: '#fff',
+  },
+  footer: {
+    paddingHorizontal: 24,
     paddingTop: 12,
-    paddingBottom: 20,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#F2F5F6',
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#F2F5F6',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#F8FAFB',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
-    width: '100%',
-    height: '100%',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   titleSection: {
     gap: 4,

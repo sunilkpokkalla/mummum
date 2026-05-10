@@ -147,10 +147,31 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
       isPro: state.isPro,
       updatedAt: firestore.FieldValue.serverTimestamp(),
     }, { merge: true });
-    console.log('[Cloud Sync]: Data pushed successfully.');
   } catch (e) {
     console.error('[Cloud Sync]: Push failed:', e);
   }
+};
+
+// Recursive helper to convert Firestore Timestamps to JS Dates
+const rehydrateDates = (obj: any): any => {
+  if (!obj || typeof obj !== 'object') return obj;
+
+  // Handle Firestore Timestamp
+  if (obj.seconds !== undefined && obj.nanoseconds !== undefined) {
+    return new Date(obj.seconds * 1000);
+  }
+
+  // Handle Arrays
+  if (Array.isArray(obj)) {
+    return obj.map(rehydrateDates);
+  }
+
+  // Handle Objects
+  const newObj: any = {};
+  for (const key in obj) {
+    newObj[key] = rehydrateDates(obj[key]);
+  }
+  return newObj;
 };
 
 export const useBabyStore = create<BabyState>()(
@@ -370,20 +391,20 @@ export const useBabyStore = create<BabyState>()(
           if (doc.exists) {
             const data = doc.data();
             if (data) {
+              const rehydrated = rehydrateDates(data);
               set({
-                babies: data.babies || [],
-                currentBabyId: data.currentBabyId || (data.babies?.[0]?.id) || null,
-                activities: data.activities || [],
-                memories: data.memories || [],
-                appointments: data.appointments || [],
-                dayCareLogs: data.dayCareLogs || [],
-                completedMilestones: data.completedMilestones || {},
-                completedChecklistItems: data.completedChecklistItems || {},
-                userName: data.userName || state.userName,
-                userPhotoUri: data.userPhotoUri || state.userPhotoUri,
-                isPro: data.isPro !== undefined ? data.isPro : state.isPro,
+                babies: rehydrated.babies || [],
+                currentBabyId: rehydrated.currentBabyId || (rehydrated.babies?.[0]?.id) || null,
+                activities: rehydrated.activities || [],
+                memories: rehydrated.memories || [],
+                appointments: rehydrated.appointments || [],
+                dayCareLogs: rehydrated.dayCareLogs || [],
+                completedMilestones: rehydrated.completedMilestones || {},
+                completedChecklistItems: rehydrated.completedChecklistItems || {},
+                userName: rehydrated.userName || state.userName,
+                userPhotoUri: rehydrated.userPhotoUri || state.userPhotoUri,
+                isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : state.isPro,
               });
-              console.log('[Cloud Sync]: Data pulled and currentBabyId restored.');
             }
           }
         } catch (e) {

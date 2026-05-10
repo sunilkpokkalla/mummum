@@ -30,8 +30,10 @@ export default function ChartsScreen() {
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const birthDate = currentBaby?.birthDate ? new Date(currentBaby.birthDate) : new Date();
-  const monthsOld = differenceInMonths(new Date(), birthDate);
-  const daysOld = differenceInDays(new Date(), birthDate);
+  
+  // Safely calculate age components
+  const monthsOld = isNaN(birthDate.getTime()) ? 0 : Math.max(0, differenceInMonths(new Date(), birthDate));
+  const daysOld = isNaN(birthDate.getTime()) ? 0 : Math.max(0, differenceInDays(new Date(), birthDate));
 
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -117,20 +119,20 @@ export default function ChartsScreen() {
 
     let percentile = '50th';
     let status = 'on track';
-    
+    const latestNum = latestValue || 0;
+    const expected = activeTab === 'Weight' ? (7.5 + (monthsOld * 1.7)) : (50 + (monthsOld * 2.5));
+
     if (activeTab === 'Weight') {
-      const expected = 7.5 + (monthsOld * 1.7);
-      if (latestValue > expected * 1.2) { percentile = '90th'; status = 'growing fast'; }
-      else if (latestValue < expected * 0.8) { percentile = '10th'; status = 'below average'; }
-      else if (latestValue > expected * 1.05) { percentile = '75th'; status = 'healthy'; }
+      if (latestNum > expected * 1.2) { percentile = '90th'; status = 'growing fast'; }
+      else if (latestNum < expected * 0.8) { percentile = '10th'; status = 'below average'; }
+      else if (latestNum > expected * 1.05) { percentile = '75th'; status = 'healthy'; }
     } else if (activeTab === 'Height') {
-      const expected = 50 + (monthsOld * 2.5);
-      if (latestValue > expected * 1.1) { percentile = '95th'; status = 'tall'; }
-      else if (latestValue < expected * 0.9) { percentile = '5th'; status = 'shorter'; }
+      if (latestNum > expected * 1.1) { percentile = '95th'; status = 'tall'; }
+      else if (latestNum < expected * 0.9) { percentile = '5th'; status = 'shorter'; }
     }
 
-    const diff = previousValue ? (latestValue - previousValue).toFixed(1) : null;
-    const isGain = previousValue ? latestValue >= previousValue : true;
+    const diff = previousValue ? (latestNum - previousValue).toFixed(1) : null;
+    const isGain = previousValue ? latestNum >= previousValue : true;
     const trendText = diff ? ` (${isGain ? 'Gained' : 'Lost'} ${Math.abs(Number(diff))} ${activeTab === 'Weight' ? 'lbs' : 'cm'} since last check)` : '';
 
     return {
@@ -155,7 +157,10 @@ export default function ChartsScreen() {
     return monthData?.details?.value ? parseFloat(monthData.details.value) : null;
   };
 
-  const maxVal = Math.max(...growthHistory.map(h => parseFloat(h.details?.value || '0')), 1);
+  const validValues = growthHistory
+    .map(h => parseFloat(h.details?.value || '0'))
+    .filter(v => !isNaN(v));
+  const maxVal = Math.max(...validValues, 1);
 
   const handleProjectionPress = () => {
     if (!isPro) {
@@ -307,7 +312,7 @@ export default function ChartsScreen() {
               growthHistory.map((item, idx) => (
                 <HistoryItem 
                   key={item.id}
-                  date={new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  date={item.timestamp ? new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Date Unknown'}
                   value={`${item.details?.value} ${item.details?.unit}`}
                   accent="#4A5D4C"
                   onDelete={() => handleDelete(item.id)}

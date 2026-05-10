@@ -10,6 +10,7 @@ import { ArrowLeft, ChevronRight, Minus, Plus, Calendar } from 'lucide-react-nat
 import { useBabyStore } from '@/store/useBabyStore';
 import { format } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
+import { resolveImageUri } from '@/utils/imagePersistor';
 
 const { width } = Dimensions.get('window');
 const SLIDER_WIDTH = width - 80;
@@ -122,14 +123,21 @@ export default function FeedLogScreen() {
     >
       <View style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
         {/* Header */}
-        <View style={[styles.header, { justifyContent: 'center' }]}>
+        <View style={[styles.header, { justifyContent: 'center', paddingTop: 16 }]}>
+          <TouchableOpacity 
+            style={[styles.backBtn, { position: 'absolute', left: 20, top: 16 }]} 
+            onPress={() => router.back()}
+          >
+            <ArrowLeft size={24} color="#1B3C35" />
+          </TouchableOpacity>
+          
           <View style={{ alignItems: 'center' }}>
             <Typography variant="headline" weight="700" style={{ color: '#4A5D4C' }}>Log Feed</Typography>
             <Typography variant="label" color="#607D8B">{currentBaby?.name || 'Baby'} • {getBabyAge(currentBaby?.birthDate)}</Typography>
           </View>
           <Image 
-            source={currentBaby?.photoUri ? { uri: currentBaby.photoUri } : require('@/assets/images/baby_avatar.png')} 
-            style={[styles.avatar, { position: 'absolute', right: 20 }]} 
+            source={currentBaby?.photoUri && resolveImageUri(currentBaby.photoUri) ? { uri: resolveImageUri(currentBaby.photoUri)! } : require('@/assets/images/baby_avatar.png')} 
+            style={[styles.avatar, { position: 'absolute', right: 20, top: 16 }]} 
           />
         </View>
 
@@ -330,8 +338,8 @@ export default function FeedLogScreen() {
           </ScrollView>
 
           {/* Save Button */}
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+          <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 16 }]}>
+            <TouchableOpacity style={[styles.saveBtn, { marginTop: 0 }]} onPress={handleSave}>
               <Typography variant="bodyLg" weight="700" color="#fff">Save Feeding</Typography>
             </TouchableOpacity>
           </View>
@@ -349,9 +357,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 60,
     paddingBottom: 16,
     backgroundColor: '#fff',
+  },
+  backBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#F8FAFB',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
     width: 36,
@@ -359,8 +374,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   content: {
-    padding: 20,
-    gap: 20,
+    padding: 24,
+    gap: 28,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -570,9 +585,10 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 24,
-    paddingBottom: 40,
     paddingTop: 12,
-    backgroundColor: '#F8FAFB',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#F2F5F6',
   },
   saveBtn: {
     height: 64,
