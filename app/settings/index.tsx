@@ -78,8 +78,8 @@ export default function SettingsScreen() {
 
   const handleLogout = async () => {
     showGlobalModal({
-      title: "Sign Out of Clinical Sync?",
-      description: "Your baby's data will remain securely on this device, but it will stop syncing to the cloud. You can sign back in at any time to restore your cloud backup.",
+      title: "Sign Out of Mummum?",
+      description: "Signing out clears your local data for privacy. Your clinical records are safely backed up in the cloud and will be restored when you sign back in.",
       confirmText: "Sign Out",
       isDestructive: true,
       onConfirm: async () => {
@@ -216,7 +216,7 @@ export default function SettingsScreen() {
 
           <View style={styles.footer}>
             <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.0</Typography>
-            <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>High-Fidelity Pediatric Tracking</Typography>
+            <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>Secured Clinical Cloud Sync Active</Typography>
           </View>
         </ScrollView>
       </SafeAreaView>

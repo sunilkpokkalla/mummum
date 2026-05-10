@@ -144,6 +144,7 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
       completedMilestones: state.completedMilestones,
       userName: state.userName,
       userPhotoUri: state.userPhotoUri,
+      isPro: state.isPro,
       updatedAt: firestore.FieldValue.serverTimestamp(),
     }, { merge: true });
     console.log('[Cloud Sync]: Data pushed successfully.');
@@ -356,14 +357,13 @@ export const useBabyStore = create<BabyState>()(
 
       syncToCloud: async () => {
         const state = useBabyStore.getState();
-        if (!state.isPro) return;
         await pushToFirestore(state);
       },
 
       pullFromCloud: async () => {
         const user = auth().currentUser;
         const state = useBabyStore.getState();
-        if (!user || !state.isPro) return;
+        if (!user) return;
 
         try {
           const doc = await firestore().collection('users').doc(user.uid).get();
@@ -372,13 +372,18 @@ export const useBabyStore = create<BabyState>()(
             if (data) {
               set({
                 babies: data.babies || [],
+                currentBabyId: data.currentBabyId || (data.babies?.[0]?.id) || null,
                 activities: data.activities || [],
                 memories: data.memories || [],
+                appointments: data.appointments || [],
+                dayCareLogs: data.dayCareLogs || [],
                 completedMilestones: data.completedMilestones || {},
                 completedChecklistItems: data.completedChecklistItems || {},
                 userName: data.userName || state.userName,
                 userPhotoUri: data.userPhotoUri || state.userPhotoUri,
+                isPro: data.isPro !== undefined ? data.isPro : state.isPro,
               });
+              console.log('[Cloud Sync]: Data pulled and currentBabyId restored.');
             }
           }
         } catch (e) {

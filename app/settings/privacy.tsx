@@ -173,7 +173,7 @@ export default function PrivacySettingsScreen() {
 
           <View style={styles.infoBox}>
             <Typography variant="label" color="#1B3C35" weight="700" style={{ textAlign: 'center', lineHeight: 18 }}>
-              Your baby's data is stored locally with end-to-end encryption. Your records are entirely your own.
+              Your baby's clinical data is encrypted and safely synced to the Mummum Cloud when you secure your account.
             </Typography>
           </View>
         </ScrollView>
@@ -186,8 +186,8 @@ export default function PrivacySettingsScreen() {
               <TouchableOpacity onPress={() => setIsPolicyVisible(false)}><X size={24} color="#1B3C35" /></TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.modalBody}>
-              <PolicySection title="1. Clinical-Grade Privacy" content="Mummum is designed as a clinical assistant. Your baby's health data is stored locally on your device. We do not sell or share clinical data." />
-              <PolicySection title="2. Data Encryption" content="All sensitive logs are protected using system-level encryption." />
+              <PolicySection title="1. Clinical-Grade Privacy" content="Mummum is designed as a clinical assistant. Your baby's health data is encrypted and synced only to your private account. We do not sell or share clinical data." />
+              <PolicySection title="2. Data Encryption" content="All sensitive logs are protected using high-entropy system-level encryption both on-device and in-transit." />
               <PolicySection title="3. Data Portability" content="You have the right to export your entire clinical history at any time." />
             </ScrollView>
           </View>
@@ -202,7 +202,7 @@ export default function PrivacySettingsScreen() {
             </View>
             <ScrollView contentContainerStyle={styles.modalBody}>
               <PolicySection title="Growth OS Standards" content="Our growth tracking follows standard WHO and CDC clinical percentile models." />
-              <PolicySection title="Security Architecture" content="Mummum's 'Local-First' architecture means the database is on your phone." />
+              <PolicySection title="Security Architecture" content="Mummum uses a Hybrid-Cloud architecture. Your data is stored locally for speed and synced to the cloud for safety." />
             </ScrollView>
           </View>
         </Modal>

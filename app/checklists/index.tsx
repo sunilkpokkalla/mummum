@@ -60,7 +60,8 @@ export default function ChecklistsScreen() {
     dayCareLogs,
     addDayCareLog,
     deleteDayCareLog,
-    showGlobalModal
+    showGlobalModal,
+    isPro
   } = useBabyStore();
   
   const [activeTab, setActiveTab] = useState<'tasks' | 'appointments' | 'daycare'>('tasks');
@@ -210,6 +211,15 @@ export default function ChecklistsScreen() {
       return;
     }
 
+    if (!isPro && babyAppointments.length >= 2) {
+      showGlobalModal({
+        title: "Pediatric Visits Limit",
+        description: "Manage your baby's full clinical schedule with Mummum Pro. Free users can track up to 2 pediatric visits."
+      });
+      setIsAppointmentModalVisible(false);
+      return;
+    }
+
     const notificationIds = await scheduleAppointmentReminders(apptTitle, apptDoctor, apptDate, apptTime);
     
     addAppointment({
@@ -288,6 +298,15 @@ export default function ChecklistsScreen() {
 
   const handleAddUserStandardTask = async () => {
     if (!newTitle) return;
+
+    if (!isPro && userStandardTasks.length >= 2) {
+      showGlobalModal({
+        title: "Daily Tasks Limit",
+        description: "Free users can add up to 2 custom tasks. Unlock Mummum Pro to add unlimited tasks for your baby's clinical routine."
+      });
+      setIsAddStandardModalVisible(false);
+      return;
+    }
 
     const id = Math.random().toString(36).substring(7);
     addUserStandardTask({

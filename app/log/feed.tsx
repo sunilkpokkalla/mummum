@@ -181,17 +181,21 @@ export default function FeedLogScreen() {
                         const newSide = activeSide === 'L' ? null : 'L';
                         setActiveSide(newSide);
                         
-                        // Production Hardening: Persist accumulated time to store
-                        startSession({ 
-                          babyId: currentBabyId || '', 
-                          type: 'feed', 
-                          startTime: new Date(), 
-                          side: newSide as any,
-                          details: {
-                            accumulatedLeft: leftTimer,
-                            accumulatedRight: rightTimer
-                          }
-                        });
+                        // Production Hardening: Stop existing session first to prevent duplicates
+                        stopSession('feed');
+                        
+                        if (newSide) {
+                          startSession({ 
+                            babyId: currentBabyId || '', 
+                            type: 'feed', 
+                            startTime: new Date(), 
+                            side: newSide as any,
+                            details: {
+                              accumulatedLeft: leftTimer,
+                              accumulatedRight: rightTimer
+                            }
+                          });
+                        }
                       }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'L' ? '#fff' : '#8D6E63' }}>
@@ -219,17 +223,21 @@ export default function FeedLogScreen() {
                         const newSide = activeSide === 'R' ? null : 'R';
                         setActiveSide(newSide);
                         
-                        // Production Hardening: Persist accumulated time to store
-                        startSession({ 
-                          babyId: currentBabyId || '', 
-                          type: 'feed', 
-                          startTime: new Date(), 
-                          side: newSide as any,
-                          details: {
-                            accumulatedLeft: leftTimer,
-                            accumulatedRight: rightTimer
-                          }
-                        });
+                        // Production Hardening: Stop existing session first to prevent duplicates
+                        stopSession('feed');
+                        
+                        if (newSide) {
+                          startSession({ 
+                            babyId: currentBabyId || '', 
+                            type: 'feed', 
+                            startTime: new Date(), 
+                            side: newSide as any,
+                            details: {
+                              accumulatedLeft: leftTimer,
+                              accumulatedRight: rightTimer
+                            }
+                          });
+                        }
                       }}
                     >
                       <Typography weight="700" style={{ color: activeSide === 'R' ? '#fff' : '#8D6E63' }}>
