@@ -1,13 +1,16 @@
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { format, subDays, isWithinInterval } from 'date-fns';
-import { Alert } from 'react-native';
+import { subDays, isWithinInterval, parseISO } from 'date-fns';
+import { useBabyStore } from '../store/useBabyStore';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 
 export const generateBabyReport = async (baby: any, activities: any[], days: number, memories: any[] = [], appointments: any[] = [], dayCareLogs: any[] = []) => {
   if (!Print.printToFileAsync || !Sharing.shareAsync) {
-    Alert.alert('Rebuild Required', 'PDF modules are not yet linked. Please run "npx expo run:ios".');
+    useBabyStore.getState().showGlobalModal({
+      title: "Rebuild Required",
+      description: "PDF generation modules are being optimized. Please run the app with 'npx expo run:ios' to enable this feature on your device."
+    });
     return;
   }
 
@@ -320,7 +323,10 @@ export const generateBabyReport = async (baby: any, activities: any[], days: num
     }
   } catch (error) {
     console.error('Master Report Generation Error:', error);
-    Alert.alert('Export Failed', 'The PDF could not be generated.');
+    useBabyStore.getState().showGlobalModal({
+      title: "Export Failed",
+      description: "We couldn't generate the clinical report. Please ensure your device has enough storage space and try again."
+    });
   }
 };
 

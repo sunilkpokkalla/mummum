@@ -1,212 +1,54 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Platform, NativeModules, LogBox } from 'react-native';
-
-// Ignore non-critical logs that cause unnecessary Red Boxes
-LogBox.ignoreLogs([
-  'Purchase was cancelled',
-  'Non-serializable values',
-  'Setting a timer',
-  'AsyncStorage has been extracted',
-  'LogBox',
-]);
-
-import 'react-native-reanimated';
-import '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
-
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-import { useBabyStore } from '@/store/useBabyStore';
-import { useRouter, useSegments, useRootNavigationState } from 'expo-router';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import * as Notifications from 'expo-notifications';
-
-Notifications.setNotificationHandler({
-  handleNotification: async (_notification: any) => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
-
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+import { ThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import * as SplashScreen from 'expo-splash-screen';
+import { useBabyStore } from '@/store/useBabyStore';
+import ElegantModal from '@/components/ElegantModal';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const colorScheme = useColorScheme();
+  const { globalModalConfig, hideGlobalModal } = useBabyStore();
 
-  const { setPro, isOnboarded, babies, tempBaby, addBaby, isTrial, trialStartedAt } = useBabyStore();
-
-  // Global Error Handler for cleaner logs
   useEffect(() => {
-    if (__DEV__) {
-      const originalConsoleError = console.error;
-      console.error = (...args: any[]) => {
-        const message = args.join(' ');
-        if (
-          message.includes('Purchase was cancelled') || 
-          message.includes('authorization attempt failed') ||
-          message.includes('SIGN_IN_CANCELLED') ||
-          message.includes('LogBox') ||
-          message.includes('headerHeight') ||
-          message.includes('onboarding')
-        ) {
-          return; // Skip red boxes for these
-        }
-        originalConsoleError(...args);
-      };
-    }
+    SplashScreen.hideAsync();
   }, []);
-
-  // Trial Expiry Logic (7 Days)
-  useEffect(() => {
-    if (isTrial && trialStartedAt) {
-      const trialDuration = 3 * 24 * 60 * 60 * 1000; // 3 days in ms
-      const now = Date.now();
-      if (now - trialStartedAt > trialDuration) {
-        setPro(false, false); // Expire trial
-      }
-    }
-  }, [isTrial, trialStartedAt]);
-
-  // Self-healing for onboarding data leak
-  useEffect(() => {
-    if (isOnboarded && babies.length === 0 && tempBaby.name) {
-      addBaby({
-        id: Math.random().toString(36).substring(7),
-        name: tempBaby.name,
-        birthDate: tempBaby.birthDate || new Date(),
-        photoUri: tempBaby.photoUri,
-      });
-    }
-  }, [isOnboarded, babies.length, tempBaby.name]);
-
-  // RevenueCat Initialization
-  useEffect(() => {
-    const initPurchases = async () => {
-      // Check the actual native bridge — not the JS proxy wrapper
-      if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
-        console.log('RevenueCat: Skipped — native module unavailable on this target.');
-        return;
-      }
-      try {
-        const { default: Purchases, LOG_LEVEL } = await import('react-native-purchases');
-        if (Purchases && typeof Purchases.configure === 'function') {
-          const isConfigured = await Purchases.isConfigured();
-          if (!isConfigured) {
-            Purchases.setLogLevel(LOG_LEVEL.INFO);
-            
-            // Custom Log Handler to silence "Purchase was cancelled" red boxes
-            Purchases.setLogHandler((logOut: any) => {
-              if (logOut.message && logOut.message.includes('Purchase was cancelled')) {
-                // Silently log to console instead of triggering console.error/LogBox
-                console.log('[RevenueCat Silent]: User cancelled purchase flow.');
-                return;
-              }
-              // Pass through all other logs normally
-              console.log(`[RevenueCat]: ${logOut.message}`);
-            });
-
-            Purchases.configure({ apiKey: "appl_gWsdCGHELkQjkHmjNeeTGKwgvnd" });
-          }
-          
-          const customerInfo = await Purchases.getCustomerInfo();
-          const activePro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
-          setPro(activePro);
-        }
-      } catch (e) {
-        console.log('RevenueCat Init error (resilient):', e);
-      }
-    };
-
-    initPurchases();
-  }, []);
-
-  // Firebase Anonymous Auth
-  useEffect(() => {
-    auth()
-      .signInAnonymously()
-      .then((user) => {
-        console.log('Firebase: Logged in anonymously as:', user.user.uid);
-      })
-      .catch((error) => {
-        console.log('Firebase: Anonymous auth failed:', error);
-      });
-  }, []);
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = 'light';
-  const { isOnboarded } = useBabyStore();
-  const segments = useSegments();
-  const router = useRouter();
-  const rootNavigationState = useRootNavigationState();
-
-  useEffect(() => {
-    if (!rootNavigationState?.key) return;
-
-    const inOnboardingGroup = segments[0] === 'onboarding';
-
-    if (!isOnboarded && !inOnboardingGroup) {
-      // Redirect to onboarding if not onboarded and not already there
-      setTimeout(() => {
-        router.replace('/onboarding');
-      }, 1);
-    } else if (isOnboarded && inOnboardingGroup) {
-      // Redirect to home if onboarded but trying to access onboarding
-      setTimeout(() => {
-        router.replace('/(tabs)');
-      }, 1);
-    }
-  }, [isOnboarded, segments, rootNavigationState?.key]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={DefaultTheme}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="onboarding/index" />
-          <Stack.Screen name="onboarding/name" />
-          <Stack.Screen name="onboarding/birthdate" />
-          <Stack.Screen name="onboarding/wishes" />
-          <Stack.Screen name="onboarding/offer" />
-          <Stack.Screen name="onboarding/welcome" />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="log/feed" options={{ presentation: 'modal', headerShown: false }} />
-          <Stack.Screen name="log/sleep" options={{ presentation: 'modal', headerShown: false }} />
-          <Stack.Screen name="log/diaper" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding/baby-info" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding/offer" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="premium" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
         </Stack>
+        <StatusBar style="auto" />
+        
+        {/* Global Master Modal Controller */}
+        <ElegantModal 
+          visible={globalModalConfig.visible}
+          onClose={hideGlobalModal}
+          onConfirm={() => {
+            if (globalModalConfig.onConfirm) globalModalConfig.onConfirm();
+            hideGlobalModal();
+          }}
+          onSecondary={() => {
+            if (globalModalConfig.onSecondary) globalModalConfig.onSecondary();
+            hideGlobalModal();
+          }}
+          title={globalModalConfig.title}
+          description={globalModalConfig.description}
+          confirmText={globalModalConfig.confirmText}
+          secondaryText={globalModalConfig.secondaryText}
+          cancelText={globalModalConfig.cancelText || "Cancel"}
+        />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

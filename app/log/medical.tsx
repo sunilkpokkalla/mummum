@@ -44,6 +44,7 @@ import { useBabyStore } from '@/store/useBabyStore';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
 import { usePremium } from '@/hooks/usePremium';
+import ProModal from '@/components/ProModal';
 
 const WHO_VACCINATIONS = [
   { id: 'v1', title: 'BCG (Tuberculosis)', period: 'At Birth' },
@@ -84,6 +85,8 @@ export default function MedicalLogScreen() {
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [dateTarget, setDateTarget] = useState<'VACCINE' | 'MEDICINE'>('VACCINE');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isProModalVisible, setIsProModalVisible] = useState(false);
+  const [proModalConfig, setProModalConfig] = useState({ title: '', description: '' });
   
   // Vaccine State
   const [vaccineName, setVaccineName] = useState('');
@@ -130,6 +133,33 @@ export default function MedicalLogScreen() {
 
   const openVaccineEntry = (name = '', activity?: any) => {
     Keyboard.dismiss();
+
+    // Pro Check for Additional Immunizations (Custom entries)
+    if (!isFeatureUnlocked && !activity) {
+      // Check if this is a custom entry (name is empty from the + button) 
+      // or if the name provided isn't in the standard WHO list
+      const isWHOVaccine = WHO_VACCINATIONS.some(v => v.title === name);
+      
+      if (!isWHOVaccine) {
+        const customVaccines = babyActivities.filter(a => 
+          a.type === 'vaccination' && 
+          !WHO_VACCINATIONS.some(v => 
+            a.details?.name?.toLowerCase().includes(v.title.toLowerCase().split(' (')[0]) || 
+            v.title.toLowerCase().includes(a.details?.name?.toLowerCase() || '')
+          )
+        );
+
+        if (customVaccines.length >= 1) {
+          setProModalConfig({
+            title: "Unlock Clinical Immunizations",
+            description: "Tracking multiple custom vaccines is a Pro feature. Unlock Mummum Pro for a lifetime clinical timeline."
+          });
+          setIsProModalVisible(true);
+          return;
+        }
+      }
+    }
+
     setVaccineName(name);
     if (activity) {
       setVaccineDate(new Date(activity.timestamp));
@@ -288,14 +318,11 @@ export default function MedicalLogScreen() {
                       onPress={() => {
                         const medCount = babyActivities.filter(a => a.type === 'medicine').length;
                         if (!isFeatureUnlocked && medCount >= 2) {
-                          Alert.alert(
-                            "Unlock Clinical Records",
-                            "Tracking more than 2 medications is a Clinical feature. Unlock Mummum for lifetime access and professional history.",
-                            [
-                              { text: "Later", style: "cancel" },
-                              { text: "Upgrade Now", onPress: () => router.push('/premium') }
-                            ]
-                          );
+                          setProModalConfig({
+                            title: "Unlock Medical History",
+                            description: "Tracking advanced medication history is a Pro feature. Unlock Mummum Pro for lifetime clinical access."
+                          });
+                          setIsProModalVisible(true);
                           return;
                         }
                         setIsMedicineModalVisible(true);
@@ -504,6 +531,16 @@ export default function MedicalLogScreen() {
               </KeyboardAvoidingView>
             </View>
           </Modal>
+          <ProModal 
+            visible={isProModalVisible}
+            onClose={() => setIsProModalVisible(false)}
+            onUpgrade={() => {
+              setIsProModalVisible(false);
+              router.push('/premium');
+            }}
+            title={proModalConfig.title}
+            description={proModalConfig.description}
+          />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

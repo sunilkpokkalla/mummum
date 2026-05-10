@@ -1,3 +1,4 @@
+import ElegantModal from '@/components/ElegantModal';
 import Typography from '@/components/Typography';
 import { useBabyStore } from '@/store/useBabyStore';
 import auth from '@react-native-firebase/auth';
@@ -5,19 +6,20 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 import { Apple, ChevronRight, Cloud, Mail, Shield } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { 
-  ActivityIndicator, 
-  Alert, 
-  NativeModules, 
-  StyleSheet, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
-  KeyboardAvoidingView, 
-  Platform, 
-  ScrollView 
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  NativeModules,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { sha256 } from 'js-sha256';
+import * as Crypto from 'expo-crypto';
 
 // Safe Native Module Discovery
 let GoogleSignin: any = null;
@@ -40,46 +42,170 @@ export default function OnboardingAuthScreen() {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    visible: false,
+    title: '',
+    desc: '',
+    confirmText: 'OK',
+    onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+  });
 
   const handleEmailAuth = async () => {
     if (!email || !password) {
-      Alert.alert("Missing Information", "Please enter both email and password.");
+      setModalConfig({
+        visible: true,
+        title: "Missing Information",
+        desc: "Please enter both your email and password to continue.",
+        confirmText: "OK",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
       return;
     }
 
     setLoading(true);
-    console.log('[Email Auth]: Starting flow for', email);
     try {
-      // Try to sign in, if fails, try to sign up
-      try {
-        console.log('[Email Auth]: Attempting sign-in...');
-        await auth().signInWithEmailAndPassword(email, password);
-        console.log('[Email Auth]: Sign-in successful!');
-      } catch (signInError: any) {
-        if (signInError.code === 'auth/user-not-found' || signInError.code === 'auth/invalid-credential') {
-          console.log('[Email Auth]: User not found or invalid, attempting sign-up...');
-          await auth().createUserWithEmailAndPassword(email, password);
-          console.log('[Email Auth]: Sign-up successful!');
-        } else {
-          throw signInError;
-        }
-      }
-
-      // Success: All data is synced and ready
-      await pullFromCloud();
-      const babyId = babies[0]?.id || addBaby(tempBaby);
-      setCurrentBaby(babyId);
-      setLoading(false);
-
-      if (babies.length > 0) {
-        completeOnboarding();
-        router.replace('/(tabs)');
+      if (isSignUp) {
+        await auth().createUserWithEmailAndPassword(email, password);
       } else {
-        router.push('/onboarding/welcome');
+        await auth().signInWithEmailAndPassword(email, password);
       }
+      await handlePostLoginSync();
     } catch (e: any) {
       setLoading(false);
-      Alert.alert("Authentication Issue", e.message);
+      let title = "Authentication Issue";
+      let desc = e.message || "We encountered a problem. Please try again.";
+
+      if (e.code === 'auth/email-already-in-use') {
+        title = "Account Exists";
+        desc = "This email is already registered. Please try logging in instead.";
+      } else if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+        title = "Incorrect Details";
+        desc = "The password you entered is incorrect. Please try again or reset your password.";
+      } else if (e.code === 'auth/user-not-found') {
+        title = "User Not Found";
+        desc = "No account found with this email. Would you like to sign up?";
+      } else if (e.code === 'auth/invalid-email') {
+        title = "Invalid Email";
+        desc = "Please enter a valid email address.";
+      } else if (e.code === 'auth/network-request-failed') {
+        title = "Connection Problem";
+        desc = "Please check your internet connection and try again.";
+      } else if (e.code === 'auth/too-many-requests') {
+        title = "Too Many Attempts";
+        desc = "Too many failed login attempts. Please try again later.";
+      }
+ 
+      setModalConfig({
+        visible: true,
+        title,
+        desc,
+        confirmText: "OK",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+    }
+  };
+
+  const handlePostLoginSync = async () => {
+    try {
+      await pullFromCloud(); // DOWNLOAD CLOUD DATA
+      
+      // REUNION SYNC LOGIC
+      const cloudBabies = useBabyStore.getState().babies;
+      const hasNewInfo = !!tempBaby.name;
+
+      if (cloudBabies.length > 0 && hasNewInfo) {
+        // CONFLICT DETECTED: Show Choice Modal
+        setModalConfig({
+          visible: true,
+          title: "Existing Records Found",
+          desc: `We found clinical records for ${cloudBabies[0].name} in your account. \n\nDo you want to restore these records, or clear them and start fresh with ${tempBaby.name}?`,
+          confirmText: "Restore Legacy",
+          onConfirm: () => {
+            // OPTION A: Keep Cloud Data
+            setModalConfig(prev => ({ ...prev, visible: false }));
+            const targetId = cloudBabies[0].id;
+            setCurrentBaby(targetId);
+            completeOnboarding();
+            setLoading(false);
+            router.replace('/(tabs)');
+          },
+          secondaryText: "Start Fresh",
+          onSecondary: () => {
+            // OPTION B: Use New Info, Clear Cloud locally
+            setModalConfig(prev => ({ ...prev, visible: false }));
+            resetStore(); // Clear pulled cloud data
+            
+            const id = Math.random().toString(36).substring(7);
+            const newBaby = {
+              id,
+              name: tempBaby.name || 'My Baby',
+              birthDate: tempBaby.birthDate || new Date(),
+            };
+            addBaby(newBaby);
+            setCurrentBaby(id);
+            completeOnboarding();
+            setLoading(false);
+            router.replace('/(tabs)');
+          }
+        });
+        return; // Wait for user choice
+      }
+
+      // NO CONFLICT: Normal Flow
+      let targetBabyId = cloudBabies[0]?.id;
+
+      if (!targetBabyId) {
+        const id = Math.random().toString(36).substring(7);
+        const newBaby = {
+          id,
+          name: tempBaby.name || 'My Baby',
+          birthDate: tempBaby.birthDate || new Date(),
+        };
+        addBaby(newBaby);
+        targetBabyId = id;
+      }
+
+      setCurrentBaby(targetBabyId);
+      setLoading(false);
+      completeOnboarding();
+      router.replace('/(tabs)');
+    } catch (e) {
+      console.error('[Sync]: Post-login sync failed', e);
+      setLoading(false);
+      router.replace('/(tabs)'); // Fallback
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setModalConfig({
+        visible: true,
+        title: "Email Required",
+        desc: "Please enter your email address to receive a password reset link.",
+        confirmText: "OK",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+      return;
+    }
+
+    try {
+      await auth().sendPasswordResetEmail(email);
+      setModalConfig({
+        visible: true,
+        title: "Reset Link Sent",
+        desc: `A password reset link has been sent to ${email}. Please check your inbox and follow the instructions.`,
+        confirmText: "Got it",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+    } catch (e: any) {
+      setModalConfig({
+        visible: true,
+        title: "Reset Failed",
+        desc: e.message || "We couldn't send the reset link. Please verify your email and try again.",
+        confirmText: "OK",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
     }
   };
 
@@ -88,7 +214,6 @@ export default function OnboardingAuthScreen() {
       try {
         GoogleSignin.configure({
           webClientId: GOOGLE_WEB_CLIENT_ID,
-          iosClientId: '944867470720-mkoaqm3gp6edmf84gclkek266h5kh592.apps.googleusercontent.com',
           offlineAccess: true,
         });
       } catch (e) {
@@ -98,25 +223,23 @@ export default function OnboardingAuthScreen() {
   }, []);
 
   const handleGuestAccess = () => {
-    Alert.alert(
-      "Guest Access",
-      "You can skip registration for now, but creating an account later is recommended to ensure your clinical data and Pro purchases can be restored if you change devices.",
-      [
-        {
-          text: "Continue as Guest",
-          onPress: () => {
-            const id = Math.random().toString(36).substring(7);
-            addBaby({
-              id,
-              name: tempBaby.name || 'Baby',
-              birthDate: tempBaby.birthDate || new Date(),
-            });
-            setCurrentBaby(id);
-            router.push('/onboarding/welcome');
-          }
-        }
-      ]
-    );
+    setModalConfig({
+      visible: true,
+      title: "Continue as Guest?",
+      desc: "Without an account, your data is stored only on this device. Create an account later to enable Cloud Sync and ensure your records are never lost.",
+      confirmText: "Continue as Guest",
+      onConfirm: () => {
+        setModalConfig(prev => ({ ...prev, visible: false }));
+        const id = Math.random().toString(36).substring(7);
+        addBaby({
+          id,
+          name: tempBaby.name || 'Baby',
+          birthDate: tempBaby.birthDate || new Date(),
+        });
+        setCurrentBaby(id);
+        router.push('/onboarding/welcome');
+      }
+    });
   };
 
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
@@ -126,16 +249,28 @@ export default function OnboardingAuthScreen() {
 
       if (provider === 'google') {
         if (!GoogleSignin) {
-          Alert.alert(
-            "Configuration Notice",
-            "Google Sign-In is not currently available in this version. Please use Apple Sign-In or Continue as Guest.",
-            [{ text: "OK" }]
-          );
+          setModalConfig({
+            visible: true,
+            title: "Coming Soon",
+            desc: "Google Sign-In is being optimized for this version. Please use Apple Sign-In or Continue as Guest for now.",
+            confirmText: "OK",
+            onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+          });
           setLoading(false);
           return;
         }
-        await GoogleSignin.hasPlayServices();
-        const { idToken } = await GoogleSignin.signIn();
+
+        if (Platform.OS === 'android') {
+          await GoogleSignin.hasPlayServices();
+        }
+
+        const userInfo = await GoogleSignin.signIn();
+        const { idToken } = await GoogleSignin.getTokens();
+
+        if (!idToken) {
+          throw new Error('Google Sign-In failed: No ID token');
+        }
+
         const googleCredential = auth.GoogleAuthProvider.credential(idToken);
         const userCredential = await auth().signInWithCredential(googleCredential);
         firebaseUser = userCredential.user;
@@ -144,92 +279,69 @@ export default function OnboardingAuthScreen() {
         if (!isAppleAvailable) {
           throw new Error('Apple Authentication not project-wide available on this device.');
         }
-        const appleCredential = await AppleAuthentication.signInAsync({
+
+        const rawNonce = Math.random().toString(36).substring(2) + Date.now().toString();
+        const hashedNonce = sha256(rawNonce);
+
+        const appleCredentialResult = await AppleAuthentication.signInAsync({
           requestedScopes: [
             AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
             AppleAuthentication.AppleAuthenticationScope.EMAIL,
           ],
+          nonce: hashedNonce,
         });
-        const { identityToken } = appleCredential;
-        if (identityToken) {
-          const credential = auth.AppleAuthProvider.credential(identityToken);
-          const userCredential = await auth().signInWithCredential(credential);
-          firebaseUser = userCredential.user;
+
+        const { identityToken } = appleCredentialResult;
+        if (!identityToken) {
+          throw new Error('Apple Sign-In failed: No Identity Token returned.');
         }
+
+        const credential = auth.AppleAuthProvider.credential(identityToken, rawNonce);
+        const userCredential = await auth().signInWithCredential(credential);
+        firebaseUser = userCredential.user;
       }
 
       if (firebaseUser) {
-        await pullFromCloud(); // DOWNLOAD CLOUD DATA
-
-        // Re-check babies after pull
-        const updatedBabies = useBabyStore.getState().babies;
-        
-        let targetBabyId = updatedBabies[0]?.id;
-
-        if (!targetBabyId) {
-          // If no babies in cloud, create one from temp data or default
-          const newBaby = {
-            id: Math.random().toString(36).substring(7),
-            name: tempBaby.name || 'My Baby',
-            birthDate: tempBaby.birthDate || new Date(),
-          };
-          addBaby(newBaby);
-          targetBabyId = newBaby.id;
-        }
-
-        setCurrentBaby(targetBabyId);
-        setLoading(false);
-
-        // Ensure we navigate to the main app if a baby exists
-        if (targetBabyId) {
-          completeOnboarding();
-          router.replace('/(tabs)');
-        } else {
-          router.push('/onboarding/welcome');
-        }
+        await handlePostLoginSync();
       }
     } catch (e: any) {
       setLoading(false);
 
-      // SILENTLY ignore user cancellations
-      const isCancel = e.code === 'auth/user-cancelled' ||
+      // DIAGNOSTIC LOGGING
+      console.log('--- SOCIAL AUTH ERROR ---');
+      console.log('Provider:', provider);
+      console.log('Code:', e.code);
+      console.log('Message:', e.message);
+      console.log('-------------------------');
+
+      const isCancel =
+        e.code === 'auth/user-cancelled' ||
         e.code === 'auth/cancelled' ||
         e.code === '1001' ||
         e.code === 'SIGN_IN_CANCELLED' ||
-        e.message?.includes('authorization attempt failed');
+        e.code === 'ERR_REQUEST_CANCELED';
 
-      if (isCancel) {
-        console.log('[Auth Silent]: User cancelled sign-in flow.');
-        return;
-      }
+      if (isCancel) return;
 
-      // TECHNICAL DIAGNOSTIC
-      console.log('--- AUTH ERROR ---');
-      console.log('Code:', e.code);
-      console.log('Message:', e.message);
-      console.log('Stack:', e.stack);
-      console.log('------------------');
-
-      Alert.alert(
-        "Authentication Issue",
-        `Technical Error: ${e.code}\n\nMessage: ${e.message}\n\nProject: mummum-baby-tracker\nBundle: com.ambright.mummumbaby\n\nPlease check your Firebase project settings.`,
-        [
-          { text: "Try Again", onPress: () => { } },
-          { text: "Continue Locally", onPress: handleGuestAccess, style: 'cancel' }
-        ]
-      );
+      setModalConfig({
+        visible: true,
+        title: "Authentication Issue",
+        desc: `We couldn't connect your ${provider} account. (Error: ${e.code || 'Internal'})\n\nPlease check your internet and try again.`,
+        confirmText: "Try Again",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
     }
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
+    <KeyboardAvoidingView
+      style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Background Decor */}
       <View style={styles.decorCircle} />
 
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -299,13 +411,30 @@ export default function OnboardingAuthScreen() {
                     style={[styles.authButton, styles.emailSubmitButton]}
                     onPress={handleEmailAuth}
                   >
-                    <Typography variant="body" weight="700" color="#fff">Login / Sign Up</Typography>
+                    <Typography variant="body" weight="700" color="#fff">
+                      {isSignUp ? 'Create Clinical Account' : 'Login to My Records'}
+                    </Typography>
                   </TouchableOpacity>
+
+                  <View style={styles.emailFooter}>
+                    <TouchableOpacity onPress={() => setIsSignUp(!isSignUp)}>
+                      <Typography variant="label" weight="700" color="#4A5D4C">
+                        {isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign Up"}
+                      </Typography>
+                    </TouchableOpacity>
+
+                    {!isSignUp && (
+                      <TouchableOpacity onPress={handleForgotPassword}>
+                        <Typography variant="label" weight="600" color="#90A4AE">Forgot Password?</Typography>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+
                   <TouchableOpacity
                     onPress={() => setShowEmailInput(false)}
                     style={styles.cancelButton}
                   >
-                    <Typography variant="label" color="#607D8B">Cancel</Typography>
+                    <Typography variant="label" color="#B0BEC5">Back to Options</Typography>
                   </TouchableOpacity>
                 </Animated.View>
               ) : (
@@ -341,6 +470,15 @@ export default function OnboardingAuthScreen() {
             By continuing, you agree to Mummum's Terms and Clinical Data Privacy Policy.
           </Typography>
         </View>
+
+        <ElegantModal
+          visible={modalConfig.visible}
+          onClose={() => setModalConfig(prev => ({ ...prev, visible: false }))}
+          onConfirm={modalConfig.onConfirm}
+          title={modalConfig.title}
+          description={modalConfig.desc}
+          confirmText={modalConfig.confirmText}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -433,6 +571,14 @@ const styles = StyleSheet.create({
   emailButton: {
     backgroundColor: '#F8FAFB',
     borderStyle: 'dashed',
+  },
+  emailFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    marginTop: 8,
+    marginBottom: 16,
   },
   emailInputContainer: {
     gap: 12,

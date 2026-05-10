@@ -1,13 +1,15 @@
 import React, { useMemo, useState, useRef } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal, Image, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Dimensions, Platform, Modal, Image, SafeAreaView } from 'react-native';
 
 // Safe Dynamic Imports to prevent crashes in Expo Go/Dev Client without native modules
 let ViewShot: any = View;
 let MediaLibrary: any = null;
+let captureRef: any = () => Promise.resolve('');
 
 try {
   const RNViewShot = require('react-native-view-shot');
   ViewShot = RNViewShot.default || RNViewShot;
+  captureRef = RNViewShot.captureRef;
 } catch (e) {}
 
 try {
@@ -20,6 +22,7 @@ import Card from '@/components/Card';
 import { useRouter } from 'expo-router';
 import { useBabyStore } from '@/store/useBabyStore';
 import { usePremium } from '@/hooks/usePremium';
+import ElegantModal from '@/components/ElegantModal';
 import { 
   format, 
   isSameDay, 
@@ -46,6 +49,12 @@ export default function LogsScreen() {
   const [activeView, setActiveView] = useState('daily'); // 'daily', 'weekly', 'monthly'
   const [isMainExpanded, setIsMainExpanded] = useState(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState({ 
+    visible: false, 
+    title: '', 
+    desc: '', 
+    onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false })) 
+  });
 
   // Create a 14-day strip terminating today
   const calendarDays = useMemo(() => {
@@ -109,7 +118,7 @@ export default function LogsScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#F8FAFB' }]}>
       {/* Header */}
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
@@ -328,14 +337,24 @@ export default function LogsScreen() {
         baby={currentBaby}
         data={selectedDayData}
         activities={babyActivities}
+        setModalConfig={setModalConfig}
       />
-    </View>
+      
+      <ElegantModal 
+        visible={modalConfig.visible}
+        onClose={() => setModalConfig(prev => ({ ...prev, visible: false }))}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        description={modalConfig.desc}
+        confirmText="Done"
+      />
+    </SafeAreaView>
   );
 }
 
-function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
-  const [reportPeriod, setReportPeriod] = useState(7);
-  const viewShotRef = useRef<any>(null);
+function SocialShareModal({ visible, onClose, baby, data, activities, setModalConfig }: any) {
+  const viewRef = useRef<any>(null);
+  const [isSnapshotLoading, setIsSnapshotLoading] = useState(false);
   
   const selectedDateActivities = activities.filter((a: any) => isSameDay(new Date(a.timestamp), data.date));
   
@@ -363,142 +382,161 @@ function SocialShareModal({ visible, onClose, baby, data, activities }: any) {
   const careEvents = selectedDateActivities.filter((a: any) => a.type === 'diaper').length;
 
   const handleSaveImage = async () => {
+    if (!MediaLibrary) {
+      setModalConfig({
+        visible: true,
+        title: "Feature Unavailable",
+        desc: "Native image export is only available in the production build. Please use npx expo run:ios to enable this feature locally.",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+      return;
+    }
+
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setModalConfig({
+        visible: true,
+        title: "Permission Needed",
+        desc: "Please grant gallery access in your settings to save these clinical snapshots to your photo library.",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+      return;
+    }
+    
     try {
-      if (!MediaLibrary) {
-        Alert.alert(
-          'Export Restricted', 
-          'Native image export is only available in the production build. Please use npx expo run:ios to enable this feature locally.',
-          [{ text: 'OK' }]
-        );
-        return;
-      }
-
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Please grant gallery access to save snapshots.');
-        return;
-      }
-
-      const uri = await viewShotRef.current.capture();
+      setIsSnapshotLoading(true);
+      const uri = await captureRef(viewRef, { format: 'png', quality: 1 });
       await MediaLibrary.saveToLibraryAsync(uri);
-      Alert.alert('Saved!', 'Snapshot has been saved to your gallery.');
-    } catch (error) {
-      console.error('Save failed:', error);
-      Alert.alert(
-        'Export Restricted', 
-        'Native image export is only available in the production build. Please use npx expo run:ios to enable this feature locally.',
-        [{ text: 'OK' }]
-      );
+      setModalConfig({
+        visible: true,
+        title: "Snapshot Saved",
+        desc: "Your clinical summary has been saved to your photo gallery and is ready to share.",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+    } catch (e) {
+      setModalConfig({
+        visible: true,
+        title: "Export Failed",
+        desc: "We couldn't generate the snapshot right now. Please ensure your device has enough storage space.",
+        onConfirm: () => setModalConfig(prev => ({ ...prev, visible: false }))
+      });
+    } finally {
+      setIsSnapshotLoading(false);
     }
   };
 
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalOverlay}>
-        <ScrollView contentContainerStyle={{ paddingVertical: 40 }} showsVerticalScrollIndicator={false}>
-          <View style={styles.bannerContainer}>
-            <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9, backgroundColor: '#fff' }}>
-              <View style={styles.bannerContent}>
-                {/* Header: Large Logo Left, Baby Name & Metrics Right */}
-                <View style={styles.bannerHeaderSplit}>
-                  <View style={styles.bannerHeaderLeft}>
-                    <Image 
-                      source={require('../../assets/images/MUMMUM_FINAL.png')} 
-                      style={{ width: 64, height: 64 }}
-                      resizeMode="contain"
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ paddingVertical: 40 }} showsVerticalScrollIndicator={false}>
+            <View style={styles.bannerContainer}>
+              <ViewShot ref={viewRef} options={{ format: 'jpg', quality: 0.9, backgroundColor: '#fff' }}>
+                <View style={styles.bannerContent}>
+                  {/* Header: Large Logo Left, Baby Name & Metrics Right */}
+                  <View style={styles.bannerHeaderSplit}>
+                    <View style={styles.bannerHeaderLeft}>
+                      <Image 
+                        source={require('../../assets/images/MUMMUM_FINAL.png')} 
+                        style={{ width: 64, height: 64 }}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
+                    </View>
+                  </View>
+
+                  <View style={styles.reportDivider} />
+
+                  <View style={styles.bannerVitalsRow}>
+                    <View style={styles.vitalStatItem}>
+                      <Scale size={16} color="#607D8B" />
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                        {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}
+                      </Typography>
+                      <Typography variant="label" color="#90A4AE">Weight</Typography>
+                    </View>
+                    <View style={styles.vitalStatItem}>
+                      <Droplet size={16} color="#607D8B" />
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                        {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}
+                      </Typography>
+                      <Typography variant="label" color="#90A4AE">Height</Typography>
+                    </View>
+                    <View style={styles.vitalStatItem}>
+                      <Baby size={16} color="#607D8B" />
+                      <Typography variant="bodyMd" weight="800" color="#1B3C35">
+                        {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
+                      </Typography>
+                      <Typography variant="label" color="#90A4AE">Head Circ</Typography>
+                    </View>
+                  </View>
+
+                  <View style={[styles.reportDivider, { marginTop: 16 }]} />
+
+                  <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 4 }}>
+                    {format(data.date, 'MMMM d, yyyy')} • Daily Report
+                  </Typography>
+                  <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
+                    Celebrating {baby?.name}'s {emotionalDay} Day
+                  </Typography>
+
+                  {/* High Level 4-Item Grid */}
+                  <View style={styles.categoryGrid}>
+                    <CategoryItem 
+                      icon={<Pill size={20} color="#D32F2F" />} 
+                      title="HEALTH" 
+                      detail={`${medsCount + vaccinesCount} Events`} 
+                      bgColor="#FFEBEE"
+                    />
+                    <CategoryItem 
+                      icon={<Milk size={20} color="#2E7D32" />} 
+                      title="NUTRITION" 
+                      detail={`${data.stats.feeds} Feeds`} 
+                      bgColor="#E8F5E9"
+                    />
+                    <CategoryItem 
+                      icon={<Moon size={20} color="#1565C0" />} 
+                      title="REST" 
+                      detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
+                      bgColor="#E3F2FD"
+                    />
+                    <CategoryItem 
+                      icon={<Droplet size={20} color="#E65100" />} 
+                      title="CARE" 
+                      detail={`${careEvents} Events`} 
+                      bgColor="#FFF3E0"
                     />
                   </View>
-                  <View style={{ alignItems: 'flex-end' }}>
-                    <Typography variant="display" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{(baby as any)?.name || 'Baby'}</Typography>
-                  </View>
+
+                  <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 16, letterSpacing: 1 }}>
+                    GENERATED BY MUMMUM HUB
+                  </Typography>
                 </View>
+              </ViewShot>
 
-                <View style={styles.reportDivider} />
-
-                <View style={styles.bannerVitalsRow}>
-                  <View style={styles.vitalStatItem}>
-                    <Scale size={16} color="#607D8B" />
-                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
-                      {lastWeight ? `${lastWeight.details.value}${lastWeight.details.unit}` : '--'}
-                    </Typography>
-                    <Typography variant="label" color="#90A4AE">Weight</Typography>
-                  </View>
-                  <View style={styles.vitalStatItem}>
-                    <Droplet size={16} color="#607D8B" />
-                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
-                      {lastHeight ? `${lastHeight.details.value}${lastHeight.details.unit}` : '--'}
-                    </Typography>
-                    <Typography variant="label" color="#90A4AE">Height</Typography>
-                  </View>
-                  <View style={styles.vitalStatItem}>
-                    <Baby size={16} color="#607D8B" />
-                    <Typography variant="bodyMd" weight="800" color="#1B3C35">
-                      {lastHeadCirc ? `${lastHeadCirc.details.value}${lastHeadCirc.details.unit}` : '--'}
-                    </Typography>
-                    <Typography variant="label" color="#90A4AE">Head Circ</Typography>
-                  </View>
-                </View>
-
-                <View style={[styles.reportDivider, { marginTop: 16 }]} />
-
-                <Typography variant="bodyLg" weight="800" color="#1B3C35" style={{ textAlign: 'center', marginBottom: 4 }}>
-                  {format(data.date, 'MMMM d, yyyy')} • Daily Report
-                </Typography>
-                <Typography variant="label" weight="800" color="#C69C82" style={{ textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 24 }}>
-                  Celebrating {baby?.name}'s {emotionalDay} Day
-                </Typography>
-
-                {/* High Level 4-Item Grid */}
-                <View style={styles.categoryGrid}>
-                  <CategoryItem 
-                    icon={<Pill size={20} color="#D32F2F" />} 
-                    title="HEALTH" 
-                    detail={`${medsCount + vaccinesCount} Events`} 
-                    bgColor="#FFEBEE"
-                  />
-                  <CategoryItem 
-                    icon={<Milk size={20} color="#2E7D32" />} 
-                    title="NUTRITION" 
-                    detail={`${data.stats.feeds} Feeds`} 
-                    bgColor="#E8F5E9"
-                  />
-                  <CategoryItem 
-                    icon={<Moon size={20} color="#1565C0" />} 
-                    title="REST" 
-                    detail={`${Math.floor(data.stats.sleep/3600)}h Sleep`} 
-                    bgColor="#E3F2FD"
-                  />
-                  <CategoryItem 
-                    icon={<Droplet size={20} color="#E65100" />} 
-                    title="CARE" 
-                    detail={`${careEvents} Events`} 
-                    bgColor="#FFF3E0"
-                  />
-                </View>
-
-                <Typography variant="label" weight="800" color="#B0BEC5" style={{ textAlign: 'center', marginTop: 16, letterSpacing: 1 }}>
-                  GENERATED BY MUMMUM HUB
-                </Typography>
+              <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
+                <TouchableOpacity 
+                  style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#C69C82' }]} 
+                  onPress={handleSaveImage}
+                  disabled={isSnapshotLoading}
+                >
+                  <Typography variant="body" weight="800" color="#fff">
+                    {isSnapshotLoading ? 'Saving...' : 'Save to Gallery'}
+                  </Typography>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#fff', borderWidth: 1, borderColor: '#F1F5F9' }]} 
+                  onPress={onClose}
+                >
+                  <Typography variant="body" weight="800" color="#4A5D4C">Close</Typography>
+                </TouchableOpacity>
               </View>
-            </ViewShot>
-
-            <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-              <TouchableOpacity 
-                style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#C69C82' }]} 
-                onPress={handleSaveImage}
-              >
-                <Typography variant="body" weight="800" color="#fff">Save to Gallery</Typography>
-              </TouchableOpacity>
-              
-              <TouchableOpacity 
-                style={[styles.closeBannerBtn, { flex: 1, backgroundColor: '#fff', borderWidth: 1, borderColor: '#F1F5F9' }]} 
-                onPress={onClose}
-              >
-                <Typography variant="body" weight="800" color="#4A5D4C">Close</Typography>
-              </TouchableOpacity>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </SafeAreaView>
       </View>
     </Modal>
   );

@@ -3,455 +3,179 @@ import {
   StyleSheet, 
   View, 
   TouchableOpacity, 
-  ScrollView,
   Platform,
   Dimensions,
   SafeAreaView,
-  Alert,
   NativeModules,
-  Linking,
   ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
 import { 
-  Check, 
   Star, 
-  ShieldCheck, 
-  Zap, 
   FileText, 
   Pill, 
   Cloud, 
-  X 
+  X,
+  Lock,
+  Heart,
+  Check,
+  ShieldCheck
 } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import { useBabyStore } from '@/store/useBabyStore';
-
-const { width } = Dimensions.get('window');
-
-
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 export default function PremiumPaywallScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme() ?? 'light';
-  const themeColors = Colors[colorScheme];
-  const { setPro, currentBabyId, babies, tempBaby } = useBabyStore();
-  const currentBaby = babies.find(b => b.id === currentBabyId);
+  const { setPro, currentBabyId, babies, showGlobalModal, hideGlobalModal } = useBabyStore();
   const [selectedPlan, setSelectedPlan] = useState('yearlymm');
   const [offerings, setOfferings] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [loading, setLoading] = React.useState(false);
-
-  const fetchOfferings = async () => {
-    setIsRefreshing(true);
-    setError(null);
-    try {
-      const { default: Purchases } = await import('react-native-purchases');
-      const fetchedOfferings = await Purchases.getOfferings();
-      // Target specific offering or fallback to current
-      const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
-      
-      if (target) {
-        setOfferings(target);
-      } else {
-        setError("Clinical offers are currently being updated. Please try again in a moment.");
-      }
-    } catch (e: any) {
-      console.log('Error fetching offerings:', e);
-      setError(e.message || "Could not connect to App Store.");
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const fetchOfferings = async () => {
+      try {
+        const { default: Purchases } = await import('react-native-purchases');
+        const fetchedOfferings = await Purchases.getOfferings();
+        const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
+        if (target) setOfferings(target);
+      } catch (e) {}
+    };
     fetchOfferings();
   }, []);
 
   const handlePurchase = async () => {
     if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
-      Alert.alert(
-        "Simulator Mode", 
-        "In-App Purchases are not available in the iOS Simulator. To test the payment flow, please use a physical device with a Sandbox Apple ID.",
-        [{ text: "OK" }]
-      );
+      showGlobalModal({ title: "Simulator", description: "IAP not available here.", confirmText: "OK" });
       return;
     }
-    const planData = plans.find(p => p.id === selectedPlan);
-    const pkg = offerings?.availablePackages?.find((p: any) => 
-      p.identifier === planData?.rcId || p.product.identifier === selectedPlan
-    );
-    
-    if (!pkg) { 
-      Alert.alert("Store Notice", "This clinical offer is currently being synchronized with the App Store. Please try again in a few seconds.");
-      return; 
-    }
+    const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === selectedPlan || p.identifier === selectedPlan);
+    if (!pkg) return;
     setLoading(true);
     try {
       const { default: Purchases } = await import('react-native-purchases');
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      
-      // Check for 'pro' OR any active entitlement to be safe
-      const hasPro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
-      
-      if (hasPro) { 
-        setPro(true); 
-        Alert.alert("Welcome to Pro", "Your Mummum Clinical Pro access is now active!");
-        router.back(); 
-      }
-    } catch (e: any) {
-      // Ignore if user cancelled
-      if (e.userCancelled) return;
-      
-      Alert.alert("Store Notice", e.message || "The store is temporarily unavailable. Please ensure you are signed into a Sandbox Apple ID.");
-      console.log('Purchase Error (Non-Critical):', e.message);
-    } finally {
-      setLoading(false);
-    }
+      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
+    } catch (e) {} finally { setLoading(false); }
   };
 
-  const handleRestore = async () => {
-    if (!NativeModules.RNPurchases || Platform.OS !== 'ios') {
-      Alert.alert("Simulator Mode", "Restore functionality requires a physical device and a real Apple ID.");
-      return;
-    }
-    setLoading(true);
-    try {
-      const { default: Purchases } = await import('react-native-purchases');
-      const customerInfo = await Purchases.restorePurchases();
-      const hasPro = !!customerInfo.entitlements.active['pro'] || Object.keys(customerInfo.entitlements.active).length > 0;
-      
-      if (hasPro) { 
-        setPro(true); 
-        Alert.alert("Restored", "Your previous purchases have been successfully restored.");
-        router.back(); 
-      } else {
-        Alert.alert("No Purchase Found", "We couldn't find any active Pro subscriptions for this Apple ID.");
-      }
-    } catch (e: any) {
-      Alert.alert("Restore Error", e.message || "An error occurred while restoring purchases.");
-      console.error('Restore Error', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const planConfigs = [
-    { id: 'monthlymm', rcId: 'prodacf07deaca', title: 'Monthly', defaultPrice: '$4.99', desc: 'Full Access', sub: 'GoPro' },
-    { id: 'yearlymm', rcId: 'prod488bc18430', title: 'Yearly', defaultPrice: '$19.99', desc: 'Best Experience', sub: 'GoPro • 60% OFF' },
-    { id: 'lifetimemm', rcId: 'prodeb4f0692c5', title: 'Lifetime', defaultPrice: '$29.99', oldPrice: '$69.99', desc: 'One-time Payment', sub: 'Clinical Pro • Best Value' }
-  ];
-
-  const getPrice = (id: string, defaultPrice: string) => {
-    const config = planConfigs.find(p => p.id === id);
-    const pkg = offerings?.availablePackages?.find((p: any) => 
-      p.identifier === config?.rcId || p.product.identifier === id
-    );
-    return pkg?.product?.priceString || defaultPrice;
-  };
-
-  const plans = planConfigs.map(p => ({
+  const plans = [
+    { id: 'monthlymm', title: 'Monthly', price: '$4.99', sub: 'Clinical Pro', badge: null },
+    { id: 'yearlymm', title: 'Yearly Pro', price: '$19.99', sub: 'Most Popular', badge: 'SAVE 60%', best: true },
+    { id: 'lifetimemm', title: 'Lifetime', price: '$29.99', sub: 'One-Time Payment', badge: 'BEST VALUE' }
+  ].map(p => ({
     ...p,
-    price: getPrice(p.id, p.defaultPrice)
+    price: offerings?.availablePackages?.find((pkg: any) => pkg.product.identifier === p.id)?.product.priceString || p.price
   }));
 
-  const features = [
-    { 
-      icon: <FileText size={20} color="#1B3C35" />, 
-      title: "Clinical PDF", 
-    },
-    { 
-      icon: <Pill size={20} color="#9C27B0" />, 
-      title: "Meds Hub", 
-    },
-    { 
-      icon: <Star size={20} color="#FFB300" />, 
-      title: "Snapshots", 
-    },
-    { 
-      icon: <Cloud size={20} color="#1565C0" />, 
-      title: "Cloud Sync", 
-    }
+  const comp = [
+    { name: "Doctor PDF Reports", pro: true },
+    { name: "Clinical Cloud Sync", pro: true },
+    { name: "Medication Safety", pro: true },
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+    <View style={styles.root}>
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.closeBtn} onPress={() => router.back()}>
-            <X size={24} color={themeColors.icon} />
-          </TouchableOpacity>
+        <View style={styles.promoBanner}>
+          <Typography weight="900" color="#fff" style={{ fontSize: 9, letterSpacing: 1 }}>60% LAUNCH DISCOUNT ACTIVE</Typography>
         </View>
 
-        <View style={styles.mainContent}>
-          <Animated.View entering={FadeInDown.delay(200).duration(800)} style={styles.hero}>
-            <Animated.View entering={ZoomIn.delay(400).duration(800)} style={styles.iconCircle}>
-              <Star size={40} color="#fff" fill="#fff" />
-            </Animated.View>
-            <Typography variant="display" style={styles.title}>Unlock Clinical Pro</Typography>
-            <Typography variant="body" color={themeColors.icon} style={styles.subtitle}>
-              Professional clinical tools for {currentBaby?.name || tempBaby.name || 'your baby'}'s care.
-            </Typography>
+        <View style={styles.content}>
+          <Animated.View entering={FadeInDown} style={styles.hero}>
+            <Typography style={styles.title}>Unlock Clinical Pro</Typography>
+            <Typography style={styles.subtitle}>Secure every tool for your baby's history.</Typography>
           </Animated.View>
 
-          <View style={styles.featuresGrid}>
-            {features.map((feature, index) => (
-              <View key={index} style={styles.featureGridItem}>
-                <View style={styles.featureIconContainer}>{feature.icon}</View>
-                <Typography variant="label" weight="800" color={themeColors.text} style={{ textAlign: 'center', marginTop: 4, fontSize: 10 }}>{feature.title}</Typography>
+          <View style={styles.compGrid}>
+            {comp.map((item, i) => (
+              <View key={i} style={styles.compRow}>
+                <Typography weight="700" color="#455A64" style={{ flex: 1, fontSize: 11 }}>{item.name}</Typography>
+                <View style={{ width: 40, alignItems: 'center' }}><X size={12} color="#CFD8DC" /></View>
+                <View style={{ width: 40, alignItems: 'center' }}><Check size={14} color="#1B3C35" strokeWidth={3} /></View>
               </View>
             ))}
           </View>
 
-          <View style={styles.plansContainer}>
-            {error ? (
-              <View style={styles.loadingStore}>
-                <Typography variant="label" color="#f44336" style={{ marginBottom: 12, textAlign: 'center', paddingHorizontal: 20 }}>
-                  {error}
-                </Typography>
-                <TouchableOpacity 
-                  style={[styles.planCard, { borderColor: '#C69C82', backgroundColor: '#FFF9F6' }]}
-                  onPress={fetchOfferings}
-                >
-                  <Typography variant="body" weight="800" color="#C69C82">Retry Connection</Typography>
-                </TouchableOpacity>
-              </View>
-            ) : !offerings ? (
-              <View style={styles.loadingStore}>
-                <ActivityIndicator size="large" color="#C69C82" />
-                <Typography variant="label" color="#90A4AE" style={{ marginTop: 12 }}>Connecting to App Store...</Typography>
-                {isRefreshing && <Typography variant="label" color="#CFD8DC" style={{ fontSize: 9, marginTop: 4 }}>Checking clinical offers...</Typography>}
-              </View>
-            ) : (
-              plans.map((plan) => (
-                <TouchableOpacity 
-                  key={plan.id}
-                  style={[
-                    styles.planCard, 
-                    selectedPlan === plan.id && { borderColor: '#1B3C35', backgroundColor: '#F1F8E9' }
-                  ]}
-                  onPress={() => setSelectedPlan(plan.id)}
-                >
-                  <View style={styles.planInfo}>
-                    <Typography variant="body" weight="800">{plan.title}</Typography>
-                    <Typography variant="label" color="#607D8B">{plan.sub}</Typography>
+          <View style={styles.plansStack}>
+            {plans.map((plan) => (
+              <TouchableOpacity 
+                key={plan.id}
+                style={[styles.planCard, selectedPlan === plan.id && styles.selectedCard, plan.best && styles.bestPlan]}
+                onPress={() => setSelectedPlan(plan.id)}
+              >
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Typography weight="900" color="#1B3C35" style={{ fontSize: 16 }}>{plan.title}</Typography>
+                    {plan.badge && <View style={[styles.miniBadge, plan.best && { backgroundColor: '#C69C82' }]}><Typography weight="900" color="#fff" style={{ fontSize: 8 }}>{plan.badge}</Typography></View>}
                   </View>
-                  <View style={{ alignItems: 'flex-end' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      {plan.oldPrice && (
-                        <Typography variant="label" color="#B0BEC5" style={{ textDecorationLine: 'line-through', marginRight: 4 }}>
-                          {plan.oldPrice}
-                        </Typography>
-                      )}
-                      <Typography variant="bodyLg" weight="800" color="#1B3C35">{plan.price}</Typography>
-                    </View>
-                    <Typography variant="label" color="#90A4AE" style={{ fontSize: 9 }}>{plan.desc}</Typography>
-                  </View>
-                </TouchableOpacity>
-              ))
-            )}
+                  <Typography variant="label" weight="800" color="#90A4AE" style={{ fontSize: 10 }}>{plan.sub}</Typography>
+                </View>
+                <Typography variant="body" weight="900" color="#1B3C35" style={{ fontSize: 24 }}>{plan.price}</Typography>
+                <View style={[styles.radio, selectedPlan === plan.id && styles.radioActive]}>
+                  {selectedPlan === plan.id && <Check size={10} color="#fff" strokeWidth={4} />}
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
 
-          <Animated.View entering={FadeInUp.delay(1000).duration(800)} style={styles.footer}>
-            <TouchableOpacity 
-              style={[styles.purchaseBtn, loading && { opacity: 0.7 }]} 
-              onPress={handlePurchase}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Typography variant="bodyLg" weight="800" style={{ color: '#fff' }}>
-                  {selectedPlan === 'lifetimemm' ? 'Unlock Lifetime Access' : 'Start 3-Day Trial'}
-                </Typography>
+          <View style={styles.footer}>
+            <TouchableOpacity style={[styles.cta, loading && { opacity: 0.7 }]} onPress={handlePurchase} disabled={loading}>
+              {loading ? <ActivityIndicator color="#fff" /> : (
+                <View style={{ alignItems: 'center' }}>
+                  <Typography weight="900" style={{ color: '#fff', fontSize: 18 }}>ACTIVATE PRO ACCESS</Typography>
+                  <Typography weight="800" color="rgba(255,255,255,0.7)" style={{ fontSize: 9 }}>7-DAY SATISFACTION GUARANTEE</Typography>
+                </View>
               )}
             </TouchableOpacity>
-
-            <View style={styles.legalInfoBlock}>
-              <Typography variant="label" color="#B0BEC5" style={[styles.disclosureText, { marginBottom: 4, fontWeight: '700' }]}>
-                Account registration is recommended to restore and sync Pro access across all your devices.
-              </Typography>
-              <Typography variant="label" color="#B0BEC5" style={styles.disclosureText}>
-                Payment will be charged to your iTunes Account at confirmation of purchase. Subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period. Account will be charged for renewal within 24-hours prior to the end of the current period.
-              </Typography>
-              <View style={styles.legalLinks}>
-                <TouchableOpacity onPress={() => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
-                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Terms</Typography>
-                </TouchableOpacity>
-                <View style={styles.dot} />
-                <TouchableOpacity onPress={() => Linking.openURL('https://mummum.app/privacy')}>
-                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Privacy</Typography>
-                </TouchableOpacity>
-                <View style={styles.dot} />
-                <TouchableOpacity onPress={handleRestore}>
-                  <Typography variant="label" weight="700" color="#90A4AE" style={{ fontSize: 9 }}>Restore</Typography>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Animated.View>
+            <View style={styles.trustRow}><ShieldCheck size={12} color="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '900' }}>SECURE APPLE CHECKOUT • CANCEL ANYTIME</Typography></View>
+          </View>
         </View>
+
+        {/* ABSOLUTE CLOSE BUTTON - TOP LAYER */}
+        <TouchableOpacity 
+          onPress={() => router.back()} 
+          style={styles.absoluteClose}
+          hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
+        >
+          <X size={20} color="#1B3C35" strokeWidth={3} />
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: 24,
-    paddingTop: 12,
-  },
-  closeBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#F8FAFB',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  scrollContent: {
-    paddingHorizontal: 32,
-    paddingBottom: 60,
-  },
-  mainContent: {
-    flex: 1,
-    paddingHorizontal: 32,
-    paddingBottom: 40,
-    justifyContent: 'space-between',
-  },
-  hero: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  iconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#1B3C35',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-    shadowColor: '#1B3C35',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 8,
-  },
-  title: {
-    fontSize: 28,
-    lineHeight: 34,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-  featuresGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  featureGridItem: {
-    width: (Dimensions.get('window').width - 64 - 12) / 2,
-    alignItems: 'center',
-    backgroundColor: '#F8FAFB',
-    padding: 12,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
-  },
-  plansContainer: {
-    gap: 10,
-    marginVertical: 4,
-  },
-  planCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 12,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#F1F5F9',
-  },
-  planInfo: {
-    gap: 2,
-  },
-  loadingStore: {
-    height: 180,
-    alignItems: 'center',
-    justifyContent: 'center',
+  root: { flex: 1, backgroundColor: '#FDFCFB' },
+  promoBanner: { backgroundColor: '#C69C82', paddingVertical: 6, alignItems: 'center', marginTop: 0 },
+  absoluteClose: { 
+    position: 'absolute', 
+    top: 100, 
+    right: 20, 
+    zIndex: 999,
+    padding: 8,
     backgroundColor: '#fff',
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
-    marginBottom: 10,
-  },
-  featureIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3
   },
-  footer: {
-    gap: 16,
-  },
-  pricingSummary: {
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    marginTop: 4,
-  },
-  purchaseBtn: {
-    height: 64,
-    backgroundColor: '#1B3C35',
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#1B3C35',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
-    elevation: 6,
-  },
-  legalInfoBlock: {
-    marginTop: 14,
-    gap: 8,
-  },
-  disclosureText: {
-    fontSize: 8,
-    textAlign: 'center',
-    lineHeight: 12,
-    color: '#B0BEC5',
-    paddingHorizontal: 10,
-  },
-  legalLinks: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-    marginTop: 4,
-  },
-  dot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: '#CFD8DC',
-  }
+  content: { flex: 1, paddingHorizontal: 24, justifyContent: 'center', paddingBottom: 10, paddingTop: 10 },
+  hero: { alignItems: 'center', marginBottom: 16, paddingTop: 120 },
+  title: { fontSize: 34, fontWeight: '900', color: '#1B3C35', lineHeight: 42, paddingVertical: 4 },
+  subtitle: { color: '#607D8B', fontSize: 14, marginTop: 2, textAlign: 'center' },
+  compGrid: { backgroundColor: '#fff', borderRadius: 20, padding: 16, marginBottom: 20, borderWidth: 1, borderColor: '#F1F5F9' },
+  compRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#F8FAFB' },
+  plansStack: { gap: 10, marginBottom: 20 },
+  planCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 18, borderRadius: 24, borderWidth: 1, borderColor: '#F1F5F9' },
+  selectedCard: { borderColor: '#1B3C35', borderWidth: 2, backgroundColor: '#1B3C3503' },
+  bestPlan: { borderColor: '#C69C82', borderWidth: 2 },
+  miniBadge: { backgroundColor: '#1B3C35', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 8 },
+  radio: { width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: '#ECEFF1', marginLeft: 12, alignItems: 'center', justifyContent: 'center' },
+  radioActive: { backgroundColor: '#1B3C35', borderColor: '#1B3C35' },
+  footer: { gap: 12 },
+  cta: { height: 72, backgroundColor: '#1B3C35', borderRadius: 24, alignItems: 'center', justifyContent: 'center', shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 16 },
+  trustRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }
 });

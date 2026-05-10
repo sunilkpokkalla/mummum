@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity, Image, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
@@ -11,6 +11,8 @@ import { differenceInMonths, differenceInDays, format } from 'date-fns';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
+import { usePremium } from '@/hooks/usePremium';
 
 import { saveImagePermanently } from '@/utils/imagePersistor';
 
@@ -18,11 +20,13 @@ export default function ChartsScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies, currentBabyId, activities, addActivity, updateBaby, deleteActivity, updateActivity } = useBabyStore();
+  const { babies, currentBabyId, activities, addActivity, updateBaby, deleteActivity, updateActivity, showGlobalModal, hideGlobalModal } = useBabyStore();
   const [activeTab, setActiveTab] = useState('Weight');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newValue, setNewValue] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
+  const { isPro } = usePremium();
+  const router = useRouter();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const birthDate = currentBaby?.birthDate ? new Date(currentBaby.birthDate) : new Date();
@@ -89,14 +93,15 @@ export default function ChartsScreen() {
   };
 
   const handleDelete = (id: string) => {
-    Alert.alert(
-      "Delete Record",
-      "Are you sure you want to remove this measurement?",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Delete", style: "destructive", onPress: () => deleteActivity(id) }
-      ]
-    );
+    showGlobalModal({
+      title: "Delete Record",
+      description: "Are you sure you want to remove this measurement?",
+      confirmText: "Delete",
+      onConfirm: () => {
+        deleteActivity(id);
+        hideGlobalModal();
+      }
+    });
   };
 
   const growthHistory = activities.filter(a => 
@@ -142,7 +147,6 @@ export default function ChartsScreen() {
     const targetDate = new Date();
     targetDate.setMonth(targetDate.getMonth() - monthOffset);
     
-    // Find measurement closest to that month
     const monthData = growthHistory.find(h => {
       const hDate = new Date(h.timestamp);
       return hDate.getMonth() === targetDate.getMonth() && hDate.getFullYear() === targetDate.getFullYear();
@@ -152,6 +156,21 @@ export default function ChartsScreen() {
   };
 
   const maxVal = Math.max(...growthHistory.map(h => parseFloat(h.details?.value || '0')), 1);
+
+  const handleProjectionPress = () => {
+    if (!isPro) {
+      showGlobalModal({
+        title: "Unlock Advanced Charts",
+        description: "Full clinical trend analysis is a Mummum Pro feature. Unlock now for lifetime access to these insights.",
+        confirmText: "Upgrade Now",
+        onConfirm: () => {
+          hideGlobalModal();
+          router.push('/premium');
+        }
+      });
+      return;
+    }
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: '#F8FAFB', paddingTop: insets.top }]}>
@@ -166,7 +185,6 @@ export default function ChartsScreen() {
           </View>
         </View>
 
-        {/* Insight Card */}
         <Card style={[styles.insightCard, { backgroundColor: colorScheme === 'light' ? '#E8F1E9' : '#1B2E1D' }]}>
           <View style={[styles.insightIcon, { backgroundColor: '#89A08B' }]}>
             <TrendingUp size={20} color="#fff" />
@@ -179,7 +197,6 @@ export default function ChartsScreen() {
           </View>
         </Card>
 
-        {/* Segmented Tabs */}
         <View style={styles.tabContainer}>
           {['Weight', 'Height', 'Head Circ'].map((tab) => (
             <TouchableOpacity
@@ -201,7 +218,6 @@ export default function ChartsScreen() {
           ))}
         </View>
 
-        {/* Growth Chart Card */}
         <Card style={styles.chartCard}>
           <View style={styles.chartCardHeader}>
             <View>
@@ -220,7 +236,6 @@ export default function ChartsScreen() {
             </View>
           </View>
 
-          {/* Dynamic Bar Chart based on baby's age */}
           <View style={styles.chartArea}>
             {[...Array(6)].map((_, i) => {
               const offset = 5 - i;
@@ -228,7 +243,6 @@ export default function ChartsScreen() {
               const isCurrentMonth = offset === 0;
               
               const monthValue = getDataForMonth(offset);
-              // Scale bar height based on max value in history, min 20% height
               const barHeight = monthValue ? (monthValue / maxVal) * 80 + 10 : 0;
 
               return (
@@ -259,9 +273,8 @@ export default function ChartsScreen() {
                 </View>
               );
             })}
-            {/* Future Projection */}
             {[monthsOld + 1, monthsOld + 2].map((m, i) => (
-              <View key={`proj-${i}`} style={styles.barWrapper}>
+              <TouchableOpacity key={`proj-${i}`} style={styles.barWrapper} onPress={handleProjectionPress}>
                 <View 
                   style={[
                     styles.bar, 
@@ -275,7 +288,7 @@ export default function ChartsScreen() {
                 <Typography variant="label" style={styles.barLabel} color={themeColors.icon}>
                   {m}M
                 </Typography>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </Card>

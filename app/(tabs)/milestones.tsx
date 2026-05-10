@@ -64,45 +64,34 @@ const MILESTONE_DATA = [
 export default function MilestonesScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = Colors[colorScheme];
-  const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone } = useBabyStore();
+  const { babies, currentBabyId, memories, addMemory, completedMilestones, toggleMilestone, showGlobalModal } = useBabyStore();
   const [loading, setLoading] = useState(false);
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const completedIds = (completedMilestones as any)[currentBabyId || ''] || [];
   const babyMemories = memories.filter(m => m.babyId === currentBabyId);
 
   const handleAddMemory = async () => {
-    Alert.alert(
-      "Add Milestone Memory",
-      "Capture a new moment or choose from your library.",
-      [
-        {
-          text: "Take Photo",
-          onPress: () => processImage(true)
-        },
-        {
-          text: "Choose from Library",
-          onPress: () => processImage(false)
-        },
-        {
-          text: "Cancel",
-          style: "cancel"
-        }
-      ]
-    );
+    showGlobalModal({
+      title: "Add Milestone Memory",
+      description: "Capture a new moment or choose from your library.",
+      confirmText: "Take Photo",
+      onConfirm: () => processImage(true),
+      secondaryText: "Choose from Library",
+      onSecondary: () => processImage(false),
+      cancelText: "Cancel"
+    });
   };
 
   const processImage = async (useCamera: boolean) => {
-    let status;
-    if (useCamera) {
-      const cameraPerm = await ImagePicker.requestCameraPermissionsAsync();
-      status = cameraPerm.status;
-    } else {
-      const libraryPerm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      status = libraryPerm.status;
-    }
+    const { status } = useCamera 
+      ? await ImagePicker.requestCameraPermissionsAsync() 
+      : await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== 'granted') {
-      Alert.alert('Permission needed', `We need ${useCamera ? 'camera' : 'photo library'} access to save memories.`);
+      showGlobalModal({
+        title: "Permission needed",
+        description: `We need ${useCamera ? 'camera' : 'photo library'} access to save memories.`
+      });
       return;
     }
 
@@ -130,7 +119,10 @@ export default function MilestonesScreen() {
         addMemory(newMemory);
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       } catch (e) {
-        Alert.alert("Error", "Could not save photo. Please try again.");
+        showGlobalModal({
+          title: "Save Failed",
+          description: "We couldn't save that photo to your milestone. Please try again or check your storage."
+        });
       } finally {
         setLoading(false);
       }

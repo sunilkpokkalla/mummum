@@ -41,7 +41,7 @@ export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
   const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems } = useBabyStore();
-  const { isPro, isTrialActive, trialStatus } = usePremium();
+  const { isPro } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
   const dateKey = format(new Date(), 'yyyy-MM-dd');
@@ -49,16 +49,35 @@ export default function DashboardScreen() {
   const items = babyChecklists[dateKey] || [];
 
   const handlePickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
+    useBabyStore.getState().showGlobalModal({
+      title: "Baby Photo",
+      description: "Personalize your baby's clinical dashboard.",
+      confirmText: "Camera",
+      onConfirm: () => processImage(true),
+      secondaryText: "Gallery",
+      onSecondary: () => processImage(false),
+      cancelText: "Cancel"
     });
+  };
 
-    if (!result.canceled && currentBabyId) {
-      const permanentUri = await saveImagePermanently(result.assets[0].uri);
-      updateBaby(currentBabyId, { photoUri: permanentUri });
+  const processImage = async (useCamera: boolean) => {
+    try {
+      const { status } = useCamera 
+        ? await ImagePicker.requestCameraPermissionsAsync() 
+        : await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (status !== 'granted') return;
+
+      const result = useCamera 
+        ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 })
+        : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+
+      if (!result.canceled && currentBabyId) {
+        const permanentUri = await saveImagePermanently(result.assets[0].uri);
+        updateBaby(currentBabyId, { photoUri: permanentUri });
+      }
+    } catch (e) {
+      console.log('Image selection failed', e);
     }
   };
 
@@ -162,18 +181,6 @@ export default function DashboardScreen() {
             {isPro ? (
               <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
                 <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
-              </View>
-            ) : isTrialActive ? (
-              <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                <View style={[styles.statusBadge, { backgroundColor: '#C69C82' }]}>
-                  <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>TRIAL</Typography>
-                </View>
-                <Pressable 
-                  style={styles.goProButtonSmall}
-                  onPress={() => router.push('/premium')}
-                >
-                  <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 8 }}>GO PRO</Typography>
-                </Pressable>
               </View>
             ) : (
               <Pressable 

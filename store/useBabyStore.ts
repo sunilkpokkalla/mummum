@@ -87,8 +87,7 @@ interface BabyState {
   appointments: Appointment[];
   dayCareLogs: DayCareLog[];
   isPro: boolean;
-  isTrial: boolean;
-  trialStartedAt: number | null;
+  isSyncing: boolean;
   
   // Actions
   addBaby: (baby: Baby) => void;
@@ -117,11 +116,15 @@ interface BabyState {
   updateStandardTaskSetting: (id: string, setting: { time: string; enabled: boolean; notificationId?: string }) => void;
   completeOnboarding: () => void;
   updateTempBaby: (data: Partial<Baby>) => void;
-  setPro: (val: boolean, isTrial?: boolean) => void;
+  setPro: (status: boolean) => void;
+  setSyncing: (status: boolean) => void;
+  showGlobalModal: (config: { title: string; description: string; confirmText?: string; onConfirm?: () => void }) => void;
+  hideGlobalModal: () => void;
   resetStore: () => void;
   toggleReminder: (id: string) => void;
   syncToCloud: () => Promise<void>;
   pullFromCloud: () => Promise<void>;
+  setStore: (data: Partial<BabyState>) => void;
 }
 
 // Utility to push data to Firestore
@@ -164,167 +167,95 @@ export const useBabyStore = create<BabyState>()(
       standardTaskSettings: {},
       isOnboarded: false,
       userPhotoUri: null,
-      userName: 'MumMum Parent',
+      userName: 'Parent',
       tempBaby: {},
       appointments: [],
       dayCareLogs: [],
       isPro: false,
-      isTrial: false,
-      trialStartedAt: null,
-
-      syncToCloud: async () => {
-        const state = get();
-        await pushToFirestore(state);
+      isSyncing: false,
+      globalModalConfig: {
+        visible: false,
+        title: '',
+        description: '',
       },
 
-      pullFromCloud: async () => {
-        const user = auth().currentUser;
-        if (!user) return;
+      addBaby: (baby) => set((state) => ({
+        babies: [...state.babies, baby],
+        currentBabyId: state.currentBabyId || baby.id
+      })),
 
-        try {
-          const doc = await firestore().collection('users').doc(user.uid).get();
-          if (doc.exists) {
-            const data = doc.data();
-            set({
-              babies: data?.babies || get().babies,
-              activities: data?.activities || get().activities,
-              memories: data?.memories || get().memories,
-              appointments: data?.appointments || get().appointments,
-              dayCareLogs: data?.dayCareLogs || get().dayCareLogs,
-              completedChecklistItems: data?.completedChecklistItems || get().completedChecklistItems,
-              completedMilestones: data?.completedMilestones || get().completedMilestones,
-              userName: data?.userName || get().userName,
-              userPhotoUri: data?.userPhotoUri || get().userPhotoUri,
-              currentBabyId: data?.currentBabyId || get().currentBabyId,
-            });
-            console.log('[Cloud Sync]: Data pulled successfully.');
-          }
-        } catch (e) {
-          console.error('[Cloud Sync]: Pull failed:', e);
-        }
-      },
+      updateBaby: (id, data) => set((state) => ({
+        babies: state.babies.map((b) => b.id === id ? { ...b, ...data } : b)
+      })),
 
-      addBaby: (baby) => {
-        set((state) => ({ 
-          babies: [...state.babies, baby],
-          currentBabyId: state.currentBabyId || baby.id,
-          tempBaby: {}
-        }));
-        get().syncToCloud();
-      },
+      updateUserPhoto: (uri) => set({ userPhotoUri: uri }),
+      updateUserName: (name) => set({ userName: name }),
+      setCurrentBaby: (id) => set({ currentBabyId: id }),
 
-      updateBaby: (id, data) => {
-        set((state) => ({
-          babies: state.babies.map((b) => b.id === id ? { ...b, ...data } : b)
-        }));
-        get().syncToCloud();
-      },
+      addActivity: (activity) => set((state) => {
+        const newActivity = {
+          ...activity,
+          id: Date.now().toString(),
+          babyId: state.currentBabyId || '',
+        };
+        return { activities: [newActivity, ...state.activities] };
+      }),
 
-      updateUserPhoto: (uri) => {
-        set({ userPhotoUri: uri });
-        get().syncToCloud();
-      },
-      
-      updateUserName: (name) => {
-        set({ userName: name });
-        get().syncToCloud();
-      },
+      updateActivity: (id, data) => set((state) => ({
+        activities: state.activities.map((a) => a.id === id ? { ...a, ...data } : a)
+      })),
 
-      setCurrentBaby: (id) => {
-        set({ currentBabyId: id });
-        get().syncToCloud();
-      },
-
-      addActivity: (activity) => {
-        set((state) => ({
-          activities: [
-            { 
-              ...activity, 
-              id: Math.random().toString(36).substring(7),
-              babyId: state.currentBabyId || '' 
-            },
-            ...state.activities
-          ]
-        }));
-        get().syncToCloud();
-      },
-
-      updateActivity: (id, data) => {
-        set((state) => ({
-          activities: state.activities.map(a => a.id === id ? { ...a, ...data } : a)
-        }));
-        get().syncToCloud();
-      },
-
-      deleteActivity: (id) => {
-        set((state) => ({
-          activities: state.activities.filter((a) => a.id !== id)
-        }));
-        get().syncToCloud();
-      },
+      deleteActivity: (id) => set((state) => ({
+        activities: state.activities.filter((a) => a.id !== id)
+      })),
 
       startSession: (session) => set((state) => ({
-        activeSessions: [
-          ...state.activeSessions.filter(s => !(s.type === session.type && s.babyId === state.currentBabyId)), 
-          { ...session, babyId: state.currentBabyId || '' }
-        ]
+        activeSessions: [...state.activeSessions, session]
       })),
 
       stopSession: (type) => set((state) => ({
-        activeSessions: state.activeSessions.filter(s => !(s.type === type && s.babyId === state.currentBabyId))
+        activeSessions: state.activeSessions.filter((s) => s.type !== type)
       })),
-      
-      addMemory: (memory) => {
-        set((state) => ({
-          memories: [
-            { ...memory, babyId: state.currentBabyId || '' },
-            ...state.memories
-          ]
-        }));
-        get().syncToCloud();
-      },
 
-      toggleChecklistItem: (id) => {
-        set((state) => {
-          if (!state.currentBabyId) return state;
-          const dateKey = format(new Date(), 'yyyy-MM-dd');
-          const babyChecklists = state.completedChecklistItems[state.currentBabyId] || {};
-          const currentItems = babyChecklists[dateKey] || [];
-          
-          const newItems = currentItems.includes(id)
-            ? currentItems.filter(i => i !== id)
-            : [...currentItems, id];
-          
-          return {
-            completedChecklistItems: {
-              ...state.completedChecklistItems,
-              [state.currentBabyId]: {
-                ...babyChecklists,
-                [dateKey]: newItems
-              }
-            }
-          };
-        });
-        get().syncToCloud();
-      },
+      addMemory: (memory) => set((state) => ({
+        memories: [{ ...memory, babyId: state.currentBabyId || '' }, ...state.memories]
+      })),
 
-      toggleMilestone: (id) => {
-        set((state) => {
-          if (!state.currentBabyId) return state;
-          const currentMilestones = state.completedMilestones[state.currentBabyId] || [];
-          const newMilestones = currentMilestones.includes(id)
-            ? currentMilestones.filter(m => m !== id)
-            : [...currentMilestones, id];
-          
-          return {
-            completedMilestones: {
-              ...state.completedMilestones,
-              [state.currentBabyId]: newMilestones
+      toggleChecklistItem: (id) => set((state) => {
+        const babyId = state.currentBabyId || 'default';
+        const dateKey = format(new Date(), 'yyyy-MM-dd');
+        const currentItems = state.completedChecklistItems[babyId]?.[dateKey] || [];
+        
+        const newItems = currentItems.includes(id)
+          ? currentItems.filter(i => i !== id)
+          : [...currentItems, id];
+
+        return {
+          completedChecklistItems: {
+            ...state.completedChecklistItems,
+            [babyId]: {
+              ...state.completedChecklistItems[babyId],
+              [dateKey]: newItems
             }
-          };
-        });
-        get().syncToCloud();
-      },
+          }
+        };
+      }),
+
+      toggleMilestone: (id) => set((state) => {
+        const babyId = state.currentBabyId || 'default';
+        const currentMilestones = state.completedMilestones[babyId] || [];
+        
+        const newMilestones = currentMilestones.includes(id)
+          ? currentMilestones.filter(m => m !== id)
+          : [...currentMilestones, id];
+
+        return {
+          completedMilestones: {
+            ...state.completedMilestones,
+            [babyId]: newMilestones
+          }
+        };
+      }),
 
       addReminder: (reminder) => set((state) => ({
         customReminders: [...state.customReminders, reminder]
@@ -334,53 +265,34 @@ export const useBabyStore = create<BabyState>()(
         customReminders: state.customReminders.map(r => r.id === id ? { ...r, ...data } : r)
       })),
 
+      toggleReminder: (id) => set((state) => ({
+        customReminders: state.customReminders.map(r => 
+          r.id === id ? { ...r, enabled: !r.enabled } : r
+        )
+      })),
+
       deleteReminder: (id) => set((state) => ({
         customReminders: state.customReminders.filter(r => r.id !== id)
       })),
 
-      addAppointment: (appointment) => {
-        set((state) => ({
-          appointments: [
-            ...state.appointments,
-            { ...appointment, babyId: state.currentBabyId || '' }
-          ]
-        }));
-        get().syncToCloud();
-      },
+      addAppointment: (appointment) => set((state) => ({
+        appointments: [{ ...appointment, babyId: state.currentBabyId || '' }, ...state.appointments]
+      })),
 
-      deleteAppointment: (id) => {
-        set((state) => ({
-          appointments: state.appointments.filter(a => a.id !== id)
-        }));
-        get().syncToCloud();
-      },
+      deleteAppointment: (id) => set((state) => ({
+        appointments: state.appointments.filter(a => a.id !== id)
+      })),
 
-      addDayCareLog: (log) => {
-        set((state) => ({
-          dayCareLogs: [
-            { ...log, babyId: state.currentBabyId || '' },
-            ...state.dayCareLogs
-          ]
-        }));
-        get().syncToCloud();
-      },
+      addDayCareLog: (log) => set((state) => ({
+        dayCareLogs: [{ ...log, babyId: state.currentBabyId || '' }, ...state.dayCareLogs]
+      })),
 
-      updateDayCareLog: (id, data) => {
-        set((state) => ({
-          dayCareLogs: state.dayCareLogs.map(l => l.id === id ? { ...l, ...data } : l)
-        }));
-        get().syncToCloud();
-      },
+      updateDayCareLog: (id, data) => set((state) => ({
+        dayCareLogs: state.dayCareLogs.map(l => l.id === id ? { ...l, ...data } : l)
+      })),
 
-      deleteDayCareLog: (id) => {
-        set((state) => ({
-          dayCareLogs: state.dayCareLogs.filter(l => l.id !== id)
-        }));
-        get().syncToCloud();
-      },
-
-      toggleReminder: (id: string) => set((state) => ({
-        customReminders: state.customReminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r)
+      deleteDayCareLog: (id) => set((state) => ({
+        dayCareLogs: state.dayCareLogs.filter(l => l.id !== id)
       })),
 
       updateStandardTaskSetting: (id, setting) => set((state) => ({
@@ -398,20 +310,26 @@ export const useBabyStore = create<BabyState>()(
         userStandardTasks: state.userStandardTasks.filter(t => t.id !== id)
       })),
 
-      completeOnboarding: () => set((state) => ({ 
-        isOnboarded: true,
-        trialStartedAt: state.trialStartedAt || Date.now()
-      })),
+      completeOnboarding: () => set({ isOnboarded: true }),
 
       updateTempBaby: (data) => set((state) => ({
         tempBaby: { ...state.tempBaby, ...data }
       })),
       
-      setPro: (val, isTrial = false) => set({ 
-        isPro: isTrial ? false : val, 
-        isTrial: isTrial,
-        trialStartedAt: isTrial ? Date.now() : null 
+      setPro: (status) => set({ isPro: status }),
+      setSyncing: (status) => set({ isSyncing: status }),
+      
+      showGlobalModal: (config) => set({ 
+        globalModalConfig: { 
+          ...config, 
+          visible: true, 
+          onConfirm: config.onConfirm || (() => get().hideGlobalModal())
+        } 
       }),
+      
+      hideGlobalModal: () => set((state) => ({ 
+        globalModalConfig: { ...state.globalModalConfig, visible: false } 
+      })),
 
       resetStore: () => set({
         babies: [],
@@ -426,7 +344,47 @@ export const useBabyStore = create<BabyState>()(
         standardTaskSettings: {},
         isOnboarded: false,
         tempBaby: {},
+        userName: 'Parent',
+        userPhotoUri: null,
+        isPro: false,
       }),
+
+      setStore: (data) => set((state) => ({
+        ...state,
+        ...data
+      })),
+
+      syncToCloud: async () => {
+        const state = useBabyStore.getState();
+        if (!state.isPro) return;
+        await pushToFirestore(state);
+      },
+
+      pullFromCloud: async () => {
+        const user = auth().currentUser;
+        const state = useBabyStore.getState();
+        if (!user || !state.isPro) return;
+
+        try {
+          const doc = await firestore().collection('users').doc(user.uid).get();
+          if (doc.exists) {
+            const data = doc.data();
+            if (data) {
+              set({
+                babies: data.babies || [],
+                activities: data.activities || [],
+                memories: data.memories || [],
+                completedMilestones: data.completedMilestones || {},
+                completedChecklistItems: data.completedChecklistItems || {},
+                userName: data.userName || state.userName,
+                userPhotoUri: data.userPhotoUri || state.userPhotoUri,
+              });
+            }
+          }
+        } catch (e) {
+          console.error('[Cloud Sync]: Pull failed:', e);
+        }
+      }
     }),
     {
       name: 'mummum-storage',

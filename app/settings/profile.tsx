@@ -6,49 +6,115 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
-  Alert,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Typography from '@/components/Typography';
-import { ArrowLeft, Baby, Calendar } from 'lucide-react-native';
+import { ArrowLeft, Baby, Calendar, Camera } from 'lucide-react-native';
 import { useBabyStore } from '@/store/useBabyStore';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { format } from 'date-fns';
 import DateTimePicker from '@/components/DateTimePicker';
+import * as ImagePicker from 'expo-image-picker';
+import { saveImagePermanently } from '@/utils/imagePersistor';
 
 export default function BabyProfileScreen() {
   const router = useRouter();
-  const { babies, currentBabyId, updateBaby } = useBabyStore();
+  const { babies, currentBabyId, updateBaby, showGlobalModal } = useBabyStore();
   const currentBaby = babies.find(b => b.id === currentBabyId);
 
   const [name, setName] = React.useState(currentBaby?.name || '');
+  const [photoUri, setPhotoUri] = React.useState(currentBaby?.photoUri || '');
   const [selectedDate, setSelectedDate] = React.useState(currentBaby?.birthDate ? new Date(currentBaby.birthDate) : new Date());
   const [showPicker, setShowPicker] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  const handlePickImage = async () => {
+    showGlobalModal({
+      title: "Baby Profile Photo",
+      description: "Choose a source for your baby's clinical profile photo.",
+      confirmText: "Camera",
+      onConfirm: () => processImage(true),
+      secondaryText: "Gallery",
+      onSecondary: () => processImage(false),
+      cancelText: "Cancel"
+    });
+  };
+
+  const processImage = async (useCamera: boolean) => {
+    try {
+      const { status } = useCamera 
+        ? await ImagePicker.requestCameraPermissionsAsync() 
+        : await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (status !== 'granted') {
+        showGlobalModal({
+          title: "Permission Required",
+          description: "We need access to your photos to personalize the clinical hub."
+        });
+        return;
+      }
+
+      setIsUploading(true);
+      const result = useCamera 
+        ? await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 })
+        : await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+
+      if (!result.canceled && result.assets[0].uri) {
+        const permanentUri = await saveImagePermanently(result.assets[0].uri);
+        setPhotoUri(permanentUri);
+      }
+    } catch (e) {
+      console.log('Image selection failed', e);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Required', "Please enter the baby's name.");
+      showGlobalModal({
+        title: "Name Required",
+        description: "Please enter your baby's name to complete their clinical profile."
+      });
       return;
     }
+
+    if (!currentBabyId) {
+      showGlobalModal({
+        title: "Error",
+        description: "Clinical profile ID not found. Please restart the app."
+      });
+      return;
+    }
+
     setIsSaving(true);
     
-    // Clear all pending notifications to prevent "sticky" names from old setups
     try {
+      // Update local store
+      updateBaby(currentBabyId, { 
+        name: name.trim(), 
+        birthDate: selectedDate.toISOString(),
+        photoUri: photoUri 
+      });
+
+      // Explicit Cloud Sync for persistence
+      const { syncToCloud } = useBabyStore.getState();
+      await syncToCloud();
+
+      // Notification cleanup (if name changed)
       const { cancelAllScheduledNotificationsAsync } = await import('expo-notifications');
       await cancelAllScheduledNotificationsAsync();
     } catch (e) {
-      console.log('Notification cleanup failed', e);
-    }
-
-    updateBaby(currentBabyId, { name: name.trim(), birthDate: selectedDate.toISOString() });
-    
-    setTimeout(() => {
+      console.log('Save failed', e);
+    } finally {
       setIsSaving(false);
       router.back();
-    }, 500);
+    }
   };
 
   return (
@@ -59,40 +125,47 @@ export default function BabyProfileScreen() {
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <ArrowLeft size={24} color="#1B3C35" />
           </TouchableOpacity>
-          <Typography variant="body" weight="800" color="#1B3C35">Baby Profile</Typography>
+          <Typography variant="body" weight="800" color="#1B3C35">Clinical Profile</Typography>
           <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={isSaving}>
             <Typography variant="body" weight="800" color={isSaving ? '#B0BEC5' : '#1B3C35'}>Save</Typography>
           </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
-          {/* Avatar */}
+          {/* Avatar Section */}
           <Animated.View entering={FadeInDown.duration(600)} style={styles.avatarSection}>
-            <View style={styles.avatarCircle}>
-              <Baby size={48} color="#fff" />
-            </View>
+            <TouchableOpacity style={styles.avatarWrapper} onPress={handlePickImage} disabled={isUploading}>
+              <View style={styles.avatarCircle}>
+                {photoUri ? (
+                  <Image source={{ uri: photoUri }} style={styles.avatarImg} />
+                ) : (
+                  <Baby size={48} color="#fff" />
+                )}
+                <View style={styles.cameraBadge}>
+                  {isUploading ? <ActivityIndicator size="small" color="#fff" /> : <Camera size={14} color="#fff" />}
+                </View>
+              </View>
+            </TouchableOpacity>
             <Typography variant="bodyLg" weight="800" style={{ marginTop: 16 }}>{name || 'Baby'}</Typography>
             <Typography variant="label" color="#607D8B">Clinical Identity</Typography>
           </Animated.View>
 
           {/* Fields */}
           <View style={styles.section}>
-            <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>CORE DETAILS</Typography>
+            <Typography variant="label" weight="800" color="#B0BEC5" style={styles.sectionLabel}>IDENTITY DETAILS</Typography>
             <View style={styles.inputGroup}>
-              {/* Name */}
               <View style={styles.inputContainer}>
                 <Typography variant="label" weight="800" color="#90A4AE" style={{ marginBottom: 8 }}>NAME</Typography>
                 <TextInput
                   style={styles.textInput}
                   value={name}
                   onChangeText={setName}
-                  placeholder="Enter name"
+                  placeholder="Baby's Name"
                   placeholderTextColor="#CFD8DC"
                 />
               </View>
-              {/* Birth Date */}
               <TouchableOpacity
-                style={[styles.inputContainer, { borderBottomWidth: 0 }]}
+                style={[styles.inputContainer, { borderBottomWidth: 0, paddingBottom: 0, marginBottom: 0 }]}
                 onPress={() => setShowPicker(true)}
               >
                 <Typography variant="label" weight="800" color="#90A4AE" style={{ marginBottom: 8 }}>DATE OF BIRTH</Typography>
@@ -106,7 +179,7 @@ export default function BabyProfileScreen() {
 
           <View style={styles.infoBox}>
             <Typography variant="label" color="#1B3C35" weight="700" style={{ textAlign: 'center', lineHeight: 18 }}>
-              Updating these details will recalculate the baby's age and all pediatric milestones across the hub.
+              Profile updates instantly recalculate clinical milestones and growth projections across the hub.
             </Typography>
           </View>
         </ScrollView>
@@ -129,11 +202,8 @@ export default function BabyProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FDFCFB' },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 24, paddingVertical: 12,
   },
   backBtn: {
     width: 44, height: 44, borderRadius: 22,
@@ -144,18 +214,27 @@ const styles = StyleSheet.create({
   saveBtn: { paddingHorizontal: 16, paddingVertical: 8 },
   content: { padding: 24 },
   avatarSection: { alignItems: 'center', marginBottom: 40 },
+  avatarWrapper: { position: 'relative' },
   avatarCircle: {
-    width: 100, height: 100, borderRadius: 50,
+    width: 110, height: 110, borderRadius: 55,
     backgroundColor: '#1B3C35', alignItems: 'center', justifyContent: 'center',
     shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.2, shadowRadius: 20, elevation: 8,
+    overflow: 'visible',
+  },
+  avatarImg: { width: 110, height: 110, borderRadius: 55 },
+  cameraBadge: {
+    position: 'absolute', bottom: 0, right: 0,
+    width: 32, height: 32, borderRadius: 16,
+    backgroundColor: '#C69C82', alignItems: 'center', justifyContent: 'center',
+    borderWidth: 3, borderColor: '#fff',
   },
   section: { marginBottom: 32 },
   sectionLabel: { letterSpacing: 1.5, marginBottom: 12, marginLeft: 4, fontSize: 11 },
   inputGroup: {
     backgroundColor: '#fff', borderRadius: 28,
     borderWidth: 1, borderColor: '#F1F5F9', overflow: 'hidden',
-    padding: 20,
+    padding: 22,
     shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.03, shadowRadius: 16, elevation: 4,
   },
@@ -166,7 +245,7 @@ const styles = StyleSheet.create({
   textInput: { fontSize: 18, fontWeight: '700', color: '#1B3C35', padding: 0 },
   dateRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   infoBox: {
-    backgroundColor: '#F1F8E9', padding: 20, borderRadius: 24,
+    backgroundColor: '#F1F8E9', padding: 22, borderRadius: 24,
     marginTop: 20, borderWidth: 1, borderColor: '#E8F5E9',
   },
 });

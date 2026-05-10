@@ -5,8 +5,7 @@ import {
   TouchableOpacity, 
   ScrollView, 
   Switch,
-  TextInput,
-  Alert
+  TextInput
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -59,8 +58,15 @@ export default function ControlsScreen() {
     setIsSuccess(true);
     setTimeout(() => {
       setIsSuccess(false);
-      Alert.alert("Profile Updated", "Clinical information has been saved.");
-      router.back();
+      useBabyStore.getState().showGlobalModal({
+        title: "Profile Updated",
+        description: "Your baby's clinical information and your preferences have been successfully saved.",
+        confirmText: "Great",
+        onConfirm: () => {
+          useBabyStore.getState().hideGlobalModal();
+          router.back();
+        }
+      });
     }, 1000);
   };
 
@@ -115,6 +121,7 @@ export default function ControlsScreen() {
 
   const renderPrivacy = () => (
     <View style={styles.form}>
+      <Card style={styles.card}>
         <View style={styles.switchItem}>
           <View style={{ flex: 1 }}>
             <Typography variant="body" weight="700" color="#1B3C35">Anonymous Analytics</Typography>

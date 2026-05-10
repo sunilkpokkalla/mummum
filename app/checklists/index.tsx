@@ -19,7 +19,6 @@ import {
   TextInput,
   Platform,
   Animated,
-  Alert,
   KeyboardAvoidingView 
 } from 'react-native';
 import { Swipeable, ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -60,7 +59,8 @@ export default function ChecklistsScreen() {
     deleteAppointment,
     dayCareLogs,
     addDayCareLog,
-    deleteDayCareLog
+    deleteDayCareLog,
+    showGlobalModal
   } = useBabyStore();
   
   const [activeTab, setActiveTab] = useState<'tasks' | 'appointments' | 'daycare'>('tasks');
@@ -202,8 +202,11 @@ export default function ChecklistsScreen() {
   };
 
   const handleAddAppointment = async () => {
-    if (!apptTitle || !apptDoctor) {
-      Alert.alert("Missing Info", "Please provide a title and doctor name.");
+    if (!apptTitle.trim() || !apptDoctor.trim()) {
+      showGlobalModal({
+        title: "Missing Information",
+        description: "Please provide both an appointment title and your doctor's name to schedule this reminder."
+      });
       return;
     }
 
@@ -276,7 +279,10 @@ export default function ChecklistsScreen() {
       setIsStandardModalVisible(false);
       setSelectedTask(null);
     } catch (e) {
-      Alert.alert("Error", "Could not schedule task alert.");
+      showGlobalModal({
+        title: "Error",
+        description: "Could not schedule task alert."
+      });
     }
   };
 
@@ -316,7 +322,10 @@ export default function ChecklistsScreen() {
         updateStandardTaskSetting(id, { ...setting, enabled: true, notificationId });
       }
     } catch (e) {
-      Alert.alert("Error", "Could not toggle notification.");
+      showGlobalModal({
+        title: "Error",
+        description: "Could not toggle notification."
+      });
     }
   };
 
