@@ -7,7 +7,6 @@
     "icon": "./assets/images/MUMMUM_FINAL.png",
     "scheme": "mummum",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ambright.mummumbaby",
