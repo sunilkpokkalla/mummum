@@ -66,7 +66,7 @@ export default function OnboardingOfferScreen() {
     <View style={styles.root}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.promoBanner}>
-          <Typography weight="900" color="#fff" style={{ fontSize: 9, letterSpacing: 1 }}>LIMITED: MOTHER'S LAUNCH SPECIAL ENDING SOON</Typography>
+          <Typography weight="800" color="#fff" style={{ fontSize: 9, letterSpacing: 1 }}>LIMITED: MOTHER'S LAUNCH SPECIAL ENDING SOON</Typography>
         </View>
 
         <View style={styles.content}>
@@ -85,27 +85,27 @@ export default function OnboardingOfferScreen() {
           </View>
 
           <Animated.View entering={FadeInUp} style={styles.priceCard}>
-             <Typography weight="900" color="#C69C82" style={{ fontSize: 10, letterSpacing: 2, marginBottom: 16 }}>EXCLUSIVE LIFETIME SPECIAL</Typography>
+             <Typography weight="800" color="#C69C82" style={{ fontSize: 10, letterSpacing: 2, marginBottom: 16 }}>EXCLUSIVE LIFETIME SPECIAL</Typography>
              
              <View style={styles.priceRow}>
                 <View>
                   <Typography style={styles.price}>{offerings?.availablePackages?.find(p => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm')?.product.priceString || '$29.99'}</Typography>
-                  <Typography weight="900" color="#90A4AE" style={{ fontSize: 9 }}>LIFETIME ACCESS</Typography>
+                  <Typography weight="800" color="#90A4AE" style={{ fontSize: 9 }}>LIFETIME ACCESS</Typography>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 4 }}>
                   <Typography style={styles.oldPrice}>$69.99</Typography>
-                  <View style={styles.saveBadge}><Typography weight="900" color="#fff" style={{ fontSize: 8 }}>SAVE 60%</Typography></View>
+                  <View style={styles.saveBadge}><Typography weight="800" color="#fff" style={{ fontSize: 8 }}>SAVE 60%</Typography></View>
                 </View>
              </View>
 
              <TouchableOpacity style={[styles.cta, loading && { opacity: 0.7 }]} onPress={handleSubscribe} disabled={loading}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Typography weight="900" style={{ fontSize: 18, color: '#fff' }}>SECURE LIFETIME ACCESS</Typography>}
+                {loading ? <ActivityIndicator color="#fff" /> : <Typography weight="800" style={{ fontSize: 18, color: '#fff' }}>SECURE LIFETIME ACCESS</Typography>}
              </TouchableOpacity>
 
-             <View style={styles.trust}><Heart size={10} color="#C69C82" fill="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '900' }}>TRUSTED BY 10K+ MOTHERS • ONE-TIME PAYMENT</Typography></View>
+             <View style={styles.trust}><Heart size={10} color="#C69C82" fill="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '800' }}>TRUSTED BY 10K+ MOTHERS • ONE-TIME PAYMENT</Typography></View>
           </Animated.View>
 
-          <TouchableOpacity onPress={handleSkip} hitSlop={15} style={styles.skip}><Typography weight="900" style={{ fontSize: 11, color: '#CFD8DC' }}>SKIP SPECIAL OFFER</Typography></TouchableOpacity>
+          <TouchableOpacity onPress={handleSkip} hitSlop={15} style={styles.skip}><Typography weight="800" style={{ fontSize: 11, color: '#CFD8DC' }}>SKIP SPECIAL OFFER</Typography></TouchableOpacity>
         </View>
 
         <ElegantModal visible={showSimModal} onClose={() => setShowSimModal(false)} onConfirm={() => setShowSimModal(false)} title="Simulator" description="IAP not available here." confirmText="OK" />
@@ -142,14 +142,14 @@ const styles = StyleSheet.create({
   },
   content: { flex: 1, paddingHorizontal: 28, justifyContent: 'center', paddingBottom: 10, paddingTop: 10 },
   hero: { alignItems: 'center', marginBottom: 18, paddingTop: 120 },
-  title: { fontSize: 34, fontWeight: '900', color: '#1B3C35', textAlign: 'center', lineHeight: 42, paddingVertical: 4 },
+  title: { fontSize: 34, fontWeight: '800', color: '#1B3C35', textAlign: 'center', lineHeight: 42, paddingVertical: 4 },
   subtitle: { fontSize: 15, color: '#607D8B', textAlign: 'center', marginTop: 2 },
   compGrid: { backgroundColor: '#fff', borderRadius: 20, padding: 18, marginBottom: 20, borderWidth: 1, borderColor: '#F1F5F9' },
   compRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#F8FAFB' },
   compStatus: { width: 32, alignItems: 'center' },
   priceCard: { backgroundColor: '#fff', borderRadius: 32, padding: 24, alignItems: 'center', shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.1, shadowRadius: 20, elevation: 8, borderWidth: 1, borderColor: '#F1F5F9' },
   priceRow: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 24, paddingHorizontal: 10 },
-  price: { fontSize: 52, fontWeight: '900', color: '#1B3C35', lineHeight: 52 },
+  price: { fontSize: 52, fontWeight: '800', color: '#1B3C35', lineHeight: 52 },
   oldPrice: { fontSize: 18, color: '#B0BEC5', textDecorationLine: 'line-through' },
   saveBadge: { backgroundColor: '#C69C82', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 8 },
   cta: { width: '100%', height: 72, backgroundColor: '#1B3C35', borderRadius: 24, alignItems: 'center', justifyContent: 'center', shadowColor: '#1B3C35', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.3, shadowRadius: 16 },

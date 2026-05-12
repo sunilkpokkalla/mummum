@@ -226,7 +226,7 @@ function MenuItem({ icon, title, detail, onPress, isLast, isPro }: any) {
             <Typography variant="body" weight="700" color="#1B3C35">{title}</Typography>
             {isPro && (
               <View style={{ backgroundColor: '#C69C82', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }}>
-                <Typography variant="label" weight="900" color="#fff" style={{ fontSize: 8 }}>PRO</Typography>
+                <Typography variant="label" weight="800" color="#fff" style={{ fontSize: 8 }}>PRO</Typography>
               </View>
             )}
           </View>

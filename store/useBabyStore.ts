@@ -89,6 +89,17 @@ interface BabyState {
   isPro: boolean;
   isSyncing: boolean;
   _hasHydrated: boolean;
+  globalModalConfig: {
+    visible: boolean;
+    title: string;
+    description: string;
+    confirmText?: string;
+    secondaryText?: string;
+    cancelText?: string;
+    onConfirm?: () => void;
+    onSecondary?: () => void;
+    isDestructive?: boolean;
+  };
   setHydrated: (status: boolean) => void;
   
   // Actions
@@ -120,7 +131,7 @@ interface BabyState {
   updateTempBaby: (data: Partial<Baby>) => void;
   setPro: (status: boolean) => void;
   setSyncing: (status: boolean) => void;
-  showGlobalModal: (config: { title: string; description: string; confirmText?: string; cancelText?: string; onConfirm?: () => void; isDestructive?: boolean }) => void;
+  showGlobalModal: (config: { title: string; description: string; confirmText?: string; secondaryText?: string; cancelText?: string; onConfirm?: () => void; onSecondary?: () => void; isDestructive?: boolean }) => void;
   hideGlobalModal: () => void;
   resetStore: () => void;
   toggleReminder: (id: string) => void;

@@ -161,7 +161,7 @@ export default function PremiumPaywallScreen() {
               )}
             </TouchableOpacity>
             <View style={{ alignItems: 'center', gap: 4 }}>
-              <View style={styles.trustRow}><ShieldCheck size={12} color="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '900' }}>SECURE APPLE CHECKOUT • CANCEL ANYTIME</Typography></View>
+              <View style={styles.trustRow}><ShieldCheck size={12} color="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '800' }}>SECURE APPLE CHECKOUT • CANCEL ANYTIME</Typography></View>
 
               <View style={{ alignItems: 'center' }}>
                 <Typography weight="700" color="#B0BEC5" style={{ fontSize: 6.5, textAlign: 'center' }} numberOfLines={1}>
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   content: { flex: 1, paddingHorizontal: 24, justifyContent: 'center', paddingBottom: 10, paddingTop: 10 },
   hero: { alignItems: 'center', marginBottom: 12, paddingTop: 60 },
-  title: { fontSize: 34, fontWeight: '900', color: '#1B3C35', lineHeight: 42, paddingVertical: 4 },
+  title: { fontSize: 34, fontWeight: '800', color: '#1B3C35', lineHeight: 42, paddingVertical: 4 },
   subtitle: { color: '#607D8B', fontSize: 14, marginTop: 2, textAlign: 'center' },
   compGrid: { backgroundColor: '#fff', borderRadius: 20, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#F1F5F9' },
   compRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#F8FAFB' },

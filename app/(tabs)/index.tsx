@@ -42,7 +42,7 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, showGlobalModal } = useBabyStore();
+  const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, showGlobalModal, hideGlobalModal } = useBabyStore();
   const [profileLoading, setProfileLoading] = useState(false);
   const [showSecurityBanner, setShowSecurityBanner] = useState(true);
   const { isPro } = usePremium();
@@ -247,14 +247,14 @@ export default function DashboardScreen() {
           <View style={styles.headerRight}>
             {isPro ? (
               <View style={[styles.statusBadge, { backgroundColor: '#1B3C35' }]}>
-                <Typography variant="label" weight="900" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
+                <Typography variant="label" weight="800" style={{ fontSize: 8, color: '#fff' }}>PRO</Typography>
               </View>
             ) : (
               <Pressable 
                 style={styles.goProButton}
                 onPress={() => router.push('/premium')}
               >
-                <Typography variant="label" weight="900" style={{ color: '#fff', fontSize: 10 }}>GO PRO</Typography>
+                <Typography variant="label" weight="800" style={{ color: '#fff', fontSize: 10 }}>GO PRO</Typography>
               </Pressable>
             )}
           </View>
@@ -668,10 +668,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerRight: {
-    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   goProButton: {

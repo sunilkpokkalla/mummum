@@ -5994,3 +5994,24 @@ iOS Bundled 34ms node_modules/react-native-purchases/dist/index.js (1 module)
  WARN  Unsupported dashed / dotted border style
  WARN  Unsupported dashed / dotted border style
  WARN  This method is deprecated (as well as all React Native Firebase namespaced API) and will be removed in the next major release as part of move to match Firebase Web modular SDK API. Please see migration guide for more details: https://rnfirebase.io/migrating-to-v22 Please use `getApp()` instead. [Component Stack]
+iOS Bundled 430ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 81ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 71ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 134ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 297ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 73ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 230ms node_modules/expo-router/entry.js (1 module)
+Error: Asset not found: /Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/assets/icon.png for platform: (unspecified)
+    at getAbsoluteAssetRecord (/Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/node_modules/metro/src/Assets.js:111:11)
+    at getAsset (/Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/node_modules/metro/src/Assets.js:207:18)
+    at Server._processSingleAssetRequest (/Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/node_modules/metro/src/Server.js:335:20)
+    at Server._processRequest (/Users/sunilkumar/Desktop/WEBSITES/ABT_2026/MumMum/node_modules/metro/src/Server.js:417:7)
+iOS Bundled 71ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 70ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 82ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 75ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 68ms node_modules/expo-router/entry.js (1 module)
+[metro-file-map] Warning: Lost connection to Watchman, reconnecting..
+iOS Bundled 77ms node_modules/expo-router/entry.js (1 module)
+iOS Bundled 113ms node_modules/expo-router/entry.js (1 module)
+[metro-file-map] Warning: Lost connection to Watchman, reconnecting..
