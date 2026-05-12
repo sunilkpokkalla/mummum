@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Platform, NativeModules } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useBabyStore } from '@/store/useBabyStore';
@@ -28,6 +29,23 @@ export function useCloudSync() {
 
     const fetchCloudData = async () => {
       try {
+        // VERIFY PRO STATUS VIA REVENUECAT FIRST
+        if (Platform.OS === 'ios' && NativeModules.RNPurchases) {
+          const { default: Purchases } = await import('react-native-purchases');
+          const customerInfo = await Purchases.getCustomerInfo();
+          const hasPro = !!customerInfo.entitlements.active['pro'];
+          
+          // Update store status to match truth from RevenueCat
+          if (hasPro !== useBabyStore.getState().isPro) {
+            useBabyStore.getState().setPro(hasPro);
+          }
+
+          if (!hasPro) {
+            // console.log('[CloudSync] Skip: User is not Pro');
+            return;
+          }
+        }
+
         setSyncing(true);
         const userDoc = await firestore().collection('users').doc(user.uid).get();
         if (userDoc.exists) {
@@ -89,7 +107,7 @@ export function useCloudSync() {
 
   // 2. UPLOAD TO CLOUD (On Local Change)
   useEffect(() => {
-    if (!user || isInitialLoad.current || !_hasHydrated) return;
+    if (!user || isInitialLoad.current || !_hasHydrated || !isPro) return;
 
     // If this change came from a download, skip this upload cycle
     if (skipNextUpload.current) {

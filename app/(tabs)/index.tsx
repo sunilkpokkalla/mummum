@@ -23,12 +23,14 @@ import {
   Syringe,
   Scale,
   X,
-  Star
+  Star,
+  ShieldAlert
 } from 'lucide-react-native';
+import auth from '@react-native-firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { useBabyStore } from '@/store/useBabyStore';
 import { formatDistanceToNow, isToday, format, intervalToDuration } from 'date-fns';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
 import { usePremium } from '@/hooks/usePremium';
 
 import { saveImagePermanently, resolveImageUri } from '@/utils/imagePersistor';
@@ -42,6 +44,7 @@ export default function DashboardScreen() {
   const themeColors = (Colors as any)[colorScheme];
   const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, showGlobalModal } = useBabyStore();
   const [profileLoading, setProfileLoading] = useState(false);
+  const [showSecurityBanner, setShowSecurityBanner] = useState(true);
   const { isPro } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
@@ -159,6 +162,15 @@ export default function DashboardScreen() {
     return () => clearInterval(interval);
   }, [activeSession]);
 
+  // Temporary Security Alert (10 seconds)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSecurityBanner(false);
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
+
   const formatSessionTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -178,6 +190,30 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {/* Security / Pro Conversion Banner (Temporary) */}
+        {!isPro && showSecurityBanner && (
+          <Animated.View 
+            entering={FadeInDown.delay(300)} 
+            exiting={FadeOutUp.duration(500)}
+          >
+            <Pressable 
+              onPress={() => router.push('/premium')}
+              style={({ pressed }) => [
+                styles.securityBanner,
+                { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
+              ]}
+            >
+              <View style={styles.securityBannerLeft}>
+                <ShieldAlert size={16} color="#fff" strokeWidth={2.5} />
+                <Typography variant="label" weight="800" color="#fff" style={styles.securityBannerText}>
+                  {!auth().currentUser ? "GUEST: SIGN UP TO SECURE DATA" : "NOT BACKED UP: GO PRO FOR CLOUD SYNC"}
+                </Typography>
+              </View>
+              <ChevronRight size={16} color="rgba(255,255,255,0.7)" strokeWidth={3} />
+            </Pressable>
+          </Animated.View>
+        )}
+
         {/* Dynamic Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -899,5 +935,29 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#4A5D4C',
     borderRadius: 4,
+  },
+  securityBanner: {
+    backgroundColor: '#C69C82',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    marginBottom: 8,
+    shadowColor: '#C69C82',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  securityBannerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  securityBannerText: {
+    fontSize: 10,
+    letterSpacing: 0.5,
   },
 });
