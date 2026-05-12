@@ -29,7 +29,6 @@ export default function PremiumPaywallScreen() {
   useEffect(() => {
     const fetchOfferings = async () => {
       try {
-      try {
         const Purchases = require('react-native-purchases').default;
         const fetchedOfferings = await Purchases.getOfferings();
         const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
