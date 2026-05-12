@@ -44,7 +44,6 @@ export default function DashboardScreen() {
   const themeColors = (Colors as any)[colorScheme];
   const { activities, babies, currentBabyId, activeSessions, updateBaby, completedChecklistItems, showGlobalModal, hideGlobalModal } = useBabyStore();
   const [profileLoading, setProfileLoading] = useState(false);
-  const [showSecurityBanner, setShowSecurityBanner] = useState(true);
   const { isPro } = usePremium();
 
   const currentBaby = babies.find(b => b.id === currentBabyId);
@@ -162,15 +161,6 @@ export default function DashboardScreen() {
     return () => clearInterval(interval);
   }, [activeSession]);
 
-  // Temporary Security Alert (10 seconds)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSecurityBanner(false);
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, []);
-
-
   const formatSessionTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -190,30 +180,6 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Security / Pro Conversion Banner (Temporary) */}
-        {!isPro && showSecurityBanner && (
-          <Animated.View 
-            entering={FadeInDown.delay(300)} 
-            exiting={FadeOutUp.duration(500)}
-          >
-            <Pressable 
-              onPress={() => router.push('/premium')}
-              style={({ pressed }) => [
-                styles.securityBanner,
-                { opacity: pressed ? 0.9 : 1, transform: [{ scale: pressed ? 0.98 : 1 }] }
-              ]}
-            >
-              <View style={styles.securityBannerLeft}>
-                <ShieldAlert size={16} color="#fff" strokeWidth={2.5} />
-                <Typography variant="label" weight="800" color="#fff" style={styles.securityBannerText}>
-                  {!auth().currentUser ? "GUEST: SIGN UP TO SECURE DATA" : "NOT BACKED UP: GO PRO FOR CLOUD SYNC"}
-                </Typography>
-              </View>
-              <ChevronRight size={16} color="rgba(255,255,255,0.7)" strokeWidth={3} />
-            </Pressable>
-          </Animated.View>
-        )}
-
         {/* Dynamic Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
