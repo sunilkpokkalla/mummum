@@ -28,10 +28,13 @@ import {
 } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useBabyStore } from '@/store/useBabyStore';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { NativeModules, Platform } from 'react-native';
 
 export default function PrivacySettingsScreen() {
   const router = useRouter();
-  const { showGlobalModal, hideGlobalModal, clearAllData } = useBabyStore();
+  const { showGlobalModal, hideGlobalModal } = useBabyStore();
   const [isPolicyVisible, setIsPolicyVisible] = React.useState(false);
   const [isDocVisible, setIsDocVisible] = React.useState(false);
 
@@ -61,8 +64,6 @@ export default function PrivacySettingsScreen() {
       isDestructive: true,
       onConfirm: async () => {
         try {
-          const auth = (await import('@react-native-firebase/auth')).default;
-          const firestore = (await import('@react-native-firebase/firestore')).default;
           const user = auth().currentUser;
           
           if (user) {
@@ -71,9 +72,8 @@ export default function PrivacySettingsScreen() {
             
             // Safe Social Cleanup
             try {
-              const { NativeModules } = await import('react-native');
               if (NativeModules.RNGoogleSignin || NativeModules.RNGoogleSigninModule) {
-                const { GoogleSignin } = await import('@react-native-google-signin/google-signin');
+                const { GoogleSignin } = require('@react-native-google-signin/google-signin');
                 const isSigned = await GoogleSignin.hasPlayServices().then(() => true).catch(() => false);
                 if (isSigned) await GoogleSignin.signOut().catch(() => {});
               }

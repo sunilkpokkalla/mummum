@@ -26,7 +26,7 @@ export default function OnboardingOfferScreen() {
     const fetchOfferings = async () => {
       if (!NativeModules.RNPurchases || Platform.OS !== 'ios') return;
       try {
-        const { default: Purchases } = await import('react-native-purchases');
+        const Purchases = require('react-native-purchases').default;
         const allOfferings = await Purchases.getOfferings();
         const target = allOfferings.all['ofrng40bc691d41'] || allOfferings.current;
         if (target) setOfferings(target);
@@ -39,11 +39,11 @@ export default function OnboardingOfferScreen() {
     if (!NativeModules.RNPurchases) {
       setShowSimModal(true); return;
     }
-    const pkg = offerings?.availablePackages?.find(p => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm');
+    const pkg = offerings?.availablePackages?.find((p: any) => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm');
     if (!pkg) return;
     setLoading(true);
     try {
-      const { default: Purchases } = await import('react-native-purchases');
+      const Purchases = require('react-native-purchases').default;
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       if (customerInfo.entitlements.active['pro']) {
         setPro(true); completeOnboarding(); router.replace('/onboarding/complete');
@@ -89,7 +89,7 @@ export default function OnboardingOfferScreen() {
              
              <View style={styles.priceRow}>
                 <View>
-                  <Typography style={styles.price}>{offerings?.availablePackages?.find(p => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm')?.product.priceString || '$29.99'}</Typography>
+                  <Typography style={styles.price}>{offerings?.availablePackages?.find((p: any) => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm')?.product.priceString || '$29.99'}</Typography>
                   <Typography weight="800" color="#90A4AE" style={{ fontSize: 9 }}>LIFETIME ACCESS</Typography>
                 </View>
                 <View style={{ alignItems: 'flex-end', gap: 4 }}>

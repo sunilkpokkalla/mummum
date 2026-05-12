@@ -29,8 +29,8 @@ export default function PremiumPaywallScreen() {
   useEffect(() => {
     const fetchOfferings = async () => {
       try {
-        // @ts-ignore
-        const { default: Purchases } = await import('react-native-purchases');
+      try {
+        const Purchases = require('react-native-purchases').default;
         const fetchedOfferings = await Purchases.getOfferings();
         const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
         if (target) setOfferings(target);
@@ -48,8 +48,7 @@ export default function PremiumPaywallScreen() {
     if (!pkg) return;
     setLoading(true);
     try {
-      // @ts-ignore
-      const { default: Purchases } = await import('react-native-purchases');
+      const Purchases = require('react-native-purchases').default;
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
     } catch (e) {
@@ -62,8 +61,7 @@ export default function PremiumPaywallScreen() {
   const handleRestore = async () => {
     setLoading(true);
     try {
-      // @ts-ignore
-      const { default: Purchases } = await import('react-native-purchases');
+      const Purchases = require('react-native-purchases').default;
       const customerInfo = await Purchases.restorePurchases();
       if (customerInfo.entitlements.active['pro']) {
         setPro(true);
