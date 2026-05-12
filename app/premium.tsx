@@ -29,6 +29,7 @@ export default function PremiumPaywallScreen() {
   useEffect(() => {
     const fetchOfferings = async () => {
       try {
+        // @ts-ignore
         const { default: Purchases } = await import('react-native-purchases');
         const fetchedOfferings = await Purchases.getOfferings();
         const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
@@ -47,6 +48,7 @@ export default function PremiumPaywallScreen() {
     if (!pkg) return;
     setLoading(true);
     try {
+      // @ts-ignore
       const { default: Purchases } = await import('react-native-purchases');
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
@@ -60,6 +62,7 @@ export default function PremiumPaywallScreen() {
   const handleRestore = async () => {
     setLoading(true);
     try {
+      // @ts-ignore
       const { default: Purchases } = await import('react-native-purchases');
       const customerInfo = await Purchases.restorePurchases();
       if (customerInfo.entitlements.active['pro']) {
@@ -103,7 +106,7 @@ export default function PremiumPaywallScreen() {
     <View style={styles.root}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.promoBanner}>
-          <Typography weight="900" color="#fff" style={{ fontSize: 9, letterSpacing: 1 }}>60% LAUNCH DISCOUNT ACTIVE</Typography>
+          <Typography weight="800" color="#fff" style={{ fontSize: 9, letterSpacing: 1 }}>60% LAUNCH DISCOUNT ACTIVE</Typography>
         </View>
 
         <View style={styles.content}>
@@ -131,12 +134,12 @@ export default function PremiumPaywallScreen() {
               >
                 <View style={{ flex: 1 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Typography weight="900" color="#1B3C35" style={{ fontSize: 16 }}>{plan.title}</Typography>
-                    {plan.badge && <View style={[styles.miniBadge, plan.best && { backgroundColor: '#C69C82' }]}><Typography weight="900" color="#fff" style={{ fontSize: 8 }}>{plan.badge}</Typography></View>}
+                    <Typography weight="800" color="#1B3C35" style={{ fontSize: 16 }}>{plan.title}</Typography>
+                    {plan.badge && <View style={[styles.miniBadge, plan.best && { backgroundColor: '#C69C82' }]}><Typography weight="800" color="#fff" style={{ fontSize: 8 }}>{plan.badge}</Typography></View>}
                   </View>
                   <Typography variant="label" weight="800" color="#90A4AE" style={{ fontSize: 10 }}>{plan.sub}</Typography>
                 </View>
-                <Typography variant="body" weight="900" color="#1B3C35" style={{ fontSize: 24 }}>{plan.price}</Typography>
+                <Typography variant="body" weight="800" color="#1B3C35" style={{ fontSize: 24 }}>{plan.price}</Typography>
                 <View style={[styles.radio, selectedPlan === plan.id && styles.radioActive]}>
                   {selectedPlan === plan.id && <Check size={10} color="#fff" strokeWidth={4} />}
                 </View>
@@ -147,13 +150,12 @@ export default function PremiumPaywallScreen() {
           <View style={styles.footer}>
             <TouchableOpacity style={[styles.cta, loading && { opacity: 0.7 }]} onPress={handlePurchase} disabled={loading}>
               {loading ? (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                  <ActivityIndicator color="#fff" />
-                  <Typography weight="900" style={{ color: '#fff', fontSize: 18 }}>PROCESSING...</Typography>
+                <View style={{ alignItems: 'center' }}>
+                  <Typography weight="800" style={{ color: '#fff', fontSize: 18 }}>PROCESSING...</Typography>
                 </View>
               ) : (
                 <View style={{ alignItems: 'center' }}>
-                  <Typography weight="900" style={{ color: '#fff', fontSize: 18 }}>ACTIVATE PRO ACCESS</Typography>
+                  <Typography weight="800" style={{ color: '#fff', fontSize: 18 }}>ACTIVATE PRO ACCESS</Typography>
                   <Typography weight="800" color="rgba(255,255,255,0.7)" style={{ fontSize: 9 }}>7-DAY SATISFACTION GUARANTEE</Typography>
                 </View>
               )}

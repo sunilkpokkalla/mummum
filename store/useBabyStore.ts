@@ -118,7 +118,7 @@ interface BabyState {
   updateTempBaby: (data: Partial<Baby>) => void;
   setPro: (status: boolean) => void;
   setSyncing: (status: boolean) => void;
-  showGlobalModal: (config: { title: string; description: string; confirmText?: string; onConfirm?: () => void }) => void;
+  showGlobalModal: (config: { title: string; description: string; confirmText?: string; cancelText?: string; onConfirm?: () => void; isDestructive?: boolean }) => void;
   hideGlobalModal: () => void;
   resetStore: () => void;
   toggleReminder: (id: string) => void;

@@ -62,6 +62,7 @@ export default function SettingsScreen() {
         try {
           const user = auth().currentUser;
           if (user) {
+            // @ts-ignore
             const firestore = (await import('@react-native-firebase/firestore')).default;
             await firestore().collection('users').doc(user.uid).delete();
             await auth().signOut();
@@ -88,6 +89,7 @@ export default function SettingsScreen() {
         try {
           const user = auth().currentUser;
           if (user) {
+            // @ts-ignore
             const firestore = (await import('@react-native-firebase/firestore')).default;
             const uid = user.uid;
             
@@ -196,12 +198,12 @@ export default function SettingsScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography variant="body" weight="900" color="#fff" style={{ letterSpacing: 0.5, fontSize: 14 }}>
+                    <Typography variant="body" weight="800" color="#fff" style={{ letterSpacing: 0.5, fontSize: 14 }}>
                       {isPro ? "MUMMUM PRO ACTIVE" : "UNLOCK CLINICAL PRO"}
                     </Typography>
                     {!isPro && (
                       <View style={{ backgroundColor: '#C69C82', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
-                        <Typography variant="label" weight="900" color="#fff" style={{ fontSize: 7 }}>PREMIUM</Typography>
+                        <Typography variant="label" weight="800" color="#fff" style={{ fontSize: 7 }}>PREMIUM</Typography>
                       </View>
                     )}
                   </View>
