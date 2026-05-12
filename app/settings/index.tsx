@@ -78,6 +78,53 @@ export default function SettingsScreen() {
     });
   };
 
+  const handleDeleteAccount = () => {
+    showGlobalModal({
+      title: "Delete Account Permanently?",
+      description: "This will permanently delete your Mummum account and all clinical cloud history. This action is irreversible and cannot be undone.",
+      confirmText: "Delete Account",
+      isDestructive: true,
+      onConfirm: async () => {
+        try {
+          const user = auth().currentUser;
+          if (user) {
+            const firestore = (await import('@react-native-firebase/firestore')).default;
+            const uid = user.uid;
+            
+            // 1. Delete Firestore Data
+            await firestore().collection('users').doc(uid).delete();
+            
+            // 2. Delete Auth Account (Requires recent login)
+            try {
+              await user.delete();
+            } catch (authErr: any) {
+              if (authErr.code === 'auth/requires-recent-login') {
+                hideGlobalModal();
+                setTimeout(() => {
+                  showGlobalModal({
+                    title: "Security Verification",
+                    description: "For your security, you must have recently signed in to delete your account. Please sign out, sign back in, and try again.",
+                    confirmText: "Understood"
+                  });
+                }, 500);
+                return;
+              }
+              throw authErr;
+            }
+          }
+          
+          resetStore();
+          hideGlobalModal();
+          router.replace('/onboarding/auth');
+        } catch (e) {
+          console.error('Delete account error:', e);
+          hideGlobalModal();
+        }
+      },
+      cancelText: "Cancel"
+    });
+  };
+
   const handleLogout = async () => {
     showGlobalModal({
       title: "Sign Out of Mummum?",
@@ -215,15 +262,22 @@ export default function SettingsScreen() {
                   hideChevron
                 />
               )}
-              <ElegantMenuItem 
-                icon={<LogOut size={20} color="#f44336" />}
-                title="Reset All Clinical Data"
-                color="#f44336"
-                onPress={handleReset}
-                hideChevron
-                isLast
-              />
-            </View>
+                <ElegantMenuItem 
+                  icon={<LogOut size={20} color="#f44336" />}
+                  title="Reset All Clinical Data"
+                  color="#f44336"
+                  onPress={handleReset}
+                  hideChevron
+                />
+                <ElegantMenuItem 
+                  icon={<Shield size={20} color="#f44336" />}
+                  title="Delete Account Permanently"
+                  color="#f44336"
+                  onPress={handleDeleteAccount}
+                  hideChevron
+                  isLast
+                />
+              </View>
           </View>
 
           <View style={styles.footer}>
