@@ -88,6 +88,8 @@ interface BabyState {
   dayCareLogs: DayCareLog[];
   isPro: boolean;
   isSyncing: boolean;
+  _hasHydrated: boolean;
+  setHydrated: (status: boolean) => void;
   
   // Actions
   addBaby: (baby: Baby) => void;
@@ -195,6 +197,7 @@ export const useBabyStore = create<BabyState>()(
       dayCareLogs: [],
       isPro: false,
       isSyncing: false,
+      _hasHydrated: false,
       globalModalConfig: {
         visible: false,
         title: '',
@@ -340,6 +343,7 @@ export const useBabyStore = create<BabyState>()(
       
       setPro: (status) => set({ isPro: status }),
       setSyncing: (status) => set({ isSyncing: status }),
+      setHydrated: (status) => set({ _hasHydrated: status }),
       
       showGlobalModal: (config) => set({ 
         globalModalConfig: { 
@@ -415,6 +419,9 @@ export const useBabyStore = create<BabyState>()(
     {
       name: 'mummum-storage',
       storage: createJSONStorage(() => SafeStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated(true);
+      },
     }
   )
 );

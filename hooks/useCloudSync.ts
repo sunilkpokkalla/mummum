@@ -1,19 +1,30 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useBabyStore } from '@/store/useBabyStore';
 import { usePremium } from '@/hooks/usePremium';
 
 export function useCloudSync() {
-  const { isPro, setSyncing } = useBabyStore();
+  const { isPro, setSyncing, _hasHydrated } = useBabyStore();
   const { activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, setStore } = useBabyStore();
-  const user = auth().currentUser;
+  const [user, setUser] = useState(auth().currentUser);
   const isInitialLoad = useRef(true);
   const skipNextUpload = useRef(false);
 
+  // REACTIVE AUTH HANDSHAKE
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((u) => {
+      setUser(u);
+      if (u) {
+        isInitialLoad.current = true; // Reset initial load on new login to allow fresh fetch
+      }
+    });
+    return unsubscribe;
+  }, []);
+
   // 1. DOWNLOAD FROM CLOUD (On Sign In / App Launch)
   useEffect(() => {
-    if (!user) return;
+    if (!user || !_hasHydrated) return;
 
     const fetchCloudData = async () => {
       try {
@@ -43,20 +54,26 @@ export function useCloudSync() {
             // Mark that the next change is from a download, so don't upload it back
             skipNextUpload.current = true;
             
-            setStore({
-              activities: rehydrated.activities || [],
-              babies: rehydrated.babies || [],
-              currentBabyId: rehydrated.currentBabyId || null,
-              memories: rehydrated.memories || [],
-              appointments: rehydrated.appointments || [],
-              dayCareLogs: rehydrated.dayCareLogs || [],
-              completedMilestones: rehydrated.completedMilestones || {},
-              completedChecklistItems: rehydrated.completedChecklistItems || {},
-              userName: rehydrated.userName || 'Parent',
-              userPhotoUri: rehydrated.userPhotoUri || null,
-              isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : isPro,
-              isOnboarded: (rehydrated.babies?.length > 0)
-            });
+            // SAFETY CHECK: Only overwrite if cloud has content or local is empty
+            const cloudHasContent = (rehydrated.activities?.length > 0 || rehydrated.babies?.length > 0);
+            const localIsEmpty = (activities.length === 0 && babies.length === 0);
+
+            if (cloudHasContent || localIsEmpty) {
+              setStore({
+                activities: rehydrated.activities || [],
+                babies: rehydrated.babies || [],
+                currentBabyId: rehydrated.currentBabyId || null,
+                memories: rehydrated.memories || [],
+                appointments: rehydrated.appointments || [],
+                dayCareLogs: rehydrated.dayCareLogs || [],
+                completedMilestones: rehydrated.completedMilestones || {},
+                completedChecklistItems: rehydrated.completedChecklistItems || {},
+                userName: rehydrated.userName || 'Parent',
+                userPhotoUri: rehydrated.userPhotoUri || null,
+                isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : isPro,
+                isOnboarded: (rehydrated.babies?.length > 0)
+              });
+            }
           }
         }
       } catch (e) {
@@ -72,7 +89,7 @@ export function useCloudSync() {
 
   // 2. UPLOAD TO CLOUD (On Local Change)
   useEffect(() => {
-    if (!user || isInitialLoad.current) return;
+    if (!user || isInitialLoad.current || !_hasHydrated) return;
 
     // If this change came from a download, skip this upload cycle
     if (skipNextUpload.current) {
