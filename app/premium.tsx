@@ -8,7 +8,6 @@ import {
 } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   Linking,
   NativeModules,
   Platform,
@@ -51,11 +50,11 @@ export default function PremiumPaywallScreen() {
       return;
     }
     const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === selectedPlan || p.identifier === selectedPlan);
-    
+
     if (!pkg) {
-      showGlobalModal({ 
-        title: "Store Unavailable", 
-        description: "We're having trouble connecting to the App Store. Please ensure your internet is connected and try again.", 
+      showGlobalModal({
+        title: "Store Unavailable",
+        description: "We're having trouble connecting to the App Store. Please ensure your internet is connected and try again.",
         confirmText: "Retry",
         onConfirm: () => {
           hideGlobalModal();
@@ -73,9 +72,9 @@ export default function PremiumPaywallScreen() {
       }
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       const activeEntitlements = Object.keys(customerInfo.entitlements.active);
-      if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) { 
-        setPro(true); 
-        router.back(); 
+      if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) {
+        setPro(true);
+        router.back();
       }
     } catch (e: any) {
       const Purchases = require('react-native-purchases').default;
@@ -104,17 +103,17 @@ export default function PremiumPaywallScreen() {
       const activeEntitlements = Object.keys(customerInfo.entitlements.active);
       if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) {
         setPro(true);
-        showGlobalModal({ 
-          title: "Success", 
-          description: "Your pro access has been restored successfully!", 
-          confirmText: "Great" 
+        showGlobalModal({
+          title: "Success",
+          description: "Your pro access has been restored successfully!",
+          confirmText: "Great"
         });
         router.back();
       } else {
-        showGlobalModal({ 
-          title: "Restore", 
-          description: "We couldn't find any active pro subscriptions for your Apple ID.", 
-          confirmText: "OK" 
+        showGlobalModal({
+          title: "Restore",
+          description: "We couldn't find any active pro subscriptions for your Apple ID.",
+          confirmText: "OK"
         });
       }
     } catch (e) {
@@ -214,7 +213,7 @@ export default function PremiumPaywallScreen() {
                     <Typography weight="800" color="#B0BEC5" style={{ fontSize: 7, textDecorationLine: 'underline' }}>Terms of Use</Typography>
                   </TouchableOpacity>
 
-                  <TouchableOpacity onPress={() => Linking.openURL('https://www.ambrighttech.com/privacy-policy')}>
+                  <TouchableOpacity onPress={() => Linking.openURL('http://www.ambrighttech.com/product/privacy-policy/')}>
                     <Typography weight="800" color="#B0BEC5" style={{ fontSize: 7, textDecorationLine: 'underline' }}>Privacy Policy</Typography>
                   </TouchableOpacity>
                 </View>

@@ -63,7 +63,7 @@ export default function SettingsScreen() {
           const user = auth().currentUser;
           if (user) {
             // @ts-ignore
-            const firestore = (await import('@react-native-firebase/firestore')).default;
+            const firestore = require('@react-native-firebase/firestore').default;
             await firestore().collection('users').doc(user.uid).delete();
             await auth().signOut();
           }
@@ -90,7 +90,7 @@ export default function SettingsScreen() {
           const user = auth().currentUser;
           if (user) {
             // @ts-ignore
-            const firestore = (await import('@react-native-firebase/firestore')).default;
+            const firestore = require('@react-native-firebase/firestore').default;
             const uid = user.uid;
             
             // 1. Delete Firestore Data

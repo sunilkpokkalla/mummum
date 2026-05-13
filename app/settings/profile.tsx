@@ -121,7 +121,7 @@ export default function BabyProfileScreen() {
       await syncToCloud();
 
       // Notification cleanup (if name changed)
-      const { cancelAllScheduledNotificationsAsync } = await import('expo-notifications');
+      const { cancelAllScheduledNotificationsAsync } = require('expo-notifications');
       await cancelAllScheduledNotificationsAsync();
     } catch (e) {
       console.log('Save failed', e);

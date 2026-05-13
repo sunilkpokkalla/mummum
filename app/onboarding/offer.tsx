@@ -72,7 +72,7 @@ export default function OnboardingOfferScreen() {
     }
     setLoading(true);
     try {
-      const { default: Purchases } = await import('react-native-purchases');
+      const Purchases = require('react-native-purchases').default;
       const user = require('@react-native-firebase/auth').default().currentUser;
       if (user) {
         await Purchases.logIn(user.uid);

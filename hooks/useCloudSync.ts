@@ -31,7 +31,7 @@ export function useCloudSync() {
       try {
         // VERIFY PRO STATUS VIA REVENUECAT FIRST
         if (Platform.OS === 'ios' && NativeModules.RNPurchases) {
-          const { default: Purchases } = await import('react-native-purchases');
+          const Purchases = require('react-native-purchases').default;
           
           // CRITICAL: Link RevenueCat with Firebase UID
           try {

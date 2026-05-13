@@ -43,7 +43,15 @@ export default function OnboardingAuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const [modalConfig, setModalConfig] = useState({
+  const [modalConfig, setModalConfig] = useState<{
+    visible: boolean;
+    title: string;
+    desc: string;
+    confirmText: string;
+    onConfirm: () => void;
+    secondaryText?: string;
+    onSecondary?: () => void;
+  }>({
     visible: false,
     title: '',
     desc: '',
@@ -519,6 +527,8 @@ export default function OnboardingAuthScreen() {
           title={modalConfig.title}
           description={modalConfig.desc}
           confirmText={modalConfig.confirmText}
+          secondaryText={modalConfig.secondaryText}
+          onSecondary={modalConfig.onSecondary}
         />
       </ScrollView>
     </KeyboardAvoidingView>
