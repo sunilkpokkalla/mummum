@@ -66,9 +66,14 @@ export default function PremiumPaywallScreen() {
     }
     setLoading(true);
     try {
-      const Purchases = require('react-native-purchases').default;
+      const { default: Purchases } = await import('react-native-purchases');
+      const user = require('@react-native-firebase/auth').default().currentUser;
+      if (user) {
+        await Purchases.logIn(user.uid);
+      }
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      if (customerInfo.entitlements.active['pro']) { 
+      const activeEntitlements = Object.keys(customerInfo.entitlements.active);
+      if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) { 
         setPro(true); 
         router.back(); 
       }
@@ -90,9 +95,14 @@ export default function PremiumPaywallScreen() {
   const handleRestore = async () => {
     setLoading(true);
     try {
-      const Purchases = require('react-native-purchases').default;
+      const { default: Purchases } = await import('react-native-purchases');
+      const user = require('@react-native-firebase/auth').default().currentUser;
+      if (user) {
+        await Purchases.logIn(user.uid);
+      }
       const customerInfo = await Purchases.restorePurchases();
-      if (customerInfo.entitlements.active['pro']) {
+      const activeEntitlements = Object.keys(customerInfo.entitlements.active);
+      if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) {
         setPro(true);
         showGlobalModal({ 
           title: "Success", 
@@ -204,7 +214,7 @@ export default function PremiumPaywallScreen() {
                     <Typography weight="800" color="#B0BEC5" style={{ fontSize: 7, textDecorationLine: 'underline' }}>Terms of Use</Typography>
                   </TouchableOpacity>
 
-                  <TouchableOpacity onPress={() => Linking.openURL('https://ambrighttech.com/privacy-policy')}>
+                  <TouchableOpacity onPress={() => Linking.openURL('https://www.ambrighttech.com/privacy-policy')}>
                     <Typography weight="800" color="#B0BEC5" style={{ fontSize: 7, textDecorationLine: 'underline' }}>Privacy Policy</Typography>
                   </TouchableOpacity>
                 </View>

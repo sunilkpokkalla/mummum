@@ -35,6 +35,22 @@ export default function RootLayout() {
         const Purchases = require('react-native-purchases').default;
         Purchases.setLogLevel(Purchases.LOG_LEVEL.INFO);
         Purchases.configure({ apiKey: 'appl_gWsdCGHELkQjkHmjNeeTGKwgvnd' });
+        
+        // PROACTIVE STATUS CHECK: Ensure local state matches store truth on launch
+        const syncProStatus = async () => {
+          try {
+            const customerInfo = await Purchases.getCustomerInfo();
+            const activeEntitlements = Object.keys(customerInfo.entitlements.active);
+            const hasPro = !!customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0;
+            
+            if (hasPro !== useBabyStore.getState().isPro) {
+              useBabyStore.getState().setPro(hasPro);
+            }
+          } catch (e) {
+            console.log('[RevenueCat]: Initial status check failed', e);
+          }
+        };
+        syncProStatus();
       } catch (e) {
         console.error('[RevenueCat]: Configuration failed', e);
       }

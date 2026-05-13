@@ -1,19 +1,19 @@
+import ElegantModal from '@/components/ElegantModal';
+import Typography from '@/components/Typography';
+import { useBabyStore } from '@/store/useBabyStore';
+import { useRouter } from 'expo-router';
+import { Check, Heart, X } from 'lucide-react-native';
 import React from 'react';
 import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  SafeAreaView,
+  ActivityIndicator,
   NativeModules,
   Platform,
-  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import Typography from '@/components/Typography';
-import { X, Star, ShieldCheck, Check, Heart } from 'lucide-react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-import { useBabyStore } from '@/store/useBabyStore';
-import ElegantModal from '@/components/ElegantModal';
 
 export default function OnboardingOfferScreen() {
   const router = useRouter();
@@ -28,9 +28,26 @@ export default function OnboardingOfferScreen() {
       try {
         const Purchases = require('react-native-purchases').default;
         const allOfferings = await Purchases.getOfferings();
-        const target = allOfferings.all['ofrng40bc691d41'] || allOfferings.current;
+        // Try the hardcoded offering first, then the current one, then just find any that has a lifetime package
+        let target = allOfferings.all['ofrng40bc691d41'] || allOfferings.current;
+
+        if (!target) {
+          // Fallback: search all offerings for any package that looks like our lifetime product
+          for (const key in allOfferings.all) {
+            const found = allOfferings.all[key].availablePackages.find((p: any) =>
+              p.packageType === 'Lifetime' || p.identifier === 'lifetimemm'
+            );
+            if (found) {
+              target = allOfferings.all[key];
+              break;
+            }
+          }
+        }
+
         if (target) setOfferings(target);
-      } catch (e) {}
+      } catch (e) {
+        console.log('[OnboardingOffer] Fetch failed:', e);
+      }
     };
     fetchOfferings();
   }, []);
@@ -39,7 +56,12 @@ export default function OnboardingOfferScreen() {
     if (!NativeModules.RNPurchases) {
       setShowSimModal(true); return;
     }
-    const pkg = offerings?.availablePackages?.find((p: any) => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm');
+    const pkg = offerings?.availablePackages?.find((p: any) =>
+      p.packageType === 'Lifetime' ||
+      p.identifier === 'lifetimemm' ||
+      p.product.identifier === 'lifetimemm' ||
+      p.product.identifier === 'prodeb4f0692c5'
+    );
     if (!pkg) {
       useBabyStore.getState().showGlobalModal({
         title: "Store Issue",
@@ -50,11 +72,16 @@ export default function OnboardingOfferScreen() {
     }
     setLoading(true);
     try {
-      const Purchases = require('react-native-purchases').default;
+      const { default: Purchases } = await import('react-native-purchases');
+      const user = require('@react-native-firebase/auth').default().currentUser;
+      if (user) {
+        await Purchases.logIn(user.uid);
+      }
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      if (customerInfo.entitlements.active['pro']) {
-        setPro(true); 
-        completeOnboarding(); 
+      const activeEntitlements = Object.keys(customerInfo.entitlements.active);
+      if (customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0) {
+        setPro(true);
+        completeOnboarding();
         router.replace('/onboarding/complete');
       }
     } catch (e: any) {
@@ -67,8 +94,8 @@ export default function OnboardingOfferScreen() {
           confirmText: "OK"
         });
       }
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,24 +133,40 @@ export default function OnboardingOfferScreen() {
           </View>
 
           <Animated.View entering={FadeInUp} style={styles.priceCard}>
-             <Typography weight="800" color="#C69C82" style={{ fontSize: 10, letterSpacing: 2, marginBottom: 16 }}>EXCLUSIVE LIFETIME SPECIAL</Typography>
-             
-             <View style={styles.priceRow}>
-                <View>
-                  <Typography style={styles.price}>{offerings?.availablePackages?.find((p: any) => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm')?.product.priceString || '$29.99'}</Typography>
-                  <Typography weight="800" color="#90A4AE" style={{ fontSize: 9 }}>LIFETIME ACCESS</Typography>
-                </View>
-                <View style={{ alignItems: 'flex-end', gap: 4 }}>
-                  <Typography style={styles.oldPrice}>$69.99</Typography>
-                  <View style={styles.saveBadge}><Typography weight="800" color="#fff" style={{ fontSize: 8 }}>SAVE 60%</Typography></View>
-                </View>
-             </View>
+            <Typography weight="800" color="#C69C82" style={{ fontSize: 10, letterSpacing: 2, marginBottom: 16 }}>EXCLUSIVE LIFETIME SPECIAL</Typography>
 
-             <TouchableOpacity style={[styles.cta, loading && { opacity: 0.7 }]} onPress={handleSubscribe} disabled={loading}>
-                {loading ? <ActivityIndicator color="#fff" /> : <Typography weight="800" style={{ fontSize: 18, color: '#fff' }}>SECURE LIFETIME ACCESS</Typography>}
-             </TouchableOpacity>
+            <View style={styles.priceRow}>
+              <View>
+                <Typography style={styles.price}>
+                  {offerings?.availablePackages?.find((p: any) =>
+                    p.packageType === 'Lifetime' ||
+                    p.identifier === 'lifetimemm' ||
+                    p.product.identifier === 'lifetimemm' ||
+                    p.product.identifier === 'prodeb4f0692c5'
+                  )?.product.priceString || '$29.99'}
+                </Typography>
+                <Typography weight="800" color="#90A4AE" style={{ fontSize: 9 }}>LIFETIME ACCESS</Typography>
+              </View>
+              <View style={{ alignItems: 'flex-end', gap: 4 }}>
+                <Typography style={styles.oldPrice}>$69.99</Typography>
+                <View style={styles.saveBadge}><Typography weight="800" color="#fff" style={{ fontSize: 8 }}>SAVE 60%</Typography></View>
+              </View>
+            </View>
 
-             <View style={styles.trust}><Heart size={10} color="#C69C82" fill="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '800' }}>TRUSTED BY 10K+ MOTHERS • ONE-TIME PAYMENT</Typography></View>
+            <TouchableOpacity style={[styles.cta, loading && { opacity: 0.7 }]} onPress={handleSubscribe} disabled={loading}>
+              {loading ? <ActivityIndicator color="#fff" /> : <Typography weight="800" style={{ fontSize: 18, color: '#fff' }}>SECURE LIFETIME ACCESS</Typography>}
+            </TouchableOpacity>
+
+            <View style={styles.trust}><Heart size={10} color="#C69C82" fill="#C69C82" /><Typography style={{ fontSize: 9, color: '#B0BEC5', fontWeight: '800' }}>TRUSTED BY 10K+ MOTHERS • ONE-TIME PAYMENT</Typography></View>
+            
+            <View style={{ flexDirection: 'row', gap: 12, marginTop: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={() => require('react-native').Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
+                <Typography weight="800" color="#B0BEC5" style={{ fontSize: 8, textDecorationLine: 'underline' }}>Terms of Use</Typography>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => require('react-native').Linking.openURL('http://www.ambrighttech.com/product/privacy-policy/')}>
+                <Typography weight="800" color="#B0BEC5" style={{ fontSize: 8, textDecorationLine: 'underline' }}>Privacy Policy</Typography>
+              </TouchableOpacity>
+            </View>
           </Animated.View>
 
           <TouchableOpacity onPress={handleSkip} hitSlop={15} style={styles.skip}><Typography weight="800" style={{ fontSize: 11, color: '#CFD8DC' }}>SKIP SPECIAL OFFER</Typography></TouchableOpacity>
@@ -132,8 +175,8 @@ export default function OnboardingOfferScreen() {
         <ElegantModal visible={showSimModal} onClose={() => setShowSimModal(false)} onConfirm={() => setShowSimModal(false)} title="Simulator" description="IAP not available here." confirmText="OK" />
 
         {/* ABSOLUTE CLOSE BUTTON - TOP LAYER */}
-        <TouchableOpacity 
-          onPress={handleSkip} 
+        <TouchableOpacity
+          onPress={handleSkip}
           style={styles.absoluteClose}
           hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
         >
@@ -147,10 +190,10 @@ export default function OnboardingOfferScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#FDFCFB' },
   promoBanner: { backgroundColor: '#1B3C35', paddingVertical: 6, alignItems: 'center', marginTop: 0 },
-  absoluteClose: { 
-    position: 'absolute', 
-    top: 100, 
-    right: 20, 
+  absoluteClose: {
+    position: 'absolute',
+    top: 100,
+    right: 20,
     zIndex: 999,
     padding: 8,
     backgroundColor: '#fff',

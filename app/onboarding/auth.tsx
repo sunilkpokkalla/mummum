@@ -108,6 +108,11 @@ export default function OnboardingAuthScreen() {
 
   const handlePostLoginSync = async () => {
     try {
+      const user = auth().currentUser;
+      if (user && NativeModules.RNPurchases) {
+        const Purchases = require('react-native-purchases').default;
+        await Purchases.logIn(user.uid);
+      }
       await pullFromCloud(); // DOWNLOAD CLOUD DATA
       
       // REUNION SYNC LOGIC
@@ -491,9 +496,20 @@ export default function OnboardingAuthScreen() {
             <Typography variant="body" weight="600" color="#90A4AE">Continue as Guest</Typography>
             <ChevronRight size={18} color="#90A4AE" />
           </TouchableOpacity>
-          <Typography variant="label" color="#B0BEC5" style={styles.termsText}>
-            By continuing, you agree to Mummum's Terms and Clinical Data Privacy Policy.
-          </Typography>
+          <View style={{ alignItems: 'center', marginTop: 12 }}>
+            <Typography variant="label" color="#B0BEC5" style={[styles.termsText, { marginBottom: 4 }]}>
+              By continuing, you agree to Mummum's
+            </Typography>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <TouchableOpacity onPress={() => require('react-native').Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
+                <Typography variant="label" weight="800" color="#B0BEC5" style={{ textDecorationLine: 'underline' }}>Terms of Use</Typography>
+              </TouchableOpacity>
+              <Typography variant="label" color="#B0BEC5">and</Typography>
+              <TouchableOpacity onPress={() => require('react-native').Linking.openURL('http://www.ambrighttech.com/product/privacy-policy/')}>
+                <Typography variant="label" weight="800" color="#B0BEC5" style={{ textDecorationLine: 'underline' }}>Privacy Policy</Typography>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
         <ElegantModal

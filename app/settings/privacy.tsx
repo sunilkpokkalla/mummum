@@ -131,6 +131,12 @@ export default function PrivacySettingsScreen() {
                 title="Privacy Policy"
                 detail="How we protect your data"
                 onPress={() => setIsPolicyVisible(true)}
+              />
+              <MenuItem 
+                icon={<Lock size={20} color="#1B3C35" />}
+                title="Online Privacy Policy"
+                detail="View full legal documentation"
+                onPress={() => require('react-native').Linking.openURL('http://www.ambrighttech.com/product/privacy-policy/')}
                 isLast
               />
             </View>

@@ -32,8 +32,20 @@ export function useCloudSync() {
         // VERIFY PRO STATUS VIA REVENUECAT FIRST
         if (Platform.OS === 'ios' && NativeModules.RNPurchases) {
           const { default: Purchases } = await import('react-native-purchases');
+          
+          // CRITICAL: Link RevenueCat with Firebase UID
+          try {
+            await Purchases.logIn(user.uid);
+          } catch (loginErr) {
+            console.error('[CloudSync] RevenueCat logIn failed:', loginErr);
+          }
+
           const customerInfo = await Purchases.getCustomerInfo();
-          const hasPro = !!customerInfo.entitlements.active['pro'];
+          
+          // Robust Entitlement Check: Look for 'pro' specifically, 
+          // but fallback to ANY active entitlement if 'pro' is missing but something else is there
+          const activeEntitlements = Object.keys(customerInfo.entitlements.active);
+          const hasPro = !!customerInfo.entitlements.active['pro'] || activeEntitlements.length > 0;
           
           // Update store status to match truth from RevenueCat
           if (hasPro !== useBabyStore.getState().isPro) {
