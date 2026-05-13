@@ -40,15 +40,36 @@ export default function OnboardingOfferScreen() {
       setShowSimModal(true); return;
     }
     const pkg = offerings?.availablePackages?.find((p: any) => p.packageType === 'Lifetime' || p.identifier === 'lifetimemm');
-    if (!pkg) return;
+    if (!pkg) {
+      useBabyStore.getState().showGlobalModal({
+        title: "Store Issue",
+        description: "We couldn't retrieve the special offer details. Please ensure your connection is stable and try again.",
+        confirmText: "OK"
+      });
+      return;
+    }
     setLoading(true);
     try {
       const Purchases = require('react-native-purchases').default;
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       if (customerInfo.entitlements.active['pro']) {
-        setPro(true); completeOnboarding(); router.replace('/onboarding/complete');
+        setPro(true); 
+        completeOnboarding(); 
+        router.replace('/onboarding/complete');
       }
-    } catch (e) {} finally { setLoading(false); }
+    } catch (e: any) {
+      const Purchases = require('react-native-purchases').default;
+      if (e.code !== Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        console.log('Onboarding Purchase Error:', e);
+        useBabyStore.getState().showGlobalModal({
+          title: "Setup Incomplete",
+          description: e.message || "We couldn't activate your Lifetime access. Please try again or skip for now.",
+          confirmText: "OK"
+        });
+      }
+    } finally { 
+      setLoading(false); 
+    }
   };
 
   const handleSkip = () => {

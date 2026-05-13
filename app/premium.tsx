@@ -28,12 +28,19 @@ export default function PremiumPaywallScreen() {
 
   useEffect(() => {
     const fetchOfferings = async () => {
+      if (Platform.OS === 'ios' && !NativeModules.RNPurchases) return;
       try {
         const Purchases = require('react-native-purchases').default;
         const fetchedOfferings = await Purchases.getOfferings();
         const target = fetchedOfferings.all['ofrng40bc691d41'] || fetchedOfferings.current;
-        if (target) setOfferings(target);
-      } catch (e) { }
+        if (target) {
+          setOfferings(target);
+        } else {
+          console.log('[RevenueCat] No offerings found');
+        }
+      } catch (e) {
+        console.log('[RevenueCat] Fetch offerings failed', e);
+      }
     };
     fetchOfferings();
   }, []);
@@ -44,14 +51,37 @@ export default function PremiumPaywallScreen() {
       return;
     }
     const pkg = offerings?.availablePackages?.find((p: any) => p.product.identifier === selectedPlan || p.identifier === selectedPlan);
-    if (!pkg) return;
+    
+    if (!pkg) {
+      showGlobalModal({ 
+        title: "Store Unavailable", 
+        description: "We're having trouble connecting to the App Store. Please ensure your internet is connected and try again.", 
+        confirmText: "Retry",
+        onConfirm: () => {
+          hideGlobalModal();
+          router.replace('/premium');
+        }
+      });
+      return;
+    }
     setLoading(true);
     try {
       const Purchases = require('react-native-purchases').default;
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      if (customerInfo.entitlements.active['pro']) { setPro(true); router.back(); }
-    } catch (e) {
-      console.log("Purchase Error:", e);
+      if (customerInfo.entitlements.active['pro']) { 
+        setPro(true); 
+        router.back(); 
+      }
+    } catch (e: any) {
+      const Purchases = require('react-native-purchases').default;
+      if (e.code !== Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        console.log("Purchase Error:", e);
+        showGlobalModal({
+          title: "Purchase Incomplete",
+          description: e.message || "Something went wrong while processing your request. Please try again.",
+          confirmText: "OK"
+        });
+      }
     } finally {
       setLoading(false);
     }

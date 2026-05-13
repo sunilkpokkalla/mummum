@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, Platform, NativeModules } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -22,25 +22,41 @@ LogBox.ignoreLogs([
   'ClonableElement',
   'Task exceeded',
   'Sending',
+  'Purchase was cancelled',
 ]);
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const { globalModalConfig, hideGlobalModal } = useBabyStore();
+  const { globalModalConfig, hideGlobalModal, _hasHydrated } = useBabyStore();
+  
+  useEffect(() => {
+    if (Platform.OS === 'ios' && NativeModules.RNPurchases) {
+      try {
+        const Purchases = require('react-native-purchases').default;
+        Purchases.setLogLevel(Purchases.LOG_LEVEL.INFO);
+        Purchases.configure({ apiKey: 'appl_gWsdCGHELkQjkHmjNeeTGKwgvnd' });
+      } catch (e) {
+        console.error('[RevenueCat]: Configuration failed', e);
+      }
+    }
+  }, []);
   
   // ACTIVATE REAL-TIME CLINICAL SYNC
   useCloudSync();
 
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (_hasHydrated) {
+      SplashScreen.hideAsync();
+    }
+  }, [_hasHydrated]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ animation: 'none' }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'none' }} />
+          <Stack.Screen name="onboarding/index" options={{ headerShown: false, animation: 'none' }} />
           <Stack.Screen name="onboarding/baby-info" options={{ headerShown: false }} />
           <Stack.Screen name="onboarding/offer" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="premium" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
