@@ -245,16 +245,22 @@ export default function SleepLogScreen() {
               </View>
 
               <View style={styles.historyList}>
-                {sleepActivities.slice(0, 5).map((activity) => (
-                  <HistoryItem 
-                    key={activity.id}
-                    title={new Date(activity.timestamp).getHours() > 19 || new Date(activity.timestamp).getHours() < 6 ? "Night Sleep" : "Nap"} 
-                    time={`${format(new Date(activity.details?.startTime || activity.timestamp), 'HH:mm')} - ${format(new Date(activity.timestamp), 'HH:mm')}`} 
-                    duration={formatDuration(activity.details?.duration || 0)} 
-                    mood={activity.details?.quality || "PEACEFUL"} 
-                    icon={<Moon size={24} color="#FFD54F" />} 
-                  />
-                ))}
+                {sleepActivities.slice(0, 5).map((activity) => {
+                  const startTime = new Date(activity.details?.startTime || activity.timestamp);
+                  const endTime = new Date(activity.timestamp);
+                  const isValid = !isNaN(startTime.getTime()) && !isNaN(endTime.getTime());
+                  
+                  return (
+                    <HistoryItem 
+                      key={activity.id}
+                      title={isValid && (startTime.getHours() > 19 || startTime.getHours() < 6) ? "Night Sleep" : "Nap"} 
+                      time={isValid ? `${format(startTime, 'HH:mm')} - ${format(endTime, 'HH:mm')}` : '--:--'} 
+                      duration={formatDuration(activity.details?.duration || 0)} 
+                      mood={activity.details?.quality || "PEACEFUL"} 
+                      icon={<Moon size={24} color="#FFD54F" />} 
+                    />
+                  );
+                })}
               </View>
             </View>
           </ScrollView>

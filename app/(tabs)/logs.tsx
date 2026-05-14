@@ -693,7 +693,12 @@ function ActivityItem({ activity }: { activity: any }) {
           <Typography variant="label" weight="800" color="#1B3C35" style={{ fontSize: 11, textTransform: 'uppercase' }}>
             {activity.type}
           </Typography>
-          <Typography variant="label" color="#90A4AE">{format(new Date(activity.timestamp), 'h:mm a')}</Typography>
+          <Typography variant="label" color="#90A4AE">
+            {(() => {
+              const d = new Date(activity.timestamp);
+              return !isNaN(d.getTime()) ? format(d, 'h:mm a') : '--:--';
+            })()}
+          </Typography>
         </View>
         <Typography variant="label" weight="600" color="#607D8B" style={{ fontSize: 12 }}>{getDetails()}</Typography>
       </View>

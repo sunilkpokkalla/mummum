@@ -595,7 +595,10 @@ function MedicineRow({ medicine, onDelete }: any) {
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Pill size={14} color={isLocked ? '#90A4AE' : '#C69C82'} />
               <Typography variant="label" weight="700" style={{ fontSize: 11, color: isLocked ? '#90A4AE' : '#8D6E63' }}>
-                {format(new Date(medicine.timestamp), 'MMMM d, yyyy • h:mm a')}
+                {(() => {
+                  const d = new Date(medicine.timestamp);
+                  return !isNaN(d.getTime()) ? format(d, 'MMMM d, yyyy • h:mm a') : '--:--';
+                })()}
               </Typography>
             </View>
           </Card>
@@ -663,7 +666,10 @@ function VaccineRow({ title, period, record, onPress, onDelete }: any) {
                 <View style={{ backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: '#C8E6C9' }}>
                   <Syringe size={10} color="#4CAF50" />
                   <Typography variant="label" weight="800" style={{ fontSize: 10, color: '#2E7D32' }}>
-                    {format(new Date(record.timestamp), 'MMM d, yyyy')}
+                    {(() => {
+                      const d = new Date(record.timestamp);
+                      return !isNaN(d.getTime()) ? format(d, 'MMM d, yyyy') : '--:--';
+                    })()}
                   </Typography>
                 </View>
               ) : (
