@@ -46,7 +46,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? 'light';
   const themeColors = (Colors as any)[colorScheme];
-  const { babies, currentBabyId, resetStore, showGlobalModal, hideGlobalModal } = useBabyStore();
+  const { babies, currentBabyId, resetStore, showGlobalModal, hideGlobalModal, syncToCloud } = useBabyStore();
   const { isPro } = usePremium();
 
   const user = auth().currentUser;
@@ -135,7 +135,14 @@ export default function SettingsScreen() {
       isDestructive: true,
       onConfirm: async () => {
         try {
-          // 1. Safe Social Cleanup (Google)
+          // 1. Force Cloud Sync before data removal
+          try {
+            await syncToCloud();
+          } catch (syncErr) {
+            console.log('[Logout]: Sync failed, proceeding anyway', syncErr);
+          }
+
+          // 2. Safe Social Cleanup (Google)
           if (GoogleSignin) {
             try {
               const isSigned = await GoogleSignin.hasPlayServices().then(() => true).catch(() => false);

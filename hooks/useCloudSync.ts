@@ -7,7 +7,7 @@ import { usePremium } from '@/hooks/usePremium';
 
 export function useCloudSync() {
   const { isPro, setSyncing, _hasHydrated } = useBabyStore();
-  const { activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, setStore } = useBabyStore();
+  const { activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, completedChecklistItems, setStore } = useBabyStore();
   const [user, setUser] = useState(auth().currentUser);
   const isInitialLoad = useRef(true);
   const skipNextUpload = useRef(false);
@@ -135,7 +135,7 @@ export function useCloudSync() {
           appointments,
           dayCareLogs,
           completedMilestones,
-          completedChecklistItems: useBabyStore.getState().completedChecklistItems,
+          completedChecklistItems,
           isPro,
           userName: useBabyStore.getState().userName,
           userPhotoUri: useBabyStore.getState().userPhotoUri,
@@ -151,5 +151,5 @@ export function useCloudSync() {
 
     const timer = setTimeout(syncToCloud, 2000);
     return () => clearTimeout(timer);
-  }, [activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, user?.uid]);
+  }, [activities, babies, currentBabyId, memories, appointments, dayCareLogs, completedMilestones, completedChecklistItems, user?.uid]);
 }

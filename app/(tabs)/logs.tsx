@@ -64,8 +64,25 @@ export default function LogsScreen() {
   }, []);
 
   const babyActivities = useMemo(() => {
-    return activities.filter(a => a.babyId === currentBabyId);
-  }, [activities, currentBabyId]);
+    const rawActivities = [...activities.filter(a => a.babyId === currentBabyId)];
+    
+    // Inject checklist items as activities for history view
+    const babyChecklists = (useBabyStore.getState().completedChecklistItems as any)[currentBabyId || ''] || {};
+    Object.entries(babyChecklists).forEach(([dateStr, items]: [string, any]) => {
+      items.forEach((itemId: string) => {
+        // Only include if not already in activities (checklists are special)
+        rawActivities.push({
+          id: `checklist-${dateStr}-${itemId}`,
+          babyId: currentBabyId,
+          type: 'checklist',
+          timestamp: new Date(dateStr).toISOString(),
+          details: { itemId }
+        });
+      });
+    });
+
+    return rawActivities;
+  }, [activities, currentBabyId, useBabyStore.getState().completedChecklistItems]);
 
   const sortedActivities = useMemo(() => {
     return [...babyActivities].sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -106,6 +123,8 @@ export default function LogsScreen() {
         groups[dateKey].stats.sleep += (activity.details?.duration || 0);
       } else if (activity.type === 'diaper') {
         groups[dateKey].stats.diapers += 1;
+      } else if (activity.type === 'checklist') {
+        // Checklist items are just listed, no specific daily stat for now
       }
     });
     
@@ -175,7 +194,7 @@ export default function LogsScreen() {
           ) : (
             <>
               <View style={styles.boardTabContainer}>
-                {['daily', 'weekly', 'monthly'].map((tab) => (
+                {['daily', 'weekly', 'monthly', 'all'].map((tab) => (
                   <TouchableOpacity 
                     key={tab} 
                     style={[styles.boardTabPill, activeView === tab && { backgroundColor: '#1B3C35', borderColor: '#1B3C35' }]}
@@ -193,7 +212,7 @@ export default function LogsScreen() {
                 onPress={() => generateBabyReport(
                   currentBaby, 
                   activities, 
-                  activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : 30), 
+                  activeView === 'daily' ? 1 : (activeView === 'weekly' ? 7 : (activeView === 'monthly' ? 30 : 3650)), 
                   memories,
                   appointments,
                   dayCareLogs
@@ -314,6 +333,7 @@ export default function LogsScreen() {
                 if (activeView === 'daily') return isSameDay(data.date, selectedDate);
                 if (activeView === 'weekly') return index < 7;
                 if (activeView === 'monthly') return index < 30;
+                if (activeView === 'all') return true;
                 return true;
               })
               .map(([key, data]) => (
@@ -626,6 +646,7 @@ function ActivityItem({ activity }: { activity: any }) {
       case 'vaccination': return <Syringe size={16} color="#009688" />;
       case 'medicine': return <Pill size={16} color="#9C27B0" />;
       case 'growth': return <Scale size={16} color="#795548" />;
+      case 'checklist': return <CheckSquare size={16} color="#4A5D4C" />;
       default: return <FileText size={16} color="#607D8B" />;
     }
   };
@@ -655,6 +676,9 @@ function ActivityItem({ activity }: { activity: any }) {
         return `${d.metric} • ${d.value}${d.unit || ''}`;
       }
       return 'Measurement recorded';
+    }
+    if (activity.type === 'checklist') {
+      return `Completed task: ${d.itemId}`;
     }
     return '';
   };

@@ -419,6 +419,7 @@ export const useBabyStore = create<BabyState>()(
                 userName: rehydrated.userName || state.userName,
                 userPhotoUri: rehydrated.userPhotoUri || state.userPhotoUri,
                 isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : state.isPro,
+                isOnboarded: (rehydrated.babies?.length > 0) || state.isOnboarded,
               });
             }
           }
