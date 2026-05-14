@@ -290,7 +290,7 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.4</Typography>
+            <Typography variant="label" color="#B0BEC5" weight="800" style={{ letterSpacing: 1 }}>MUMMUM HUB v1.0.5</Typography>
             <Typography variant="label" color="#CFD8DC" style={{ marginTop: 4 }}>Secured Clinical Cloud Sync Active</Typography>
           </View>
         </ScrollView>
