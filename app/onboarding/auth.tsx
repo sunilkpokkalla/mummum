@@ -127,12 +127,12 @@ export default function OnboardingAuthScreen() {
       const cloudBabies = useBabyStore.getState().babies;
       const hasNewInfo = !!tempBaby.name;
 
-      if (cloudBabies.length > 0 && hasNewInfo) {
-        // CONFLICT DETECTED: Show Choice Modal
+      if (cloudBabies.length > 0 && hasNewInfo && cloudBabies[0].name !== tempBaby.name) {
+        // CONFLICT DETECTED: Show Choice Modal if names are significantly different
         setModalConfig({
           visible: true,
           title: "Existing Records Found",
-          desc: `We found clinical records for ${cloudBabies[0].name} in your account. \n\nDo you want to restore these records, or clear them and start fresh with ${tempBaby.name}?`,
+          desc: `We found clinical records for "${cloudBabies[0].name}" in your account. \n\nDo you want to restore these records, or clear them and start fresh with "${tempBaby.name}"?`,
           confirmText: "Restore Legacy",
           onConfirm: () => {
             // OPTION A: Keep Cloud Data

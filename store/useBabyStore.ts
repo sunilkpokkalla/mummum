@@ -398,7 +398,6 @@ export const useBabyStore = create<BabyState>()(
 
       pullFromCloud: async () => {
         const user = auth().currentUser;
-        const state = useBabyStore.getState();
         if (!user) return;
 
         try {
@@ -407,20 +406,40 @@ export const useBabyStore = create<BabyState>()(
             const data = doc.data();
             if (data) {
               const rehydrated = rehydrateDates(data);
-              set({
-                babies: rehydrated.babies || [],
-                currentBabyId: rehydrated.currentBabyId || (rehydrated.babies?.[0]?.id) || null,
-                activities: rehydrated.activities || [],
-                memories: rehydrated.memories || [],
-                appointments: rehydrated.appointments || [],
-                dayCareLogs: rehydrated.dayCareLogs || [],
-                completedMilestones: rehydrated.completedMilestones || {},
-                completedChecklistItems: rehydrated.completedChecklistItems || {},
-                userName: rehydrated.userName || state.userName,
-                userPhotoUri: rehydrated.userPhotoUri || state.userPhotoUri,
-                isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : state.isPro,
-                isOnboarded: (rehydrated.babies?.length > 0) || state.isOnboarded,
-              });
+              
+              // SAFETY CHECK: Only overwrite if cloud has content or local is empty
+              const cloudHasContent = (rehydrated.activities?.length > 0 || rehydrated.babies?.length > 0);
+              const state = get();
+              const localIsEmpty = (state.activities.length === 0 && state.babies.length === 0);
+
+              if (cloudHasContent || localIsEmpty) {
+                set({
+                  babies: rehydrated.babies || [],
+                  currentBabyId: rehydrated.currentBabyId || (rehydrated.babies?.[0]?.id) || null,
+                  activities: rehydrated.activities || [],
+                  memories: rehydrated.memories || [],
+                  appointments: rehydrated.appointments || [],
+                  dayCareLogs: rehydrated.dayCareLogs || [],
+                  completedMilestones: rehydrated.completedMilestones || {},
+                  completedChecklistItems: rehydrated.completedChecklistItems || {},
+                  userName: rehydrated.userName || state.userName,
+                  userPhotoUri: rehydrated.userPhotoUri || state.userPhotoUri,
+                  isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : state.isPro,
+                  isOnboarded: (rehydrated.babies?.length > 0) || state.isOnboarded,
+                });
+              } else {
+                // MIGRATION: Cloud is empty but local has data -> Sync local to cloud
+                console.log('[Cloud Sync]: Local data found for new account, migrating to cloud...');
+                await get().syncToCloud();
+              }
+            }
+          } else {
+            // Document doesn't exist -> Migration scenario
+            const state = get();
+            const localHasContent = (state.activities.length > 0 || state.babies.length > 0);
+            if (localHasContent) {
+              console.log('[Cloud Sync]: No cloud profile found, migrating local history...');
+              await get().syncToCloud();
             }
           }
         } catch (e) {
