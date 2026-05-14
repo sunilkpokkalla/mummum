@@ -141,13 +141,34 @@ interface BabyState {
 }
 
 // Utility to push data to Firestore
+// Recursive helper to remove undefined values for Firestore
+const sanitizeForFirestore = (obj: any): any => {
+  if (obj === undefined) return null;
+  if (obj === null || typeof obj !== 'object') return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizeForFirestore);
+  }
+
+  const newObj: any = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const val = obj[key];
+      if (val !== undefined) {
+        newObj[key] = sanitizeForFirestore(val);
+      }
+    }
+  }
+  return newObj;
+};
+
 const pushToFirestore = async (state: Partial<BabyState>) => {
   const user = auth().currentUser;
   if (!user) return;
 
   try {
     // PRE-SYNC CLEANUP: Ensure we don't push undefined or malformed fields
-    const payload = {
+    const payload = sanitizeForFirestore({
       babies: state.babies || [],
       currentBabyId: state.currentBabyId || (state.babies?.[0]?.id) || null,
       activities: state.activities || [],
@@ -164,7 +185,7 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
       isPro: !!state.isPro,
       isOnboarded: !!state.isOnboarded,
       updatedAt: firestore.FieldValue.serverTimestamp(),
-    };
+    });
 
     await firestore().collection('users').doc(user.uid).set(payload, { merge: true });
     console.log('[Cloud Sync]: Data pushed successfully');

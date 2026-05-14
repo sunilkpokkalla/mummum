@@ -104,9 +104,9 @@ export default function FeedLogScreen() {
       timestamp: new Date(),
       details: {
         feedMode: mode,
-        amount: mode !== 'Breast' ? amount : undefined,
-        unit: mode !== 'Breast' ? unit : undefined,
-        content: mode !== 'Breast' ? content : undefined,
+        amount: mode !== 'Breast' ? amount : null,
+        unit: mode !== 'Breast' ? unit : null,
+        content: mode !== 'Breast' ? content : null,
         leftDuration: leftTimer,
         rightDuration: rightTimer,
         notes: notes
