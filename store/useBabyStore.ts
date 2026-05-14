@@ -214,15 +214,25 @@ const rehydrateDates = (obj: any): any => {
   // Handle Objects
   const newObj: any = {};
   for (const key in obj) {
-    // If it's a timestamp string (like from AsyncStorage hydration), convert to Date
     const value = obj[key];
-    if (typeof value === 'string' && (key === 'timestamp' || key === 'startTime' || key === 'endTime' || key === 'birthDate')) {
-      const d = new Date(value);
-      if (!isNaN(d.getTime())) {
-        newObj[key] = d;
-        continue;
+    
+    // Hardened Date Rehydration
+    if (key === 'timestamp' || key === 'startTime' || key === 'endTime' || key === 'birthDate' || key === 'date') {
+      if (value) {
+        const d = new Date(value);
+        if (!isNaN(d.getTime())) {
+          newObj[key] = d;
+        } else {
+          // If invalid date, fallback to now to prevent UI crashes, 
+          // or null if it's optional like birthDate
+          newObj[key] = key === 'birthDate' ? null : new Date();
+        }
+      } else {
+        newObj[key] = null;
       }
+      continue;
     }
+    
     newObj[key] = rehydrateDates(value);
   }
   return newObj;

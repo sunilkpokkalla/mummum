@@ -108,9 +108,11 @@ export default function DashboardScreen() {
     }
   };
 
-  const getBabyAge = (birthDate: Date | string | undefined) => {
+  const getBabyAge = (birthDate: Date | string | undefined | null) => {
     if (!birthDate) return '';
     const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) return '';
+    
     const now = new Date();
     const duration = intervalToDuration({ start: birth, end: now });
     
@@ -133,7 +135,10 @@ export default function DashboardScreen() {
   const lastSleep = babyActivities.find(a => a.type === 'sleep');
   const lastDiaper = babyActivities.find(a => a.type === 'diaper');
 
-  const todaysActivities = babyActivities.filter(a => isToday(new Date(a.timestamp)));
+  const todaysActivities = babyActivities.filter(a => {
+    const d = new Date(a.timestamp);
+    return !isNaN(d.getTime()) && isToday(d);
+  });
   const activeSession = activeSessions.find(s => s.babyId === currentBabyId);
   
   const lastWeight = babyActivities.find(a => a.type === 'growth' && a.details?.metric === 'Weight');
@@ -324,19 +329,31 @@ export default function DashboardScreen() {
             <SummaryCard 
               icon={<Milk size={20} color={themeColors.primary} />}
               label="Last Feed"
-              value={lastFeed ? formatDistanceToNow(new Date(lastFeed.timestamp)) + ' ago' : 'No data'}
+              value={(() => {
+                if (!lastFeed) return 'No data';
+                const d = new Date(lastFeed.timestamp);
+                return !isNaN(d.getTime()) ? formatDistanceToNow(d) + ' ago' : 'Invalid date';
+              })()}
               accent={themeColors.primary}
             />
             <SummaryCard 
               icon={<Moon size={20} color={themeColors.secondary} />}
               label="Last Sleep"
-              value={lastSleep ? formatDistanceToNow(new Date(lastSleep.timestamp)) + ' ago' : 'No data'}
+              value={(() => {
+                if (!lastSleep) return 'No data';
+                const d = new Date(lastSleep.timestamp);
+                return !isNaN(d.getTime()) ? formatDistanceToNow(d) + ' ago' : 'Invalid date';
+              })()}
               accent={themeColors.secondary}
             />
             <SummaryCard 
               icon={<Droplet size={20} color={themeColors.tertiary} />}
               label="Last Diaper"
-              value={lastDiaper ? formatDistanceToNow(new Date(lastDiaper.timestamp)) + ' ago' : 'No data'}
+              value={(() => {
+                if (!lastDiaper) return 'No data';
+                const d = new Date(lastDiaper.timestamp);
+                return !isNaN(d.getTime()) ? formatDistanceToNow(d) + ' ago' : 'Invalid date';
+              })()}
               accent={themeColors.tertiary}
             />
           </ScrollView>
@@ -552,7 +569,12 @@ function TimelineItem({ activity, icon, backgroundColor, isLast }: any) {
       <Card style={styles.timelineContent}>
         <View style={styles.timelineHeader}>
           <Typography variant="bodyMd" weight="700">{getTitle(activity.type)}</Typography>
-          <Typography variant="label" color={themeColors.icon}>{format(new Date(activity.timestamp), 'h:mm a')}</Typography>
+          <Typography variant="label" color={themeColors.icon}>
+            {(() => {
+              const d = new Date(activity.timestamp);
+              return !isNaN(d.getTime()) ? format(d, 'h:mm a') : '--:--';
+            })()}
+          </Typography>
         </View>
         <Typography variant="label" color={themeColors.icon}>{getDescription(activity)}</Typography>
         
