@@ -71,7 +71,7 @@ const INFO_CONTENT: Record<string, { title: string; sections: { title: string; c
         content: 'Mummum is designed with a privacy-first architecture. Your baby\'s clinical history is a sacred record, and we treat it with the highest level of technical respect and security.'
       },
       {
-        title: 'Version 1.0.0',
+        title: 'Version 1.0.3',
         content: 'This is the production launch of Mummum. We are committed to continuous clinical hardening and interaction polishing to support parents everywhere.'
       }
     ]

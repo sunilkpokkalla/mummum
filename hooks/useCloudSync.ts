@@ -51,11 +51,6 @@ export function useCloudSync() {
           if (hasPro !== useBabyStore.getState().isPro) {
             useBabyStore.getState().setPro(hasPro);
           }
-
-          if (!hasPro) {
-            // console.log('[CloudSync] Skip: User is not Pro');
-            return;
-          }
         }
 
         setSyncing(true);
@@ -119,7 +114,7 @@ export function useCloudSync() {
 
   // 2. UPLOAD TO CLOUD (On Local Change)
   useEffect(() => {
-    if (!user || isInitialLoad.current || !_hasHydrated || !isPro) return;
+    if (!user || isInitialLoad.current || !_hasHydrated) return;
 
     // If this change came from a download, skip this upload cycle
     if (skipNextUpload.current) {
