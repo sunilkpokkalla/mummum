@@ -335,15 +335,8 @@ export default function OnboardingAuthScreen() {
         await handlePostLoginSync();
       }
     } catch (e: any) {
+      console.error(`[Social Auth] ${provider} failed:`, e.code, e.message);
       setLoading(false);
-
-      // DIAGNOSTIC LOGGING
-      console.log('--- SOCIAL AUTH ERROR ---');
-      console.log('Provider:', provider);
-      console.log('Code:', e.code);
-      console.log('Message:', e.message);
-      console.log('-------------------------');
-
       const isCancel =
         e.code === 'auth/user-cancelled' ||
         e.code === 'auth/cancelled' ||

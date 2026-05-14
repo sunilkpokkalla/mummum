@@ -179,6 +179,16 @@ export default function MedicalLogScreen() {
     setIsDatePickerVisible(true);
   };
 
+  const getBabyAge = (birthDate: Date | string | undefined | null) => {
+    if (!birthDate) return '';
+    const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) return '';
+    
+    const now = new Date();
+    const diffMonths = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
+    return `${diffMonths} months old`;
+  };
+
   const handleDateSelect = (date: Date) => {
     if (dateTarget === 'VACCINE') setVaccineDate(date);
     else setMedicineDate(date);

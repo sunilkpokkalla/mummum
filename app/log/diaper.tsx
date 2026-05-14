@@ -36,9 +36,11 @@ export default function DiaperLogScreen() {
   const [rash, setRash] = useState(false);
   const [notes, setNotes] = useState('');
 
-  const getBabyAge = (birthDate: Date | string | undefined) => {
+  const getBabyAge = (birthDate: Date | string | undefined | null) => {
     if (!birthDate) return '';
     const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) return '';
+    
     const now = new Date();
     const diffMonths = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
     return `${diffMonths} months old`;

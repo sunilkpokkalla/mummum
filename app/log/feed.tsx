@@ -29,16 +29,14 @@ export default function FeedLogScreen() {
   const [content, setContent] = useState('Breast Milk');
   const [notes, setNotes] = useState('');
 
-  const getBabyAge = (birthDate: Date | string | undefined) => {
+  const getBabyAge = (birthDate: Date | string | undefined | null) => {
     if (!birthDate) return '';
     const birth = new Date(birthDate);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - birth.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const diffMonths = Math.floor(diffDays / 30);
+    if (isNaN(birth.getTime())) return '';
     
-    if (diffMonths > 0) return `${diffMonths} months old`;
-    return `${diffDays} days old`;
+    const now = new Date();
+    const diffMonths = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth());
+    return `${diffMonths} months old`;
   };
 
   // Interactive Slider logic
