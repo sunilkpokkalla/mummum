@@ -146,20 +146,28 @@ const pushToFirestore = async (state: Partial<BabyState>) => {
   if (!user) return;
 
   try {
-    await firestore().collection('users').doc(user.uid).set({
-      babies: state.babies,
-      currentBabyId: state.currentBabyId,
-      activities: state.activities,
-      memories: state.memories,
-      appointments: state.appointments,
-      dayCareLogs: state.dayCareLogs,
-      completedChecklistItems: state.completedChecklistItems,
-      completedMilestones: state.completedMilestones,
-      userName: state.userName,
-      userPhotoUri: state.userPhotoUri,
-      isPro: state.isPro,
+    // PRE-SYNC CLEANUP: Ensure we don't push undefined or malformed fields
+    const payload = {
+      babies: state.babies || [],
+      currentBabyId: state.currentBabyId || (state.babies?.[0]?.id) || null,
+      activities: state.activities || [],
+      memories: state.memories || [],
+      appointments: state.appointments || [],
+      dayCareLogs: state.dayCareLogs || [],
+      completedChecklistItems: state.completedChecklistItems || {},
+      completedMilestones: state.completedMilestones || {},
+      customReminders: state.customReminders || [],
+      userStandardTasks: state.userStandardTasks || [],
+      standardTaskSettings: state.standardTaskSettings || {},
+      userName: state.userName || 'Parent',
+      userPhotoUri: state.userPhotoUri || null,
+      isPro: !!state.isPro,
+      isOnboarded: !!state.isOnboarded,
       updatedAt: firestore.FieldValue.serverTimestamp(),
-    }, { merge: true });
+    };
+
+    await firestore().collection('users').doc(user.uid).set(payload, { merge: true });
+    console.log('[Cloud Sync]: Data pushed successfully');
   } catch (e) {
     console.error('[Cloud Sync]: Push failed:', e);
   }
@@ -174,6 +182,9 @@ const rehydrateDates = (obj: any): any => {
     return new Date(obj.seconds * 1000);
   }
 
+  // Handle ISO Strings in specific date-related fields
+  // (Optional: can be aggressive, but focusing on known timestamp fields is safer)
+
   // Handle Arrays
   if (Array.isArray(obj)) {
     return obj.map(rehydrateDates);
@@ -182,7 +193,16 @@ const rehydrateDates = (obj: any): any => {
   // Handle Objects
   const newObj: any = {};
   for (const key in obj) {
-    newObj[key] = rehydrateDates(obj[key]);
+    // If it's a timestamp string (like from AsyncStorage hydration), convert to Date
+    const value = obj[key];
+    if (typeof value === 'string' && (key === 'timestamp' || key === 'startTime' || key === 'endTime' || key === 'birthDate')) {
+      const d = new Date(value);
+      if (!isNaN(d.getTime())) {
+        newObj[key] = d;
+        continue;
+      }
+    }
+    newObj[key] = rehydrateDates(value);
   }
   return newObj;
 };
@@ -406,39 +426,58 @@ export const useBabyStore = create<BabyState>()(
             const data = doc.data();
             if (data) {
               const rehydrated = rehydrateDates(data);
-              
-              // SAFETY CHECK: Only overwrite if cloud has content or local is empty
-              const cloudHasContent = (rehydrated.activities?.length > 0 || rehydrated.babies?.length > 0);
               const state = get();
+
+              // SMART MERGE: Avoid overwriting local data with empty cloud fields
+              const mergeArrays = (local: any[], cloud: any[]) => {
+                if (!cloud || cloud.length === 0) return local;
+                const localIds = new Set(local.map(i => i.id));
+                const uniqueCloud = cloud.filter(i => !localIds.has(i.id));
+                return [...uniqueCloud, ...local];
+              };
+
+              const mergedActivities = mergeArrays(state.activities, rehydrated.activities || []);
+              const mergedBabies = mergeArrays(state.babies, rehydrated.babies || []);
+
+              // Check if cloud actually has data worth restoring
+              const cloudHasData = (rehydrated.activities?.length > 0 || rehydrated.babies?.length > 0);
               const localIsEmpty = (state.activities.length === 0 && state.babies.length === 0);
 
-              if (cloudHasContent || localIsEmpty) {
+              if (cloudHasData || localIsEmpty) {
                 set({
-                  babies: rehydrated.babies || [],
-                  currentBabyId: rehydrated.currentBabyId || (rehydrated.babies?.[0]?.id) || null,
-                  activities: rehydrated.activities || [],
-                  memories: rehydrated.memories || [],
-                  appointments: rehydrated.appointments || [],
-                  dayCareLogs: rehydrated.dayCareLogs || [],
-                  completedMilestones: rehydrated.completedMilestones || {},
-                  completedChecklistItems: rehydrated.completedChecklistItems || {},
+                  babies: mergedBabies,
+                  currentBabyId: rehydrated.currentBabyId || state.currentBabyId || mergedBabies[0]?.id || null,
+                  activities: mergedActivities,
+                  memories: mergeArrays(state.memories, rehydrated.memories || []),
+                  appointments: mergeArrays(state.appointments, rehydrated.appointments || []),
+                  dayCareLogs: mergeArrays(state.dayCareLogs, rehydrated.dayCareLogs || []),
+                  
+                  // For objects (checklist/milestones), we merge keys
+                  completedMilestones: { ...rehydrated.completedMilestones, ...state.completedMilestones },
+                  completedChecklistItems: { ...rehydrated.completedChecklistItems, ...state.completedChecklistItems },
+                  
+                  customReminders: mergeArrays(state.customReminders, rehydrated.customReminders || []),
+                  userStandardTasks: mergeArrays(state.userStandardTasks, rehydrated.userStandardTasks || []),
+                  standardTaskSettings: { ...rehydrated.standardTaskSettings, ...state.standardTaskSettings },
+
                   userName: rehydrated.userName || state.userName,
                   userPhotoUri: rehydrated.userPhotoUri || state.userPhotoUri,
                   isPro: rehydrated.isPro !== undefined ? rehydrated.isPro : state.isPro,
-                  isOnboarded: (rehydrated.babies?.length > 0) || state.isOnboarded,
+                  isOnboarded: (mergedBabies.length > 0) || state.isOnboarded,
                 });
-              } else {
-                // MIGRATION: Cloud is empty but local has data -> Sync local to cloud
-                console.log('[Cloud Sync]: Local data found for new account, migrating to cloud...');
-                await get().syncToCloud();
+                
+                // If local had data and cloud was empty, push the merged state back to cloud
+                if (!cloudHasData && !localIsEmpty) {
+                  console.log('[Cloud Sync]: Migrating local data to cloud account...');
+                  await get().syncToCloud();
+                }
               }
             }
           } else {
-            // Document doesn't exist -> Migration scenario
+            // Document doesn't exist -> New user or migration
             const state = get();
-            const localHasContent = (state.activities.length > 0 || state.babies.length > 0);
-            if (localHasContent) {
-              console.log('[Cloud Sync]: No cloud profile found, migrating local history...');
+            if (state.activities.length > 0 || state.babies.length > 0) {
+              console.log('[Cloud Sync]: Initializing cloud profile with local data...');
               await get().syncToCloud();
             }
           }
